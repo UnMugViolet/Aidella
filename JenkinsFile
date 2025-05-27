@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('SCM') {
             steps {
-                git url: 'git@github.com:UnMugViolet/Aidella.git', branch: 'main'
+                git url: 'https://github.com/UnMugViolet/Aidella.git', branch: 'main'
             }
         }
         stage('SonarQube analysis') {
