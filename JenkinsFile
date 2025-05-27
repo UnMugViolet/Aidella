@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+    
+    environment {
+        NODE_ENV = 'production'
+    }
+    tools {
+        nodejs 'Main NodeJS'
+    }
+    stages {
+        stage('SCM') {
+            steps {
+                git url: 'git@github.com:UnMugViolet/Aidella.git', branch: 'main'
+            }
+        }
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('Sonar-Server') {
+                    sh "${tool 'SonarScanner'}/bin/sonar-scanner"
+                }
+            }
+        }
+        // Wait for the SonarQube analysis to be completed by getting the webhook response
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        stage('Build') { 
+            steps {
+                sh 'npm install --include=dev'
+                sh 'npm run build'
+            }
+        }
+        stage('Publish') {
+            steps {
+                // Publish the build artifacts to the server using SSH
+                sshPublisher(
+                    continueOnError: false, 
+                    failOnError: true, 
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'Hostinger',
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: 'public/**',
+									excludes: '**/.env',
+                                    remoteDirectory: '/domains/darkturquoise-tiger-532584.hostingersite.com/public_html',
+                                    removePrefix: 'public', 
+                                    cleanRemote: false, 
+                                    makeEmptyDirs: true, 
+                                    flatten: false, 
+                                    noDefaultExcludes: false, 
+                                    patternSeparator: '[, ]+' 
+                                )
+                            ],
+                            usePromotionTimestamp: false,
+                            verbose: true 
+                        )
+                    ]
+                )
+            }
+        }
+    }
+}
