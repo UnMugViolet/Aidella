@@ -25,8 +25,11 @@ class DogRaceFactory extends Factory
             'Spitz Nain',
         ];
         
+        $name = $this->faker->unique()->randomElement($races);
+
         return [
-            'name' => $this->faker->unique()->randomElement($races),
+            'name' => $name,
+            'slug' => strtolower(str_replace(' ', '-', $name)),
             'description' => fake()->sentence(),
             'created_at' => now(),
             'updated_at' => now(),

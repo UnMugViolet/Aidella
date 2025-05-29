@@ -4,7 +4,7 @@
 			<h1 class="text-2xl font-bold">My Application</h1>
 			<nav>
 				<ul class="flex space-x-4">
-					<li><a href="#" class="hover:text-gray-400">A propos</a></li>
+					<li><a href="/about" class="hover:text-gray-400">A propos</a></li>
 					<li><a href="#" class="hover:text-gray-400">Contact</a></li>
 				</ul>
 			</nav>
