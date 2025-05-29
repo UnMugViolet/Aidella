@@ -2,21 +2,19 @@
 
 namespace Database\Seeders;
 
+use App\Models\PostCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-use App\Models\DogRace;
-use Database\Factories\DogRaceFactory;
-
-class DogRaceSeeder extends Seeder
+class PostCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-            DogRace::factory()
-                ->count(6)
-                ->create();
+        PostCategory::factory()
+            ->count(8)
+            ->create();
     }
 }

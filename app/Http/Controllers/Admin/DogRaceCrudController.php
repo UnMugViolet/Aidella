@@ -27,7 +27,7 @@ class DogRaceCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\DogRace::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/dog-race');
-        CRUD::setEntityNameStrings('type de chien', 'type de chiens');
+        CRUD::setEntityNameStrings('race de chien', 'race de chiens');
     }
 
     /**

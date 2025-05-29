@@ -16,8 +16,17 @@ class DogRaceFactory extends Factory
      */
     public function definition(): array
     {
+        $races = [
+            'Berger Australien',
+            'Labrador',
+            'Cavalier King Charles',
+            'Bouledogue Français',
+            'Coton de Tulear',
+            'Spitz Nain',
+        ];
+        
         return [
-            'name' => fake()->unique()->word(),
+            'name' => $this->faker->unique()->randomElement($races),
             'description' => fake()->sentence(),
             'created_at' => now(),
             'updated_at' => now(),

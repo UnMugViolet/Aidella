@@ -13,8 +13,8 @@ class UserSeeder extends Seeder
     {
         // Create a test user
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Aidella',
+            'email' => 'redac@aidella.com',
         ]);
         
         // Create or update the admin user

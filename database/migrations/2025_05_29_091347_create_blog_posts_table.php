@@ -16,16 +16,26 @@ return new class extends Migration
             $table->string('title')->unique();
             $table->text('content');
 
-            $table->string('author')->nullable();
-            $table->string('published_at')->nullable();
-
+            
             $table->string('status')->default('draft');
             $table->string('meta_title')->unique();
             $table->string('meta_description');
             $table->string('slug')->unique();
+            
+            $table->foreignId('post_category_id')
+                ->constrained('post_categories')
+                ->onDelete('restrict');
+            $table->foreignId('dog_race_id')
+                ->nullable()
+                ->constrained('dog_races')
+                ->nullOnDelete();
+            $table->foreignId('author_id')
+                ->nullable()
+                ->default(1)
+                ->constrained('users')
+                ->onDelete('set default');
 
-            $table->foreignId('post_category_id')->constrained('post_categories')->onDelete('restrict');
-            $table->foreignId('dog_race_id')->nullable()->constrained('dog_races')->nullOnDelete();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }
