@@ -88,11 +88,8 @@ class DogRace extends Model
             
             // Delete image files from storage
             foreach ($pictures as $picture) {
-                if ($picture->path) {
-                    // The path already includes the full path and extension
-                    if (Storage::disk('public')->exists($picture->path)) {
+                if ($picture->path && Storage::disk('public')->exists($picture->path)) {
                         Storage::disk('public')->delete($picture->path);
-                    }
                 }
             }
             
