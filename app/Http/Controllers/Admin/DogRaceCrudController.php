@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\ReorderOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Storage;
 use Prologue\Alerts\Facades\Alert as FacadesAlert;
@@ -19,6 +20,7 @@ class DogRaceCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ReorderOperation; 
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -39,7 +41,7 @@ class DogRaceCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb();
+        // CRUD::setFromDb();
 
         CRUD::column('name')
             ->label('Nom')
@@ -49,6 +51,9 @@ class DogRaceCrudController extends CrudController
             ->type('text')
             ->hint('Généré automatiquement à partir du nom');
         // Add a custom column for the formatted image name
+        CRUD::column('description')
+            ->label('Description')
+            ->type('text');
         CRUD::addColumn([
             'name' => 'main_image_name',
             'label' => 'Image mignature',
@@ -244,6 +249,13 @@ class DogRaceCrudController extends CrudController
                 'is_main' => 1,
             ]);
         }
+    }
+
+    protected function setupReorderOperation()
+    {
+        CRUD::set('reorder.label', 'name');
+        CRUD::set('reorder.max_level', 1);
+        CRUD::set('reorder.order_column', 'order'); 
     }
 
     /**

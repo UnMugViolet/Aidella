@@ -22,8 +22,8 @@ class DogRace extends Model
         'name',
         'description',
         'slug',
-        // Do NOT include 'images', 'main_image', 'picture_name', etc. It is handled by the Pictures model
-        // and the morphMany relationship defined below.
+        'order', // Added for ordering in the admin panel
+        // image is handled by the Pictures model
     ];
 
     /**
@@ -39,6 +39,17 @@ class DogRace extends Model
     public function pictures()
     {
         return $this->morphMany(Pictures::class, 'imageable');
+    }
+
+    
+    public function parent()
+    {
+        return $this->belongsTo(DogRace::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(DogRace::class, 'parent_id');
     }
 
     /**
