@@ -49,6 +49,17 @@ class BlogPost extends Model
         'updated_at',
     ];
 
+    /**
+     * Get all the images for the BlogPost.
+     * 
+     * @return string|null
+     */
+    public function images()
+    {
+        $images = $this->pictures()->pluck('path')->toArray();
+        return !empty($images) ? implode(',', $images) : null;
+    }
+
 
     /**
      * Relationship: A BlogPost can belongs to a DogRace.

@@ -37,7 +37,7 @@ class DogRace extends Model
 
     public function pictures()
     {
-        return $this->morphMany(Pictures::class, 'imageable', 'model_type', 'imageable_id');
+        return $this->morphMany(Pictures::class, 'imageable');
     }
 
     /**
@@ -51,16 +51,14 @@ class DogRace extends Model
     }
 
     /**
-     * Get all the images for the DogRace.
+     * Get the image thumbnail for the DogRace.
      * 
      * @return string|null
      */
-    public function images()
+/*     public function images()
     {
-        $images = $this->pictures()->pluck('path')->toArray();
-        return !empty($images) ? implode(',', $images) : null;
-    }
-
+        return $this->pictures()->pluck('path')->toArray();
+    } */
 
     /**
      * Boot the model and add event listeners

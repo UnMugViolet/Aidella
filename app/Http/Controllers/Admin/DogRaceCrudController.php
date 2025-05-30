@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Console\View\Components\Alert;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class DogRaceCrudController
@@ -68,6 +70,8 @@ class DogRaceCrudController extends CrudController
             'upload' => true,
             'disk' => 'public',
             'prefix' => 'uploads/dog-races/',
+            'default' => 'https://via.placeholder.com/150', // Placeholder image URL
+            'hint' => 'Sélectionnez une image ou laissez vide pour utiliser le placeholder.',
         ]);
 
         // Add JavaScript to auto-generate slug
@@ -123,7 +127,17 @@ class DogRaceCrudController extends CrudController
         \Log::info('Uploaded files:', $uploadedFiles);
         
         $request = $this->crud->validateRequest();
-        $item = $this->crud->create($this->crud->getStrippedSaveRequest($request));
+        $to_create = $this->crud->getStrippedSaveRequest($request);
+        // Ensure there is no duplicate name
+        if (
+            $this->crud->model::where('name', $to_create['name'])->exists() ||
+            $this->crud->model::where('slug', $to_create['slug'])->exists()
+        ) {
+            \Alert::error('Une race avec ce nom ou ce slug existe déjà.')->flash();
+            return redirect()->back()->withInput();
+        }
+
+        $item = $this->crud->create($to_create);
         $this->data['entry'] = $this->crud->entry = $item;
 
         // Create picture records with uploaded filenames
@@ -145,14 +159,11 @@ class DogRaceCrudController extends CrudController
         $uploadedFiles = $this->handleFileUploads();
         
         $request = $this->crud->validateRequest();
-        $itemId = $this->crud->update(
+        $item = $this->crud->update(
             $request->get($this->crud->model->getKeyName()),
             $this->crud->getStrippedSaveRequest($request)
         );
         
-        // Create a new instance of the model and find the item
-        $modelClass = $this->crud->model;
-        $item = (new $modelClass)->find($itemId);
         $this->data['entry'] = $this->crud->entry = $item;
 
         // Update picture records
@@ -207,8 +218,6 @@ class DogRaceCrudController extends CrudController
             
             $item->pictures()->create([
                 'path' => '/storage/' . $uploadedFiles['main_image']['path'],
-                'imageable_id' => $item->id,
-                'model_type' => get_class($item),
                 'alt_text' => $formattedName,
                 'is_main' => 1,
             ]);
@@ -230,8 +239,6 @@ class DogRaceCrudController extends CrudController
             
             $item->pictures()->create([
                 'path' => '/storage/' . $uploadedFiles['main_image']['path'],
-                'imageable_id' => $item->id,
-                'model_type' => 'App\Models\DogRace',
                 'alt_text' => $formattedName,
                 'is_main' => 1,
             ]);
