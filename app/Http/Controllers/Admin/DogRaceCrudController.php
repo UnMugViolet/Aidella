@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Console\View\Components\Alert;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Storage;
+use Prologue\Alerts\Facades\Alert as FacadesAlert;
 
 /**
  * Class DogRaceCrudController
@@ -39,12 +39,22 @@ class DogRaceCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        CRUD::setFromDb();
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        CRUD::column('name')
+            ->label('Nom')
+            ->type('text');
+        CRUD::column('slug')
+            ->label('Slug')
+            ->type('text')
+            ->hint('Généré automatiquement à partir du nom');
+        // Add a custom column for the formatted image name
+        CRUD::addColumn([
+            'name' => 'main_image_name',
+            'label' => 'Image mignature',
+            'type' => 'model_function',
+            'function_name' => 'getMainImageName',
+        ]);
     }
 
     /**
@@ -70,8 +80,8 @@ class DogRaceCrudController extends CrudController
             'upload' => true,
             'disk' => 'public',
             'prefix' => 'uploads/dog-races/',
-            'default' => 'https://via.placeholder.com/150', // Placeholder image URL
-            'hint' => 'Sélectionnez une image ou laissez vide pour utiliser le placeholder.',
+            'default' => '', 
+            'hint' => 'Sélectionnez une image, laisser vide donne une image par defaut.',
         ]);
 
         // Add JavaScript to auto-generate slug
@@ -113,18 +123,8 @@ class DogRaceCrudController extends CrudController
     {
         $this->crud->hasAccessOrFail('create');
         
-        // Debug: Check if files are being received
-        \Log::info('Files received:', [
-            'main_image' => request()->hasFile('main_image'),
-            'images' => request()->hasFile('images'),
-            'all_files' => request()->allFiles()
-        ]);
-        
         // Handle file uploads before creating the item
         $uploadedFiles = $this->handleFileUploads();
-        
-        // Debug: Check what was uploaded
-        \Log::info('Uploaded files:', $uploadedFiles);
         
         $request = $this->crud->validateRequest();
         $to_create = $this->crud->getStrippedSaveRequest($request);
@@ -133,7 +133,7 @@ class DogRaceCrudController extends CrudController
             $this->crud->model::where('name', $to_create['name'])->exists() ||
             $this->crud->model::where('slug', $to_create['slug'])->exists()
         ) {
-            \Alert::error('Une race avec ce nom ou ce slug existe déjà.')->flash();
+            FacadesAlert::error('Une race avec ce nom ou ce slug existe déjà.')->flash();
             return redirect()->back()->withInput();
         }
 
@@ -143,13 +143,13 @@ class DogRaceCrudController extends CrudController
         // Create picture records with uploaded filenames
         $this->createPictureRecords($item, $uploadedFiles);
 
-        \Alert::success(trans('backpack::crud.insert_success'))->flash();
+        FacadesAlert::success(trans('backpack::crud.insert_success'))->flash();
         $this->crud->setSaveAction();
         return $this->crud->performSaveAction($item->getKey());
     }
 
     /**
-     * Update multiple images in Pictures table
+     * Update thumbnail images in Pictures table
      */
     protected function update()
     {
@@ -159,6 +159,7 @@ class DogRaceCrudController extends CrudController
         $uploadedFiles = $this->handleFileUploads();
         
         $request = $this->crud->validateRequest();
+
         $item = $this->crud->update(
             $request->get($this->crud->model->getKeyName()),
             $this->crud->getStrippedSaveRequest($request)
@@ -169,7 +170,7 @@ class DogRaceCrudController extends CrudController
         // Update picture records
         $this->updatePictureRecords($item, $uploadedFiles);
 
-        \Alert::success(trans('backpack::crud.update_success'))->flash();
+        FacadesAlert::success(trans('backpack::crud.update_success'))->flash();
         $this->crud->setSaveAction();
         return $this->crud->performSaveAction($item->getKey());
     }
@@ -187,16 +188,16 @@ class DogRaceCrudController extends CrudController
         // Handle main image upload
         if (request()->hasFile('main_image')) {
             $file = request()->file('main_image');
-            $filename = uniqid() . '_' . $file->getClientOriginalName();
+            $filename = uniqid() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
             
             // Ensure directory exists
-            \Storage::disk('public')->makeDirectory('uploads/dog-races');
+            Storage::disk('public')->makeDirectory('uploads/dog-races');
             
             $path = $file->storeAs('uploads/dog-races', $filename, 'public');
             
             if ($path) {
                 $uploadedFiles['main_image'] = [
-                    'filename' => $filename,
+                    'filename' => $file->getClientOriginalName(),
                     'path' => 'uploads/dog-races/' . $filename,
                     'original_name' => $file->getClientOriginalName()
                 ];

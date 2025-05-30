@@ -1,17 +1,21 @@
 <template>
   <div>
-    <h1>Accueil Aidella</h1>
+    <h1 class="text-5xl font-semibold p-2">Accueil Aidella</h1>
     <div class="flex justify-center">
-    <div v-for="(dogRaces, index) in dogRaces" :key="index">
-      <a :href="'race/'+ dogRaces.slug">{{ dogRaces.name }}</a>
-        <div class="flex flex-row w-10/12">
-          <div v-if="getMainPicture(dogRaces.pictures)">
-            <img :src="getMainPicture(dogRaces.pictures).path" :alt="getMainPicture(dogRaces.pictures).alt_text"/>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl p-2">
+        <a :href="'race/' + dogRaces.slug" v-for="(dogRaces, index) in dogRaces" :key="index">
+          <div class="flex flex-col w-full p-2">
+            <div
+              class="w-full h-80 bg-center bg-cover rounded-xs mb-2"
+              :style="{
+                backgroundImage: getMainPicture(dogRaces.pictures)
+                  ? `url('${getMainPicture(dogRaces.pictures).path}')`
+                  : `url('${noImagePath}')`
+              }"
+            ></div>
+            <span class="text-center font-semibold">{{ dogRaces.name }}</span>
           </div>
-          <div v-else>
-            <img :src="noImagePath" alt="No image available"/>
-          </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>

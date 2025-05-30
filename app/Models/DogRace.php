@@ -5,6 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class DogRace extends Model
 {
@@ -51,14 +52,27 @@ class DogRace extends Model
     }
 
     /**
-     * Get the image thumbnail for the DogRace.
-     * 
-     * @return string|null
+     * Get the image name without the prefix and underscore
      */
-/*     public function images()
+    public function getMainImageName()
     {
-        return $this->pictures()->pluck('path')->toArray();
-    } */
+        $mainPicture = $this->pictures()->where('is_main', 1)->first();
+        if (!$mainPicture) {
+            return '';
+        }
+        $filename = basename($mainPicture->path);
+        $pos = strpos($filename, '_');
+        if (!$pos ) {
+            return $filename;
+        }
+        return substr($filename, $pos + 1);
+    }
+
+    public function getMainImageAttribute()
+    {
+        $main = $this->pictures()->where('is_main', 1)->first();
+        return $main ? $main->path : null;
+    }
 
     /**
      * Boot the model and add event listeners
@@ -76,8 +90,8 @@ class DogRace extends Model
             foreach ($pictures as $picture) {
                 if ($picture->path) {
                     // The path already includes the full path and extension
-                    if (\Storage::disk('public')->exists($picture->path)) {
-                        \Storage::disk('public')->delete($picture->path);
+                    if (Storage::disk('public')->exists($picture->path)) {
+                        Storage::disk('public')->delete($picture->path);
                     }
                 }
             }
