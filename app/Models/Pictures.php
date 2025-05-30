@@ -37,6 +37,6 @@ class Pictures extends Model
      */
     public function imageable()
     {
-        return $this->morphTo('imageable', 'model_type', 'imageable_id');
+        return $this->morphTo();
     }
 }
