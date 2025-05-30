@@ -9,10 +9,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $dogRaces = DogRace::all();
-
-        // Remove the 'slug' attribute from the collection
-        $dogRaces->makeHidden('slug');
+        $dogRaces = DogRace::with('pictures')->get();
 
         return view('homepage', compact('dogRaces'));
     }

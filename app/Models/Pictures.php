@@ -18,17 +18,17 @@ class Pictures extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'path',
         'is_main',
+        'alt_text',
+        'model_type',
         'imageable_id',
-        'imageable_type',
     ];
 
     /**
      * Attributes that have default values.
      */
     protected $attributes = [
-        'picture_name' => 'default_photo_url.png',
         'is_main' => false,
     ];
 
@@ -37,6 +37,6 @@ class Pictures extends Model
      */
     public function imageable()
     {
-        return $this->morphTo();
+        return $this->morphTo('imageable', 'model_type', 'imageable_id');
     }
 }
