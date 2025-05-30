@@ -69,19 +69,6 @@ class DogRaceCrudController extends CrudController
             'disk' => 'public',
             'prefix' => 'uploads/dog-races/',
         ]);
-    
-        // Add multiple image upload field
-        CRUD::addField([
-            'label' => 'Images',
-            'name' => 'images',
-            'type' => 'upload_multiple',
-            'upload' => true,
-            'disk' => 'public', // The disk where you want to store the files
-            'prefix' => 'uploads/dog-races/',
-        ]);
-
-        // Exclude upload fields from being saved to the main model
-        CRUD::setOperationSetting('saveAllInputsExcept', ['images', 'main_image']);
 
         // Add JavaScript to auto-generate slug
         CRUD::addField([
@@ -205,26 +192,6 @@ class DogRaceCrudController extends CrudController
             }
         }
 
-        // Handle multiple images upload
-        if (request()->hasFile('images')) {
-            foreach (request()->file('images') as $file) {
-                $filename = uniqid() . '_' . $file->getClientOriginalName();
-                
-                // Ensure directory exists
-                \Storage::disk('public')->makeDirectory('uploads/dog-races');
-                
-                $path = $file->storeAs('uploads/dog-races', $filename, 'public');
-                
-                if ($path) {
-                    $uploadedFiles['images'][] = [
-                        'filename' => $filename,
-                        'path' => 'uploads/dog-races/' . $filename,
-                        'original_name' => $file->getClientOriginalName()
-                    ];
-                }
-            }
-        }
-
         return $uploadedFiles;
     }
 
@@ -246,20 +213,6 @@ class DogRaceCrudController extends CrudController
                 'is_main' => 1,
             ]);
         }
-
-        // Create multiple image records
-        foreach ($uploadedFiles['images'] as $index => $imageData) {
-            // Format the filename for alt text (remove extension and replace spaces/hyphens with underscores)
-            $formattedName = str_replace([' ', '-'], '_', pathinfo($imageData['original_name'], PATHINFO_FILENAME));
-            
-            $item->pictures()->create([
-                'path' => '/storage/' . $imageData['path'],
-                'imageable_id' => $item->id,
-                'model_type' => get_class($item),
-                'alt_text' => $formattedName,
-                'is_main' => 0,
-            ]);
-        }
     }
 
     /**
@@ -278,29 +231,10 @@ class DogRaceCrudController extends CrudController
             $item->pictures()->create([
                 'path' => '/storage/' . $uploadedFiles['main_image']['path'],
                 'imageable_id' => $item->id,
-                'model_type' => get_class($item),
+                'model_type' => 'App\Models\DogRace',
                 'alt_text' => $formattedName,
                 'is_main' => 1,
             ]);
-        }
-
-        // Update multiple images if new ones uploaded
-        if (!empty($uploadedFiles['images'])) {
-            // Remove old images
-            $item->pictures()->where('is_main', 0)->delete();
-            
-            foreach ($uploadedFiles['images'] as $index => $imageData) {
-                // Format the filename for alt text
-                $formattedName = str_replace([' ', '-'], '_', pathinfo($imageData['original_name'], PATHINFO_FILENAME));
-                
-                $item->pictures()->create([
-                    'path' => '/storage/' . $imageData['path'],
-                    'imageable_id' => $item->id,
-                    'model_type' => get_class($item),
-                    'alt_text' => $formattedName,
-                    'is_main' => 0,
-                ]);
-            }
         }
     }
 
