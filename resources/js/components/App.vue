@@ -19,11 +19,12 @@ onMounted(() => {
     currentComponent.value = defineAsyncComponent(() => import('./Pages/Homepage.vue'))
   }
 })
+
 </script>
 
 <template>
   <div id="app">
-    <Header />
+    <Header :dogRaces="pageData.dogRaces"/>
     <main>
       <component :is="currentComponent" :initial-data="pageData" />
     </main>

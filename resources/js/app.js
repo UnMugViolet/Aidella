@@ -3,11 +3,15 @@ import App from './components/App.vue'
 import Homepage from './components/Pages/Homepage.vue'
 import About from './components/Pages/About.vue'
 import SingleDog from './components/Pages/SingleDog.vue'
+import LegalMentions from './components/Pages/LegalMentions.vue'
+import PrivacyPolicy from './components/Pages/PrivacyPolicy.vue'
 
 const app = createApp(App)
 
 app.component('Homepage', Homepage)
 app.component('About', About)
 app.component('SingleDog', SingleDog)
+app.component('LegalMentions', LegalMentions)
+app.component('PrivacyPolicy', PrivacyPolicy)
 
 app.mount('#app')
