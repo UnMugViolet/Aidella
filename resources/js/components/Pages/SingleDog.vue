@@ -8,8 +8,10 @@
 <script setup>
 import { ref } from 'vue'
 
-const props = defineProps(['initialData'])
-const dogRace = ref(props.initialData)
+// Get data from the global window object set in Blade
+const dogRaces = ref(window.pageData.dogRaces)
+const dogRace = ref(window.pageData.dogRace)
 
-console.log('Dogs' + JSON.stringify(dogRace.value))
+console.log('Dogs', dogRaces.value)
+console.log('Dog', dogRace.value)
 </script>

@@ -5,5 +5,5 @@
 @section('component', 'SingleDog')
 
 @section('data')
-    @json($dogRace)
+    {!! json_encode(['dogRace' => $dogRace, 'dogRaces' => $dogRaces]) !!}
 @endsection

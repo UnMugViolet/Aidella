@@ -25,6 +25,7 @@ Route::get('/race/{slug}', function ($slug) {
     $dogRace = DogRace::where('slug', $slug)->firstOrFail();
     return view('single_dog', [
         'dogRace' => $dogRace,
+        'dogRaces' => DogRace::all(),
         'dogRaceJson' => $dogRace->toJson()
     ]);
 });

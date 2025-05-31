@@ -4,10 +4,10 @@
 			<a href="/" class="text-white hover:text-gray-400">
 				<h1 class="text-2xl font-bold">My Application</h1>
 			</a>
-			<nav>
+			<nav class="flex space-x-6">
 				<ul v-for="dogRace in dogRaces" :key="dogRace.id" class="flex space-x-4">
 					<li>
-						<a :href="dogRace.slug" class="hover:text-gray-400">
+						<a :href="'/race/' + dogRace.slug" class="hover:text-gray-400">
 							{{ dogRace.name }}
 						</a>
 					</li>
@@ -24,6 +24,8 @@
 import { ref, computed } from 'vue';
 const props = defineProps(['dogRaces'])
 
-
+const sortedDogRaces = computed(() =>
+  [...dogRaces.value].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+);
 
 </script>
