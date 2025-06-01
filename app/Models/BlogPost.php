@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use Orchid\Filters\Filterable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Filters\Types\Like;
+use Orchid\Filters\Types\Where;
 
 class BlogPost extends Model
 {
     use CrudTrait;
+    use Filterable;
     /** @use HasFactory<\Database\Factories\BlogPostFactory> */
     use HasFactory;
 
@@ -20,12 +24,12 @@ class BlogPost extends Model
     protected $fillable = [
         'title',
         'content',
-        'published_at',
         'status',
         'meta_title',
         'meta_description',
         'slug',
         'author_id',
+        'published_at',
         'category_id',
         'dog_race_id'
     ];
@@ -47,6 +51,35 @@ class BlogPost extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
+    ];
+
+    /**
+     * The attributes that are allowed to be sorted in the admin panel.
+     *
+     * @var list<string>
+     */
+    protected $allowedSorts = [
+        'id',
+        'title',
+        'content',
+        'status',
+        'author_id',
+        'slug',
+        'published_at',
+        'category_id',
+        'dog_race_id',
+    ];
+
+    protected $allowedFilters = [
+        'id'            => Where::class,
+        'title'         => Like::class,
+        'content'       => Like::class,
+        'status'        => Like::class,
+        'author_id'     => Where::class,
+        'slug'          => Like::class,
+        'published_at'  => Where::class,
+        'category_id'   => Where::class,
+        'dog_race_id'   => Where::class,
     ];
 
     /**

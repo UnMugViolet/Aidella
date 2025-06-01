@@ -25,15 +25,14 @@ class DogRaceFactory extends Factory
             'Spitz Nain',
         ];
 
-        $order = 0;
-        
-        $name = $this->faker->unique()->randomElement($races);
+        $index = $this->faker->unique()->numberBetween(0, count($races) - 1);
+        $name = $races[$index];
 
         return [
             'name' => $name,
             'slug' => strtolower(str_replace(' ', '-', $name)),
             'description' => fake()->sentence(),
-            'order' =>  $order++,
+            'order' => $index + 1,
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -15,8 +15,24 @@ class DogRaceSeeder extends Seeder
      */
     public function run(): void
     {
-            DogRace::factory()
-                ->count(6)
-                ->create();
+        $races = [
+            'Berger Australien',
+            'Labrador',
+            'Cavalier King Charles',
+            'Bouledogue Français',
+            'Coton de Tulear',
+            'Spitz Nain',
+        ];
+
+        foreach ($races as $index => $name) {
+            DogRace::create([
+                'name' => $name,
+                'slug' => strtolower(str_replace(' ', '-', $name)),
+                'description' => fake()->sentence(),
+                'order' => $index + 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

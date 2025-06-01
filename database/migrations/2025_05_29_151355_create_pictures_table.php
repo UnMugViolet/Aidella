@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pictures', function (Blueprint $table) {
             $table->id();
-            $table->integer('imageable_id');
+            $table->unsignedInteger('imageable_id');
             $table->string('model_type');
             $table->string('alt_text')->nullable();
             $table->boolean('is_main')->default(false);

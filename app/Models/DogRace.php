@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use Orchid\Filters\Filterable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Orchid\Filters\Types\Like;
+use Orchid\Filters\Types\Where;
 
 class DogRace extends Model
 {
     use CrudTrait;
+    use Filterable;
     /** @use HasFactory<\Database\Factories\DogRaceFactory> */
     use HasFactory;
 
@@ -21,9 +25,8 @@ class DogRace extends Model
     protected $fillable = [
         'name',
         'description',
+        'order',
         'slug',
-        'order', // Added for ordering in the admin panel
-        // image is handled by the Pictures model
     ];
 
     /**
@@ -35,6 +38,26 @@ class DogRace extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * The attributes that are allowed to be sorted in the admin panel.
+     *
+     * @var list<string>
+     */
+    protected $allowedSorts = [
+        'order',
+        'name',
+        'description',
+        'slug',
+    ];
+
+    protected $allowedFilters = [
+        'order'         => Where::class,
+        'name'          => Like::class,
+        'description'   => Like::class,
+        'slug'          => Like::class,
+    ];
+
 
     public function pictures()
     {

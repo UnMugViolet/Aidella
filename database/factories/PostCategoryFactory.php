@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PostCategory>
@@ -32,7 +33,7 @@ class PostCategoryFactory extends Factory
         return [
             'name' => $name,
             'description' => $this->faker->sentence,
-            'slug' => $name,
+            'slug' => Str::slug($name, '-', 'fr'),
         ];
     }
 }
