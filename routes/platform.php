@@ -107,4 +107,3 @@ Route::screen('posts', BlogPostListScreen::class)->name('platform.posts');
 Route::screen('posts-add', BlogPostScreen::class)->name('platform.posts.create');
 Route::screen('posts/{blogPost}/edit', BlogPostEditScreen::class)->name('platform.posts.edit');
 
-// Route::screen('idea', Idea::class, 'platform.screens.idea');
