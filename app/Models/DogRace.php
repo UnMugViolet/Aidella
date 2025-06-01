@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Orchid\Filters\DogRaceFiltersLayout;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Orchid\Filters\Filterable;
 
 class DogRace extends Model
 {
     use CrudTrait;
+    use Filterable;
     /** @use HasFactory<\Database\Factories\DogRaceFactory> */
     use HasFactory;
 
@@ -21,6 +24,7 @@ class DogRace extends Model
     protected $fillable = [
         'name',
         'description',
+        'order',
         'slug',
         // Do NOT include 'images', 'main_image', 'picture_name', etc. It is handled by the Pictures model
         // and the morphMany relationship defined below.
@@ -34,6 +38,10 @@ class DogRace extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
+    ];
+
+    protected $filters = [
+        DogRaceFiltersLayout::class,
     ];
 
     public function pictures()

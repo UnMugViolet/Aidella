@@ -24,13 +24,15 @@ class DogRaceFactory extends Factory
             'Coton de Tulear',
             'Spitz Nain',
         ];
-        
-        $name = $this->faker->unique()->randomElement($races);
+
+        $index = $this->faker->unique()->numberBetween(0, count($races) - 1);
+        $name = $races[$index];
 
         return [
             'name' => $name,
             'slug' => strtolower(str_replace(' ', '-', $name)),
             'description' => fake()->sentence(),
+            'order' => $index + 1,
             'created_at' => now(),
             'updated_at' => now(),
         ];

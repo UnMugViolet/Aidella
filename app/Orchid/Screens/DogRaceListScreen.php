@@ -3,12 +3,10 @@
 namespace App\Orchid\Screens;
 
 use App\Models\DogRace;
+use App\Orchid\Layouts\DogRaceListLayout;
+use App\Orchid\Filters\DogRaceFiltersLayout;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
-use Orchid\Support\Facades\Layout;
-use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Toast;
 
 class DogRaceListScreen extends Screen
 {
@@ -16,34 +14,27 @@ class DogRaceListScreen extends Screen
 
     public function query(): array
     {
+        $sort = request('sort', 'order');
+        $direction = request('direction', 'asc');
+
+        // Handle Orchid's '-' prefix for descending order
+        if (str_starts_with($sort, '-')) {
+            $sort = ltrim($sort, '-');
+            $direction = 'desc';
+        }
+
         return [
-            'dogRaces' => DogRace::paginate(),
+            'dogRaces' => DogRace::orderBy($sort, $direction)->paginate(),
         ];
     }
 
+    /**
+     * @return TD[]
+     */
     public function layout(): array
     {
         return [
-            Layout::table('dogRaces', [
-                TD::make('name', 'Nom')->sort()->filter(),
-                TD::make('description', 'Description'),
-				TD::make('slug', 'Slug'),
-
-				TD::make('created_at', 'Créé le')
-					->sort()
-					->render(function (DogRace $dogRace) {
-						return $dogRace->created_at->format('d/m/Y H:i');
-					}),
-            ]),
+            DogRaceListLayout::class,
         ];
-    }
-
-    public function destroy($id)
-    {
-        $dogRace = DogRace::findOrFail($id);
-        $dogRace->delete();
-
-        Toast::success('Race de chien supprimée.');
-        return redirect()->route('platform.dog-races');
     }
 }

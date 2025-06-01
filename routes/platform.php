@@ -81,6 +81,6 @@ Route::screen('roles', RoleListScreen::class)
 
 Route::screen('dog-races', DogRaceListScreen::class)->name('platform.dog-races');
 Route::screen('dog-races-add', DogRaceScreen::class)->name('platform.dog-races.create');
-Route::screen('dog-races/{dogRace}/edit', DogRaceEditScreen::class)->name('platform.dog-races.edit');
+// Route::screen('dog-races/{dogRace}/edit', DogRaceEditScreen::class)->name('platform.dog-races.edit');
 
 // Route::screen('idea', Idea::class, 'platform.screens.idea');
