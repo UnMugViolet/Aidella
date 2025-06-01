@@ -11,6 +11,7 @@ use Orchid\Screen\Fields\Picture;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DogRaceScreen extends Screen
 {
@@ -69,8 +70,13 @@ class DogRaceScreen extends Screen
 
             // Validate the data
         $request->validate([
-            'dogRace.name' => 'required|string|max:255',
-            'dogRace.description' => 'nullable|string|max:255',
+            'postCategory.name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[\pL\pN\s\-]+$/u',
+            ],
+            'postCategory.description' => 'nullable|string|max:255',
         ]);
 
         // Save only if the name is not already taken
@@ -79,7 +85,7 @@ class DogRaceScreen extends Screen
             return null;
         }
         
-        $data['slug'] = $this->generateSlug($data['name']);
+        $data['slug'] = Str::slug($data['name'], '-', 'fr');
         $max_order = DogRace::max('order');
 
         $data['order'] = $max_order ? $max_order + 1 : 1;
@@ -101,15 +107,5 @@ class DogRaceScreen extends Screen
 
         Toast::success('Race de chien enregistrée avec succès!');
         return redirect()->route('platform.dog-races');
-    }
-
-    private function generateSlug(string $name): string
-    {
-        $slug = strtolower($name);
-        $slug = str_replace('é', 'e', $slug);
-        $slug = preg_replace('/\s+/', '-', $slug); // Replace whitespace with -
-        $slug = preg_replace('/[^a-z0-9\-]/', '', $slug); // Remove special chars except -
-        $slug = trim($slug, '-'); // Trim leading and trailing -
-        return $slug;
     }
 }

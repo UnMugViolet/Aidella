@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use App\Models\PostCategory;
+use App\Services\SlugService;
 use Illuminate\Http\Request;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Actions\Button;
@@ -10,6 +11,7 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
+use Illuminate\Support\Str;
 
 class BlogPostScreen extends Screen
 {
@@ -81,7 +83,12 @@ class BlogPostScreen extends Screen
 
         // Validate the data
         $request->validate([
-            'postCategory.name' => 'required|string|max:255',
+            'postCategory.name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[\pL\pN\s\-]+$/u',
+            ],
             'postCategory.description' => 'nullable|string|max:255',
         ]);
 
@@ -90,6 +97,8 @@ class BlogPostScreen extends Screen
             Toast::error('Cette categorie existe déjà.');
             return null;
         }
+        $data['slug'] = Str::slug($data['name'], '-', 'fr');
+
         // Save the post category
         $postCategory->fill($data);
         $postCategory->save();
