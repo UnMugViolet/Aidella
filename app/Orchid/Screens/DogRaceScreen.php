@@ -74,10 +74,11 @@ class DogRaceScreen extends Screen
         }
         
         $data['slug'] = $this->generateSlug($data['name']);
+        $max_order = DogRace::max('order');
 
+        $data['order'] = $max_order ? $max_order + 1 : 1;
         $dogRace->fill($data)->save();
 
-        // Handle picture upload and morphMany
         if (!empty($data['thumbnail'])) {
             // Remove old thumbnails
             $parsedUrl = parse_url($data['thumbnail'], PHP_URL_PATH);
@@ -93,7 +94,7 @@ class DogRaceScreen extends Screen
         }
 
         Toast::success('Race de chien enregistrée avec succès!');
-        return redirect()->route('platform.dog-races.create');
+        return redirect()->route('platform.dog-races');
     }
 
     private function generateSlug(string $name): string

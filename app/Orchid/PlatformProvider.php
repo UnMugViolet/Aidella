@@ -47,16 +47,16 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.systems.roles')
                 ->divider(),
 
+            Menu::make(__('Ajouter une race de chien'))
+                ->icon('bs.plus')
+                ->route('platform.dog-races.create')
+                ->permission('platform.systems.users')
+                ->title(__('Race de chiens')),
+
             Menu::make(__('Liste de chiens'))
                 ->icon('bs.card-list')
                 ->route('platform.dog-races')
                 ->permission('platform.systems.users')
-                ->title(__('Race de chiens')),
-
-            Menu::make(__('Ajouter une race de chien'))
-                ->icon('bs.plus')
-                ->route('platform.dog-races.create')
-                ->permission('platform.systems.users'),
             
         ];
     }
