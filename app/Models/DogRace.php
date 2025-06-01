@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use App\Orchid\Filters\DogRaceFiltersLayout;
+use Orchid\Filters\Filterable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Orchid\Filters\Filterable;
 
 class DogRace extends Model
 {
@@ -40,8 +39,16 @@ class DogRace extends Model
         'updated_at',
     ];
 
-    protected $filters = [
-        DogRaceFiltersLayout::class,
+    /**
+     * The attributes that are allowed to be sorted in the admin panel.
+     *
+     * @var list<string>
+     */
+    protected $allowedSorts = [
+        'order',
+        'name',
+        'description',
+        'slug',
     ];
 
     public function pictures()

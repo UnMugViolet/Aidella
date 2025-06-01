@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('dog_races', function (Blueprint $table) {
-            $table->unsignedInteger('order')->unique()->after('description');
+            $table->integer('order')->unique()->after('description');
         });
     }
 
