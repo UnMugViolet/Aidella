@@ -27,8 +27,6 @@ class DogRace extends Model
         'description',
         'order',
         'slug',
-        // Do NOT include 'images', 'main_image', 'picture_name', etc. It is handled by the Pictures model
-        // and the morphMany relationship defined below.
     ];
 
     /**

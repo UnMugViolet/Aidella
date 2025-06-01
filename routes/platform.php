@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use App\Models\DogRace;
+use App\Orchid\Screens\BlogPostEditScreen;
+use App\Orchid\Screens\BlogPostListScreen;
+use App\Orchid\Screens\BlogPostScreen;
 use App\Orchid\Screens\DogRaceScreen;
 use App\Orchid\Screens\DogRaceListScreen;
 use App\Orchid\Screens\DogRaceEditScreen;
@@ -79,8 +82,14 @@ Route::screen('roles', RoleListScreen::class)
         ->parent('platform.index')
         ->push(__('Roles'), route('platform.systems.roles')));
 
+
+// Dog races
 Route::screen('dog-races', DogRaceListScreen::class)->name('platform.dog-races');
 Route::screen('dog-races-add', DogRaceScreen::class)->name('platform.dog-races.create');
 Route::screen('dog-races/{dogRace}/edit', DogRaceEditScreen::class)->name('platform.dog-races.edit');
+
+Route::screen('post-categories', BlogPostListScreen::class)->name('platform.post-categories');
+Route::screen('post-categories-add', BlogPostScreen::class)->name('platform.post-categories.create');
+Route::screen('post-categories/{postCategory}/edit', BlogPostEditScreen::class)->name('platform.post-categories.edit');
 
 // Route::screen('idea', Idea::class, 'platform.screens.idea');

@@ -67,6 +67,12 @@ class DogRaceScreen extends Screen
     {
         $data = $request->get('dogRace');
 
+            // Validate the data
+        $request->validate([
+            'dogRace.name' => 'required|string|max:255',
+            'dogRace.description' => 'nullable|string|max:255',
+        ]);
+
         // Save only if the name is not already taken
         if (DogRace::where('name', $data['name'])->where('id', '!=', $dogRace->id)->exists()) {
             Toast::error('Cette race de chien existe déjà.');

@@ -6,9 +6,8 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
+use Illuminate\Support\Str;
 use Orchid\Screen\TD;
-
-
 
 class DogRaceListLayout extends Table
 {
@@ -39,20 +38,21 @@ class DogRaceListLayout extends Table
                 ->sort()
                 ->cantHide()
                 ->filter(TD::FILTER_TEXT)
-                ->render(fn ($dogRace) => $dogRace->name),
+                ->render(fn ($dogRace) => Str::limit($dogRace->name, 40)),
+
 
             TD::make('description', 'Description')
                 ->sort()
                 ->cantHide()
                 ->filter(TD::FILTER_TEXT)
-                ->render(fn ($dogRace) => $dogRace->description),
+                ->render(fn ($dogRace) => Str::limit($dogRace->description, 40)),
 
             TD::make('slug', 'Voir la page')
                 ->sort()
                 ->cantHide()
                 ->filter(TD::FILTER_TEXT)
                 ->render(fn ($dogRace) =>
-                    Link::make($dogRace->slug)
+                    Link::make(Str::limit($dogRace->slug, 20))
                         ->href(config('app.url') . '/race/' . $dogRace->slug)
                         ->target('_blank')
                         ->icon('bs.eye')
