@@ -62,11 +62,22 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('bs.bookmarks')
                 ->route('platform.post-categories.create')
                 ->permission('platform.systems.users')
+                ->title(__('Categories de post')),
+        
+            Menu::make(__('Liste des categories de post'))
+                ->icon('bs.list-stars')
+                ->route('platform.post-categories')
+                ->permission('platform.systems.users'),
+
+            Menu::make(__('Ajouter un post'))
+                ->icon('bs.mailbox')
+                ->route('platform.posts.create')
+                ->permission('platform.systems.users')
                 ->title(__('Posts')),
         
             Menu::make(__('Liste des categories de post'))
-                ->icon('bs.card-list')
-                ->route('platform.post-categories')
+                ->icon('bs.list')
+                ->route('platform.posts')
                 ->permission('platform.systems.users'),
             
         ];

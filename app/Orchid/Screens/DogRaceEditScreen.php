@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\Picture;
+use Illuminate\Support\Str;
 
 class DogRaceEditScreen extends Screen
 {
@@ -75,7 +76,7 @@ class DogRaceEditScreen extends Screen
             return null;
         }
 
-        $data['slug'] = $this->generateSlug($data['name']);
+        $data['slug'] = Str::slug($data['name'], '-', 'fr');
         $dogRace->fill($data)->save();
 
         if (!empty($data['thumbnail'])) {
@@ -102,15 +103,5 @@ class DogRaceEditScreen extends Screen
 
         Toast::success('Race de chien mise à jour avec succès!');
         return redirect()->route('platform.dog-races');
-    }
-
-    private function generateSlug(string $name): string
-    {
-        $slug = strtolower($name);
-        $slug = str_replace('é', 'e', $slug);
-        $slug = preg_replace('/\s+/', '-', $slug);
-        $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
-        $slug = trim($slug, '-');
-        return $slug;
     }
 }

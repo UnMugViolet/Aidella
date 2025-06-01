@@ -1,20 +1,19 @@
 <?php
 
 namespace App\Orchid\Screens;
+
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
-use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
-use Illuminate\Support\Str;
+use Orchid\Support\Facades\Toast;
 
-class PostCategoryScreen extends Screen
+class PostCategoryEditScreen extends Screen
 {
     public $postCategory;
-
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -35,7 +34,7 @@ class PostCategoryScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Gestion des catégories de blog';
+        return 'Modifier la catégorie de blog';
     }
 
     /**
@@ -46,6 +45,13 @@ class PostCategoryScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Button::make('Supprimer')
+                ->icon('trash')
+                ->confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')
+                ->method('remove')
+                ->parameters([
+                    'id' => $this->postCategory->id,
+                ]),
             Button::make('Enregistrer')
                 ->icon('check')
                 ->method('save'),
@@ -70,39 +76,16 @@ class PostCategoryScreen extends Screen
                     ->title('Description')
                     ->rows(5)
                     ->placeholder('Description de la catégorie'),
-
             ]),
         ];
     }
 
-    public function save(PostCategory $postCategory, Request $request)
+    public function remove(Request $request)
     {
-        $data = $request->get('postCategory');
+        PostCategory::findOrFail($request->get('id'))->delete();
 
-        // Validate the data
-        $request->validate([
-            'postCategory.name' => [
-                'required',
-                'string',
-                'max:255',
-                'regex:/^[\pL\pN\s\-]+$/u',
-            ],
-            'postCategory.description' => 'nullable|string|max:255',
-        ]);
-
-        // Save only if the name is not already taken
-        if (PostCategory::where('name', $data['name'])->where('id', '!=', $postCategory->id)->exists()) {
-            Toast::error('Cette categorie existe déjà.');
-            return null;
-        }
-        $data['slug'] = Str::slug($data['name'], '-', 'fr');
-
-        // Save the post category
-        $postCategory->fill($data);
-        $postCategory->save();
-
-        Toast::success('Catégorie de blog enregistrée avec succès.');
-
+        Toast::info(__('Catégorie de blog supprimée'));
+        
         return redirect()->route('platform.post-categories');
     }
 }

@@ -5,7 +5,6 @@ namespace App\Orchid\Screens;
 use App\Models\DogRace;
 use App\Orchid\Layouts\DogRaceListLayout;
 use Orchid\Screen\Screen;
-use Orchid\Screen\TD;
 
 use Illuminate\Http\Request;
 use Orchid\Support\Facades\Toast;
@@ -15,6 +14,11 @@ class DogRaceListScreen extends Screen
     public $name = 'Liste des races de chiens';
     public $description = 'Retrouvez ici la liste des pages de chiens vous pourrez les modifier ou les supprimer depuis l\'option "Action"';
 
+    /**
+     * Fetch data to be displayed on the screen.
+     *
+     * @return array
+     */
     public function query(): array
     {
         return [
@@ -23,7 +27,19 @@ class DogRaceListScreen extends Screen
     }
 
     /**
-     * @return TD[]
+     * The screen's action buttons.
+     *
+     * @return \Orchid\Screen\Action[]
+     */
+    public function commandBar(): iterable
+    {
+        return [];
+    }
+
+    /**
+     * The screen's layout elements.
+     *
+     * @return \Orchid\Screen\Layout[]|string[]
      */
     public function layout(): array
     {

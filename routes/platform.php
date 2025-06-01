@@ -2,19 +2,28 @@
 
 declare(strict_types=1);
 
-use App\Models\DogRace;
+use App\Orchid\Screens\PlatformScreen;
+
+use App\Orchid\Screens\BlogPostScreen;
 use App\Orchid\Screens\BlogPostEditScreen;
 use App\Orchid\Screens\BlogPostListScreen;
-use App\Orchid\Screens\BlogPostScreen;
+
 use App\Orchid\Screens\DogRaceScreen;
 use App\Orchid\Screens\DogRaceListScreen;
 use App\Orchid\Screens\DogRaceEditScreen;
-use App\Orchid\Screens\PlatformScreen;
+
+
+use App\Orchid\Screens\PostCategoryScreen;
+use App\Orchid\Screens\PostCategoryEditScreen;
+use App\Orchid\Screens\PostCategoryListScreen;
+
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
 
@@ -88,8 +97,13 @@ Route::screen('dog-races', DogRaceListScreen::class)->name('platform.dog-races')
 Route::screen('dog-races-add', DogRaceScreen::class)->name('platform.dog-races.create');
 Route::screen('dog-races/{dogRace}/edit', DogRaceEditScreen::class)->name('platform.dog-races.edit');
 
-Route::screen('post-categories', BlogPostListScreen::class)->name('platform.post-categories');
-Route::screen('post-categories-add', BlogPostScreen::class)->name('platform.post-categories.create');
-Route::screen('post-categories/{postCategory}/edit', BlogPostEditScreen::class)->name('platform.post-categories.edit');
+// Post categories
+Route::screen('post-categories', PostCategoryListScreen::class)->name('platform.post-categories');
+Route::screen('post-categories-add', PostCategoryScreen::class)->name('platform.post-categories.create');
+Route::screen('post-categories/{postCategory}/edit', PostCategoryEditScreen::class)->name('platform.post-categories.edit');
 
+// Blog posts
+Route::screen('posts', BlogPostListScreen::class)->name('platform.posts');
+Route::screen('posts-add', BlogPostScreen::class)->name('platform.posts.create');
+Route::screen('posts/{blogPost}/edit', BlogPostEditScreen::class)->name('platform.posts.edit');
 // Route::screen('idea', Idea::class, 'platform.screens.idea');

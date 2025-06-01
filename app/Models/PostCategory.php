@@ -5,12 +5,14 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Filters\Filterable;
 use Orchid\Filters\Types\Where;
 use Orchid\Filters\Types\Like;
 
 class PostCategory extends Model
 {
     use CrudTrait;
+    use Filterable;
     /** @use HasFactory<\Database\Factories\PostCategoryFactory> */
     use HasFactory;
 
@@ -40,20 +42,18 @@ class PostCategory extends Model
      * @var list<string>
      */
     protected $allowedSorts = [
-        'order',
+        'id',
         'name',
         'description',
         'slug',
     ];
 
     protected $allowedFilters = [
-        'order'         => Where::class,
+        'id'            => Where::class,
         'name'          => Like::class,
         'description'   => Like::class,
         'slug'          => Like::class,
     ];
-
-
 
     public function pictures()
     {
