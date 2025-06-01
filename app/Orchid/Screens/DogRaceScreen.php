@@ -70,13 +70,13 @@ class DogRaceScreen extends Screen
 
             // Validate the data
         $request->validate([
-            'postCategory.name' => [
+            'dogRace.name' => [
                 'required',
                 'string',
                 'max:255',
                 'regex:/^[\pL\pN\s\-]+$/u',
             ],
-            'postCategory.description' => 'nullable|string|max:255',
+            'dogRace.description' => 'nullable|string|max:255',
         ]);
 
         // Save only if the name is not already taken
