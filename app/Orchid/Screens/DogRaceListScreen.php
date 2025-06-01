@@ -22,7 +22,9 @@ class DogRaceListScreen extends Screen
     public function query(): array
     {
         return [
-            'dogRaces' => DogRace::filters()->defaultSort('order', 'asc')->paginate(),
+            'dogRaces' => DogRace::filters()
+                ->defaultSort('order', 'asc')
+                ->paginate(),
         ];
     }
 

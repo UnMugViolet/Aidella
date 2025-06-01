@@ -25,7 +25,7 @@ class BlogPostFactory extends Factory
             'meta_description' => $this->faker->text(160),
             'slug' => $this->faker->unique()->slug,
             'author_id' => $this->faker->numberBetween(1, 2),
-            'post_category_id' => $this->faker->numberBetween(1, 4),
+            'category_id' => $this->faker->numberBetween(1, 4),
             'dog_race_id' => $this->faker->numberBetween(1, 6),
             'published_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'created_at' => now(),

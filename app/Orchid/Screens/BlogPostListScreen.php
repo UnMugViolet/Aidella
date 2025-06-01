@@ -2,10 +2,17 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\BlogPost;
+use App\Orchid\Layouts\BlogPostListLayout;
+use Illuminate\Http\Request;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Toast;
 
 class BlogPostListScreen extends Screen
 {
+    public $name = 'Liste des articles de blog';
+    public $description = 'Retrouvez ici la liste des articles de blog. Vous pourrez les modifier ou les supprimer depuis l\'option "Action"';
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -13,17 +20,11 @@ class BlogPostListScreen extends Screen
      */
     public function query(): iterable
     {
-        return [];
-    }
-
-    /**
-     * The name of the screen displayed in the header.
-     *
-     * @return string|null
-     */
-    public function name(): ?string
-    {
-        return 'BlogPostListScreen';
+        return [
+            'blogPosts' => BlogPost::filters()
+                ->defaultSort('title', 'desc')
+                ->paginate(),
+        ];
     }
 
     /**
@@ -43,6 +44,15 @@ class BlogPostListScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            BlogPostListLayout::class,
+        ];
+    }
+
+    public function remove(Request $request): void
+    {
+        BlogPost::findOrFail($request->get('id'))->delete();
+
+        Toast::info(__('Race de chien supprimée'));
     }
 }

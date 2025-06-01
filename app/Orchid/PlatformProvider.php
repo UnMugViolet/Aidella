@@ -69,13 +69,13 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.post-categories')
                 ->permission('platform.systems.users'),
 
-            Menu::make(__('Ajouter un post'))
+            Menu::make(__('Créer un post'))
                 ->icon('bs.mailbox')
                 ->route('platform.posts.create')
                 ->permission('platform.systems.users')
                 ->title(__('Posts')),
         
-            Menu::make(__('Liste des categories de post'))
+            Menu::make(__('Liste des posts'))
                 ->icon('bs.list')
                 ->route('platform.posts')
                 ->permission('platform.systems.users'),
