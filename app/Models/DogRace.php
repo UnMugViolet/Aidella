@@ -7,6 +7,8 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Orchid\Filters\Types\Like;
+use Orchid\Filters\Types\Where;
 
 class DogRace extends Model
 {
@@ -50,6 +52,14 @@ class DogRace extends Model
         'description',
         'slug',
     ];
+
+    protected $allowedFilters = [
+        'order'         => Where::class,
+        'name'          => Like::class,
+        'description'   => Like::class,
+        'slug'          => Like::class,
+    ];
+
 
     public function pictures()
     {
