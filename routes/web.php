@@ -21,7 +21,7 @@ Route::get('/politique-de-confidentialite', function () {
 });
 
 // Routes for all the dogs races
-Route::get('/race/{slug}', function ($slug) {
+Route::get('{slug}', function ($slug) {
     $dogRace = DogRace::where('slug', $slug)->firstOrFail();
     return view('single_dog', [
         'dogRace' => $dogRace,

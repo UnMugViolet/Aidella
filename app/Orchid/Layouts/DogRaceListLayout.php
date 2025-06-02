@@ -53,7 +53,7 @@ class DogRaceListLayout extends Table
                 ->filter(TD::FILTER_TEXT)
                 ->render(fn ($dogRace) =>
                     Link::make(Str::limit($dogRace->slug, 20))
-                        ->href(config('app.url') . '/race/' . $dogRace->slug)
+                        ->href(config('app.url') . $dogRace->slug)
                         ->target('_blank')
                         ->icon('bs.eye')
                 ),
