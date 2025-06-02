@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h1>{{ dogRace.name }}</h1>
+  <section class="px-4 md:px-8 py-8 mt-10">
+    <h1 class="text-6xl md:text-7xl font-semibold text-left py-4 uppercase">{{ dogRace.name }}</h1>
     <!-- Your dog race content -->
-  </div>
+  </section>
 </template>
 
 <script setup>

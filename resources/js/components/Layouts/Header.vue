@@ -7,13 +7,13 @@
             <nav class="flex space-x-6">
                 <ul v-for="dogRace in dogRaces" :key="dogRace.id" class="flex space-x-4">
                     <li>
-                        <a :href="dogRace.slug" class="hover:text-gray-400 text-shadow-custom transition-all duration-400 ease-in-out">
+                        <a :href="dogRace.slug" class="hover:underline text-shadow-custom transition-all duration-400 ease-out">
                             {{ dogRace.name }}
                         </a>
                     </li>
                 </ul>
                 <ul class="flex space-x-4">
-                    <li><a href="/a-propos" class="hover:text-gray-400 text-shadow-custom transition-all duration-400 ease-in-out">A propos</a></li>
+                    <li><a href="/a-propos" class="hover:underline text-shadow-custom transition-all duration-400 ease-out">A propos</a></li>
                 </ul>
             </nav>
         </div>
@@ -32,6 +32,6 @@ const sortedDogRaces = computed(() =>
 
 <style scoped>
 .text-shadow-custom {
-  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  text-shadow: 0 2px 8px rgba(0,0,0,1);
 }
 </style>
