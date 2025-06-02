@@ -68,8 +68,6 @@ class BlogPostScreen extends Screen
                 ->placeholder('Contenu du post')
                 ->required(),
 
-            
-
             ]),
         ];
     }
