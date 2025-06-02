@@ -16,6 +16,8 @@ use Illuminate\Support\Str;
 class DogRaceScreen extends Screen
 {
     public $dogRace;
+    public $name = 'Gestion des races de chiens';
+    public $description = 'Cette page d\'ajouter une race de chiens. La création d\'une race de chien entraine la création d\'une page de chiens.';
 
     public function query(DogRace $dogRace): iterable
     {
@@ -23,11 +25,6 @@ class DogRaceScreen extends Screen
         return [
             'dogRace' => $dogRace,
         ];
-    }
-
-    public function name(): ?string
-    {
-        return 'Gestion des races de chiens';
     }
 
     public function commandBar(): iterable

@@ -1,6 +1,18 @@
 <template>
   <div>
-    <h1 class="text-5xl font-semibold p-2">Accueil Aidella</h1>
+    <div class="relative w-full">
+      <video autoplay muted loop class="w-full [height:93svh] object-cover">
+        <source :src="videoPath" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <!-- Dark overlay -->
+      <div class="absolute inset-0 bg-black opacity-50"></div>
+      <!-- Centered text -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white ">
+        <h1 class="text-6xl md:text-8xl font-semibold mb-2">Aidella</h1>
+        <p class="p-2 text-base md:text-xl">Bienvenue sur notre site dédié aux races de chiens</p>
+      </div>
+    </div>
     <div class="flex justify-center">
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl p-2">
         <a :href="'/race/' + dogRace.slug" v-for="(dogRace, index) in sortedDogRaces" :key="index">
@@ -26,7 +38,8 @@ import { ref, computed } from 'vue'
 const props = defineProps(['initialData'])
 
 let dogRaces = ref(props.initialData.dogRaces);
-const noImagePath = '/img/no-image.jpg';
+const noImagePath = 'https://placehold.co/800x800?text=NO+IMAGE';
+const videoPath = '/videos/video_banniere_aidella.mp4';
 
 console.log(dogRaces.value);
 

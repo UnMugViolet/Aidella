@@ -1,12 +1,22 @@
 <?php
 
 namespace App\Orchid\Screens;
-
-
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Screen\Fields\Picture;
+use Orchid\Support\Facades\Layout;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Screen;
 
 class BlogPostScreen extends Screen
 {
+
+    public $name = 'Ajouter un Post';
+    public $description = 'Cette page permet d\'ajouter un post.';
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -18,23 +28,17 @@ class BlogPostScreen extends Screen
     }
 
     /**
-     * The name of the screen displayed in the header.
-     *
-     * @return string|null
-     */
-    public function name(): ?string
-    {
-        return 'BlogPostScreen';
-    }
-
-    /**
      * The screen's action buttons.
      *
      * @return \Orchid\Screen\Action[]
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Enregistrer')
+                ->icon('check')
+                ->method('save')
+        ];
     }
 
     /**
@@ -44,7 +48,30 @@ class BlogPostScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::rows([
+                Input::make('post.title')
+                ->title('Titre')
+                ->placeholder('Titre du post')
+                ->required(),
+                
+            Picture::make('post.thumbnail')
+                ->title('Images carrousel')
+                ->storage('public')
+                ->path('uploads/posts')
+                ->acceptedFiles('image/*')
+                ->maxFiles(5)
+                ->help('Téléchargez jusqu\'à 5 images pour le carrousel du post'),
+
+            Quill::make('html')
+                ->title('Contenu')
+                ->placeholder('Contenu du post')
+                ->required(),
+
+            
+
+            ]),
+        ];
     }
 
 }
