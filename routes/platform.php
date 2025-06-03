@@ -37,7 +37,6 @@ use Tabuna\Breadcrumbs\Trail;
 | contains the need "dashboard" middleware group. Now create something great!
 |
 */
-
 // Main
 Route::screen('/main', PlatformScreen::class)
     ->name('platform.main');

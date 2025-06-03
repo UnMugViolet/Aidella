@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Orchid\Filters\Filterable;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Filters\Types\Like;
@@ -11,7 +10,6 @@ use Orchid\Filters\Types\Where;
 
 class BlogPost extends Model
 {
-    use CrudTrait;
     use Filterable;
     /** @use HasFactory<\Database\Factories\BlogPostFactory> */
     use HasFactory;

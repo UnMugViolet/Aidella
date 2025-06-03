@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Orchid\Filters\Filterable;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +11,6 @@ use Orchid\Filters\Types\Where;
 
 class DogRace extends Model
 {
-    use CrudTrait;
     use Filterable;
     /** @use HasFactory<\Database\Factories\DogRaceFactory> */
     use HasFactory;

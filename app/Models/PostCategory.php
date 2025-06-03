@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Filters\Filterable;
@@ -11,7 +10,6 @@ use Orchid\Filters\Types\Like;
 
 class PostCategory extends Model
 {
-    use CrudTrait;
     use Filterable;
     /** @use HasFactory<\Database\Factories\PostCategoryFactory> */
     use HasFactory;
