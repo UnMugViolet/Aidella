@@ -14,7 +14,7 @@
       </div>
     </div>
     <DogRaceGrid :dogRaces="dogRaces"/>
-    <section class="px-4 md:px-8 py-8 mt-10">
+    <section class="px-4 md:px-8 md:py-8 mt-10">
       <h2 class="text-6xl md:text-7xl font-semibold text-right py-4 uppercase">Qui sommes nous ?</h2>
       <div class="flex flex-col md:flex-row gap-4 md:items-center mt-2">
         <img src="https://placehold.co/600x400" alt="a propos de notre elevage" class="w-full md:w-1/2 h-auto rounded-lg shadow-lg mb-4">         
