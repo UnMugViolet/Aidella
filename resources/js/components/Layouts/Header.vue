@@ -51,23 +51,23 @@
             <transition name="slide" mode="out-in">
                 <nav
                     v-if="burgerOpen"
-                    class="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center space-y-8 md:hidden h-svh z-40"
+                    class="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center space-y-6 md:hidden h-svh z-40"
                     aria-label="Mobile Menu"
                 >
                     <div class="relative w-full flex flex-col justify-center px-4">
                         <span class="text-2xl font-semibold mb-3">Nos Chiots</span>
                         <ul class="rounded shadow-lg min-w-max truncate text-white">
-                            <li v-for="dogRace in sortedDogRaces" :key="dogRace.id" class="py-1.5 ml-4">
+                            <li v-for="dogRace in sortedDogRaces" :key="dogRace.id" class="py-1.5 ml-4 underline">
                                 <a :href="dogRace.slug" >{{ dogRace.name }}</a>
                             </li>
                         </ul>
                     </div>
-                    <ul class="flex flex-col space-y-6 items-center">
+                    <ul class="flex flex-col w-full items-left jusify-between">
                         <li>
-                            <a href="/a-propos" class="text-xl hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out">A propos</a>
+                            <a href="/a-propos" class="text-2xl hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out px-4">A propos</a>
                         </li>
-                        <li class="flex items-center gap-1 hover:text-gray-100 transition-colors duration-300 ease-in-out">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" style="filter: drop-shadow(0 2px 8px rgba(0,0,0,1));">
+                        <li class="absolute bottom-0 py-2 flex justify-center w-full gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-auto" style="filter: drop-shadow(0 2px 8px rgba(0,0,0,1));">
                                 <path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24c1.12.37 2.33.57 3.57.57c.55 0 1 .45 1 1V20c0 .55-.45 1-1 1c-9.39 0-17-7.61-17-17c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1c0 1.25.2 2.45.57 3.57c.11.35.03.74-.25 1.02z"/>
                             </svg>
                             <a href="tel:+33669107661" class="text-xl hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out">06 69 10 76 61</a>
