@@ -26,6 +26,7 @@ class PostCategoryFactory extends Factory
             'loisirs',
             'accessoires',
             'adoption',
+            'general'
         ];
 
         $name = $this->faker->unique()->randomElement($categories_name);

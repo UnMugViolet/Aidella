@@ -74,6 +74,7 @@ class DogRaceScreen extends Screen
                 'regex:/^[\pL\pN\s\-]+$/u',
             ],
             'dogRace.description' => 'nullable|string|max:255',
+            'dogRace.thumbnail' => 'nullable|image|max:2048', // Max 2MB
         ]);
 
         // Save only if the name is not already taken

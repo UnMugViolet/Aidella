@@ -21,9 +21,10 @@ class BlogPostListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'blogPosts' => BlogPost::filters()
-                ->defaultSort('title', 'desc')
-                ->paginate(),
+            'blogPosts' => BlogPost::whereNotNull('category_id')
+            ->filters()
+            ->defaultSort('title', 'desc')
+            ->paginate(),
         ];
     }
 
