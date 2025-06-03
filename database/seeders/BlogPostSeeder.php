@@ -17,7 +17,7 @@ class BlogPostSeeder extends Seeder
         // Create 10 blog posts using the factory
         BlogPost::factory(10)->create([
             'status' => 'published',
-            'author_id' => 1, // Assuming the first user is the author
+            'author_id' => 1, // first user is always aidella redac
         ]);
         
         // Switch to a different author for the next set of posts

@@ -2,19 +2,18 @@
 
 namespace App\Orchid\Screens;
 
-use App\Models\PostCategory;
-use App\Orchid\Layouts\BlogPostCategoryLayout;
+use App\Orchid\Layouts\BlogPostDogRaceLayout;
 use App\Orchid\Layouts\BlogPostPicturesLayout;
 use App\Orchid\Layouts\BlogPostSeoLayout;
 use Orchid\Screen\Actions\Button;
-use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 
-class BlogPostScreen extends Screen
+class BlogPostDogRaceScreen extends Screen
 {
 
-    public $name = 'Ajouter un Post';
-    public $description = 'Cette page permet d\'ajouter un post.';
+    public $name = 'Ajouter une page de chien';
+    public $description = 'Cette page permet d\'e modifier la page d\'un chien.';
 
     /**
      * Fetch data to be displayed on the screen.
@@ -49,7 +48,7 @@ class BlogPostScreen extends Screen
     {
         return [
             Layout::tabs([
-                'Contenu' => BlogPostCategoryLayout::class,
+                'Contenu' => BlogPostDogRaceLayout::class,
                 'SEO'     => BlogPostSeoLayout::class,
                 'Images'  => BlogPostPicturesLayout::class,
             ]),

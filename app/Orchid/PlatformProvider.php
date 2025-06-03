@@ -53,9 +53,14 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.systems.users')
                 ->title(__('Race de chiens')),
 
-            Menu::make(__('Liste de chiens'))
+            Menu::make(__('Pages de chiens'))
                 ->icon('bs.card-list')
                 ->route('platform.dog-races')
+                ->permission('platform.systems.users'),
+            
+            Menu::make(__('Créer une page de chien'))
+                ->icon('bs.file-earmark')
+                ->route('plateform.dog-races.post')
                 ->permission('platform.systems.users'),
 
             Menu::make(__('Ajouter une categorie de post'))
