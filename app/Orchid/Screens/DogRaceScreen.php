@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\BlogPost;
 use App\Models\DogRace;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -50,6 +51,14 @@ class DogRaceScreen extends Screen
                     ->rows(5)
                     ->placeholder('Description de la race'),
 
+                Input::make('dogRace.order')
+                    ->type('number')
+                    ->title('Ordre d\'affichage')
+                    ->placeholder(DogRace::max('order') + 1)
+                    ->default(DogRace::max('order') + 1)
+                    ->help('Plus le nombre est petit, plus la race apparaît en haut dans l\'affichage.')
+                    ->min(1),
+
                 Picture::make('dogRace.thumbnail')
                     ->title('Miniature')
                     ->storage('public')
@@ -65,7 +74,9 @@ class DogRaceScreen extends Screen
     {
         $data = $request->get('dogRace');
 
-            // Validate the data
+        $thumbnailRule = is_string($data['thumbnail'] ?? null) ? 'nullable|string' : 'nullable|image';
+
+        // Validate the data
         $request->validate([
             'dogRace.name' => [
                 'required',
@@ -74,7 +85,8 @@ class DogRaceScreen extends Screen
                 'regex:/^[\pL\pN\s\-]+$/u',
             ],
             'dogRace.description' => 'nullable|string|max:255',
-            'dogRace.thumbnail' => 'nullable|image|max:2048', // Max 2MB
+            'dogRace.thumbnail' => $thumbnailRule,
+            'dogRace.order' => 'nullable|integer|min:1',
         ]);
 
         // Save only if the name is not already taken
@@ -82,11 +94,11 @@ class DogRaceScreen extends Screen
             Toast::error('Cette race de chien existe déjà.');
             return null;
         }
-        
-        $data['slug'] = Str::slug($data['name'], '-', 'fr');
-        $max_order = DogRace::max('order');
 
-        $data['order'] = $max_order ? $max_order + 1 : 1;
+        if (empty($data['order'])) {
+            $data['order'] = DogRace::max('order') + 1;
+        }
+
         $dogRace->fill($data)->save();
 
         if (!empty($data['thumbnail'])) {
@@ -103,6 +115,14 @@ class DogRaceScreen extends Screen
             ]);
         }
 
+        // Create the associated blog post
+        BlogPost::create([
+            'title' => $dogRace->name,
+            'slug' => Str::slug($data['name'], '-', 'fr'),
+            'content' => '',
+            'meta_title' => 'Titre par défaut pour ' . $dogRace->name,
+            'meta_description' => 'Description par défaut pour ' . $dogRace->name,
+        ]);
         Toast::success('Race de chien enregistrée avec succès!');
         return redirect()->route('platform.dog-races');
     }

@@ -49,10 +49,17 @@ class DogRaceEditScreen extends Screen
                     ->placeholder('Nom de la race')
                     ->required(),
 
+                Input::make('dogRace.order')
+                    ->type('number')
+                    ->title('Ordre d\'affichage')
+                    ->placeholder($this->dogRace->order)
+                    ->default($this->dogRace->order)
+                    ->help('Plus le nombre est petit, plus le chien apparaît en haut dans l\'affichage.'),
+
                 TextArea::make('dogRace.description')
                     ->title('Description')
-                    ->rows(5)
-                    ->placeholder('Description de la race'),
+                    ->rows(6)
+                    ->placeholder($this->dogRace->description ?? 'Description de la race'),
 
                 Picture::make('dogRace.thumbnail')
                     ->title('Miniature')
@@ -61,7 +68,7 @@ class DogRaceEditScreen extends Screen
                     ->acceptedFiles('image/*')
                     ->maxFiles(1)
                     ->help('Téléchargez une image miniature')
-                    ->value('/' . $this->dogRace->main_image ?? null), // Add this line for preview
+                    ->value('/' . $this->dogRace->main_image ?? null),
             ]),
         ];
     }
@@ -76,8 +83,18 @@ class DogRaceEditScreen extends Screen
             return null;
         }
 
-        $data['slug'] = Str::slug($data['name'], '-', 'fr');
         $dogRace->fill($data)->save();
+
+        // Update associated BlogPost if exists
+        $blogPost = \App\Models\BlogPost::where('title', $dogRace->getOriginal('name'))->first();
+        if ($blogPost) {
+            $blogPost->update([
+                'title' => $blogPost->title ?? $blogPost->name,
+                'slug' => Str::slug($dogRace->name, '-', 'fr'),
+                'meta_title' => $blogPost->meta_title ?? 'Titre par défaut pour ' . $dogRace->name,
+                'meta_description' => $blogPost->meta_description ?? 'Description par défaut pour ' . $dogRace->name,
+            ]);
+        }
 
         if (!empty($data['thumbnail'])) {
             // Remove old thumbnails from storage and database
