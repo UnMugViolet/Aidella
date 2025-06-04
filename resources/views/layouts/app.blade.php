@@ -3,8 +3,35 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <title>@yield('title', 'Aidella')</title>
+
+        <!-- MetaTags General -->
+        <meta name="title" content="@yield('meta_title', 'Aidella - Elevage canin')">
+        <meta name="description" content="@yield('meta_description', 'Aidella - Elevage canin')">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph -->
+        <meta property="og:title" content="@yield('meta_title', 'Aidella - Elevage canin')">
+        <meta property="og:description" content="@yield('meta_description', '')">
+        <meta property="og:country-name" content="France">
+        <meta property="og:image" content="/images/logo-aidella.webp">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:type" content="website">
+
+        <!-- Facebook Meta Tags -->
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="@yield('meta_title', 'Aidella - Elevage canin')">
+        <meta property="og:description" content="@yield('meta_description', 'Aidella - Elevage canin')">
+        <meta property="og:image" content="/images/logo-aidella.webp">
+
+        <!-- Twitter Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta property="twitter:domain" content="logma-production.com">
+        <meta property="twitter:url" content="{{ url()->current() }}">
+        <meta name="twitter:title" content="@yield('meta_title', 'Aidella - Elevage canin')">
+        <meta name="twitter:description" content="@yield('meta_description', 'Aidella - Elevage canin')">
+        <meta name="twitter:image" content="/images/logo-aidella.webp">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
