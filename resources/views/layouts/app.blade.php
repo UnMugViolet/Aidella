@@ -42,7 +42,6 @@
     </head>
     <body>
         <div id="app"></div>
-        
         <script>
             window.currentComponent = "@yield('component', 'Homepage')";
             window.pageData = @yield('data', '{}');

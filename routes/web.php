@@ -3,7 +3,8 @@
 use App\Models\DogRace;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\SingleDogController;
+use App\Models\BlogPost;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -20,12 +21,6 @@ Route::get('/politique-de-confidentialite', function () {
     return view('privacy_policy');
 });
 
-// Routes for all the dogs races
-Route::get('{slug}', function ($slug) {
-    $dogRace = DogRace::where('slug', $slug)->firstOrFail();
-    return view('single_dog', [
-        'dogRace' => $dogRace,
-        'dogRaces' => DogRace::all(),
-        'dogRaceJson' => $dogRace->toJson()
-    ]);
-});
+// Generate all the routes for the Dog Pages
+Route::get('{slug}', [SingleDogController::class, 'show']);
+

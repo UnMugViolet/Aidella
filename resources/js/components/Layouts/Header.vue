@@ -29,8 +29,8 @@
                     </button>
                     <ul v-if="dropDownOpen" class="absolute left-0 text-black rounded shadow-lg min-w-max z-50">
                         <div class="bg-white rounded mt-2">
-                            <li v-for="dogRace in sortedDogRaces" :key="dogRace.id">
-                                <a :href="dogRace.slug" class="block px-4 py-2 rounded hover:bg-gray-100">{{ dogRace.name }}</a>
+                            <li v-for="dogPage in dogPages" :key="dogPage.id">
+                                <a :href="dogPage.blog_post.slug" class="block px-4 py-2 rounded hover:bg-gray-100">{{ dogPage.name }}</a>
                             </li>
                         </div>
                     </ul>
@@ -57,8 +57,8 @@
                     <div class="relative w-full flex flex-col justify-center px-4">
                         <span class="text-2xl font-semibold mb-3">Nos Chiots</span>
                         <ul class="rounded shadow-lg min-w-max truncate text-white">
-                            <li v-for="dogRace in sortedDogRaces" :key="dogRace.id" class="py-1.5 ml-4 underline">
-                                <a :href="dogRace.slug" >{{ dogRace.name }}</a>
+                            <li v-for="dogPage in dogPages" :key="dogPage.id" class="py-1.5 ml-4 underline">
+                                <a :href="dogPage.slug" >{{ dogPage.name }}</a>
                             </li>
                         </ul>
                     </div>
@@ -80,17 +80,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-const props = defineProps(['dogRaces'])
+import { ref } from 'vue';
+const props = defineProps(['dogPages'])
 const dropDownOpen = ref(false);
 const burgerOpen = ref(false);
-const mobileDropDownOpen = ref(false);
 
 const logoPath = '/images/logo-aidella.webp'; 
 
-const sortedDogRaces = computed(() =>
-  [...props.dogRaces].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-);
 </script>
 
 <style scoped>

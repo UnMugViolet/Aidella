@@ -1,9 +1,15 @@
 @extends('layouts.app')
 
-@section('title', $dogRace->name . ' - Aidella')
+@section('title', $blogPost->dogRace->name . ' - Aidella')
 
 @section('component', 'SingleDog')
 
+@section('meta_title', $blogPost->meta_title ? $blogPost->meta_title : $blogPost->dogRace->name . ' - Aidella')
+@section('meta_description', $blogPost->meta_description ? $blogPost->meta_description : $blogPost->dogRace->name . ' - Aidella')
+
 @section('data')
-    {!! json_encode(['dogRace' => $dogRace, 'dogRaces' => $dogRaces]) !!}
+    {!! json_encode([
+        'dogPages' => $dogPages,
+        'blogPost' => $blogPost
+    ]) !!}
 @endsection

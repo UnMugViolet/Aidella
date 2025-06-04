@@ -24,7 +24,7 @@ onMounted(() => {
 
 <template>
   <div id="app">
-    <Header :dogRaces="pageData.dogRaces"/>
+    <Header :dogPages="pageData.dogPages"/>
     <main>
       <component :is="currentComponent" :initial-data="pageData" />
     </main>

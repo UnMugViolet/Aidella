@@ -5,5 +5,5 @@
 @section('component', "Homepage")
 
 @section('data')
-    { dogRaces: @json($dogRaces) }
+    { dogPages: @json($dogPages) }
 @endsection

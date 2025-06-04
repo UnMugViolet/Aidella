@@ -2,5 +2,5 @@
 
 return [
     App\Providers\AppServiceProvider::class,
-    App\Providers\SlugService::class,
+    App\Providers\DogPagesViewServiceProvider::class,
 ];

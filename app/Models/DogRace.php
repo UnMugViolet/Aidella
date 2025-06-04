@@ -62,15 +62,9 @@ class DogRace extends Model
         return $this->morphMany(Pictures::class, 'imageable');
     }
 
-    
-    public function parent()
+    public function blogPost()
     {
-        return $this->belongsTo(DogRace::class, 'parent_id');
-    }
-
-    public function children()
-    {
-        return $this->hasMany(DogRace::class, 'parent_id');
+        return $this->hasOne(BlogPost::class);
     }
 
     /**
