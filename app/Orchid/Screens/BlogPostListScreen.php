@@ -5,6 +5,8 @@ namespace App\Orchid\Screens;
 use App\Models\BlogPost;
 use App\Orchid\Layouts\BlogPostListLayout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
 
@@ -50,10 +52,4 @@ class BlogPostListScreen extends Screen
         ];
     }
 
-    public function remove(Request $request): void
-    {
-        BlogPost::findOrFail($request->get('id'))->delete();
-
-        Toast::info(__('Race de chien supprimée'));
-    }
 }

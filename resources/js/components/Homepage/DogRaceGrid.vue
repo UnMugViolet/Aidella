@@ -55,7 +55,7 @@ const getMainPicture = (pictures) => {
 <style scoped>
 
 .card {
-  overflow: hidden; /* Ensures the image zoom stays inside the card */
+  overflow: hidden;
 }
 
 .dog-image {

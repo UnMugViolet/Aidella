@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\BlogPostDogRaceEditScreen;
 use App\Orchid\Screens\BlogPostDogRaceScreen;
 use App\Orchid\Screens\PlatformScreen;
 
@@ -94,7 +95,7 @@ Route::screen('roles', RoleListScreen::class)
 // Dog races
 Route::screen('dog-races', DogRaceListScreen::class)->name('platform.dog-races');
 Route::screen('dog-races/post', BlogPostDogRaceScreen::class)->name('plateform.dog-races.post');
-Route::screen('dog-races/{dogRace}/edit', DogRaceEditScreen::class)->name('platform.dog-races.edit');
+Route::screen('dog-races/{dogRace}/edit', BlogPostDogRaceEditScreen::class)->name('platform.dog-races.edit');
 
 // Post categories
 Route::screen('post-categories', PostCategoryListScreen::class)->name('platform.post-categories');
