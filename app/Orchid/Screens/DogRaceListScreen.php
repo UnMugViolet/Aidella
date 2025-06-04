@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\BlogPost;
 use App\Models\DogRace;
 use App\Orchid\Layouts\DogRaceListLayout;
 use Orchid\Screen\Screen;
@@ -52,8 +53,16 @@ class DogRaceListScreen extends Screen
 
     public function remove(Request $request): void
     {
-        DogRace::findOrFail($request->get('id'))->delete();
+        $dogRace = DogRace::findOrFail($request->get('id'));
+        $blogPost = BlogPost::where('dog_race_id', $dogRace->id)
+            ->whereNull('category_id')
+            ->first();
 
-        Toast::info(__('Race de chien supprimée'));
+        if ($blogPost) {
+            $blogPost->delete();
+        }
+        $dogRace->delete();
+
+        Toast::info(__('Race de chien et page associée supprimée'));
     }
 }

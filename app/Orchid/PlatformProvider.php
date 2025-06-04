@@ -51,7 +51,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('bs.plus')
                 ->route('platform.dog-races.create')
                 ->permission('platform.systems.users')
-                ->title(__('Pages de chiens')),
+                ->title(__('Races de chiens')),
 
             Menu::make(__('Liste des races de chien'))
                 ->icon('bs.card-list')

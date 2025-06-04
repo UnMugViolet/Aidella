@@ -122,6 +122,8 @@ class DogRaceScreen extends Screen
             'content' => '',
             'meta_title' => 'Titre par défaut pour ' . $dogRace->name,
             'meta_description' => 'Description par défaut pour ' . $dogRace->name,
+            'status' => 'draft',
+            'dog_race_id' => $dogRace->id,
         ]);
         Toast::success('Race de chien enregistrée avec succès!');
         return redirect()->route('platform.dog-races');
