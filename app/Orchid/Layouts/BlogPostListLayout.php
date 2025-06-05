@@ -60,6 +60,12 @@ class BlogPostListLayout extends Table
                 ->cantHide()
                 ->filter(TD::FILTER_TEXT)
                 ->render(fn ($blogPost) => Str::limit(strip_tags($blogPost->category->name), 9)),
+
+            TD::make('dogRace.name', 'Race de chien')
+                ->sort()
+                ->cantHide()
+                ->filter(TD::FILTER_TEXT)
+                ->render(fn ($blogPost) => Str::limit(strip_tags($blogPost->dogRace->name), 9)),
             
             TD::make('author.name', 'Auteur')
                 ->sort()
@@ -78,7 +84,7 @@ class BlogPostListLayout extends Table
                 ->filter(TD::FILTER_TEXT)
                 ->render(fn ($blogPost) =>
                     Link::make(Str::limit($blogPost->slug, 13))
-                        ->href(config('app.url') . '/blog/' . $blogPost->slug)
+                        ->href(config('app.url') . '/' . $blogPost->category->slug . '/' . $blogPost->slug)
                         ->target('_blank')
                         ->icon('bs.eye')
             ),

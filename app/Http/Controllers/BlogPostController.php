@@ -10,10 +10,18 @@ class BlogPostController extends Controller
 {
     public function index()
     {
-        $blogPosts = BlogPost::with(['category', 'pictures', 'author', 'dogRace'])
+        $blogPosts = BlogPost::select(['id', 'title', 'slug', 'category_id', 'published_at', 'author_id', 'dog_race_id'])
+            ->with([
+                'category:id,name,slug',
+                'author:id,name',
+                'dogRace:id,name',
+                'pictures' => function ($query) {
+                    $query->select('id', 'imageable_type', 'path')->where('is_main', true);
+                }
+            ])
             ->whereNotNull('category_id')
-            ->orderBy('created_at', 'desc')
             ->where('status', 'published')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('blog_posts', [
