@@ -15,6 +15,7 @@ use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Orchid\Support\Facades\Toast;
 
@@ -34,16 +35,28 @@ class BlogPostDogRaceEditScreen extends Screen
 
         $dogRaceData = $dogRace->toArray();
         $dogRaceData['thumbnail'] = optional($dogRace->pictures()->where('is_main', true)->first())->path;
+        if ($dogRaceData['thumbnail'] && $dogRaceData['thumbnail'][0] !== '/') {
+            $dogRaceData['thumbnail'] = '/' . $dogRaceData['thumbnail'];
+        }
 
         $blogPostData = $blogPost ? $blogPost->toArray() : [];
-
-        // If you use a rich text editor, ensure 'html' is set
         $blogPostData['html'] = $blogPostData['content'] ?? '';
 
-        // Pictures for gallery
-        $blogPostData['pictures'] = $blogPost
-            ? $blogPost->pictures()->where('is_main', false)->pluck('path')->toArray()
-            : [];
+        // Get attachment IDs for gallery pictures
+        $galleryAttachmentIds = [];
+        if ($blogPost) {
+            foreach ($blogPost->pictures()->where('is_main', false)->get() as $picture) {
+                $filename = pathinfo($picture->path, PATHINFO_FILENAME);
+                $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
+                $attachment = Attachment::where('name', $filename)
+                    ->where('extension', $extension)
+                    ->first();
+                if ($attachment) {
+                    $galleryAttachmentIds[] = $attachment->id;
+                }
+            }
+        }
+        $blogPostData['gallery'] = $galleryAttachmentIds;
 
         return [
             'dogRace' => $dogRaceData,
@@ -154,23 +167,43 @@ class BlogPostDogRaceEditScreen extends Screen
 
     private function saveThumbnail(DogRace $dogRace, $thumbnail, $altText)
     {
+        $oldThumbnail = $dogRace->pictures()->where('is_main', true)->first();
+        if ($oldThumbnail) {
+            $this->deletePictureAndAttachment($oldThumbnail);
+        }
         $thumbnailPath = $this->parsePath($thumbnail);
-        $dogRace->pictures()->where('is_main', true)->delete();
         $dogRace->pictures()->create([
             'path' => $thumbnailPath,
             'is_main' => true,
             'alt_text' => $altText,
-            'is_main' => true,
         ]);
     }
 
     private function saveGalleryPictures(BlogPost $post, $pictures, $altText)
     {
+        $currentPictures = $post->pictures()->where('is_main', false)->get();
+        $currentAttachmentIds = [];
+        foreach ($currentPictures as $picture) {
+            $filename = pathinfo($picture->path, PATHINFO_FILENAME);
+            $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
+            $attachment = Attachment::where('name', $filename)
+                ->where('extension', $extension)
+                ->first();
+            if ($attachment) {
+                $currentAttachmentIds[$attachment->id] = $picture;
+            }
+        }
+
+        foreach ($currentAttachmentIds as $attachmentId => $picture) {
+            if (!in_array($attachmentId, $pictures)) {
+                $this->deletePictureAndAttachment($picture);
+            }
+        }
+        // Add new pictures that are not already present
         foreach ($pictures as $attachmentId) {
-            if (!empty($attachmentId)) {
+            if (!isset($currentAttachmentIds[$attachmentId])) {
                 $attachment = Attachment::find($attachmentId);
                 if ($attachment) {
-                    // Build the path as storage/uploads/dog-races/filename
                     $storagePath = 'storage/' . ltrim($attachment->path, '/') . '/' . $attachment->name . '.' . $attachment->extension;
                     $post->pictures()->create([
                         'path' => $storagePath,
@@ -180,6 +213,24 @@ class BlogPostDogRaceEditScreen extends Screen
                 }
             }
         }
+    }
+
+    private function deletePictureAndAttachment($picture)
+    {
+        $filename = pathinfo($picture->path, PATHINFO_FILENAME);
+        $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
+        $attachment = Attachment::where('name', $filename)
+            ->where('extension', $extension)
+            ->first();
+        if ($attachment) {
+            $attachment->delete();
+        } else {
+            $cleanPath = ltrim($picture->path, '/');
+            if (Storage::disk('public')->exists($cleanPath)) {
+                Storage::disk('public')->delete($cleanPath);
+            }
+        }
+        $picture->delete();
     }
 
     private function parsePath($path)

@@ -138,51 +138,46 @@ class BlogPost extends Model
         static::deleting(function ($blogPost) {
             $blogPost->load(['dogRace', 'pictures']);
 
-            // Delete BlogPost pictures and their attachments if they are Attachments
+            // Delete all pictures for the BlogPost
             foreach ($blogPost->pictures as $picture) {
-                $filename = pathinfo($picture->path, PATHINFO_FILENAME);
-                $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
-
-                Log::info("Deleting picture: {$picture->path}, Filename: {$filename}, Extension: {$extension}");
-                // Find the Attachment by name and extension
-                $attachment = Attachment::where('name', $filename)
-                    ->where('extension', $extension)
-                    ->first();
-
-                if ($attachment) {
-                    $attachment->delete();
-                } else {
-                    // Fallback: delete the file directly
-                    $cleanPath = str_replace('storage/', '', $picture->path);
-                    if (Storage::disk('public')->exists($cleanPath)) {
-                        Storage::disk('public')->delete($cleanPath);
-                    }
-                }
-                $picture->delete();
+                self::deletePictureAndAttachment($picture);
             }
 
-            // Delete associated DogRace and its pictures
+            // Delete all pictures for the associated DogRace (if any)
             if ($blogPost->dogRace) {
                 foreach ($blogPost->dogRace->pictures as $picture) {
-                    $filename = pathinfo($picture->path, PATHINFO_FILENAME);
-                    $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
-
-                    $attachment = Attachment::where('name', $filename)
-                        ->where('extension', $extension)
-                        ->first();
-
-                    if ($attachment) {
-                        $attachment->delete();
-                    } else {
-                        $cleanPath = str_replace('storage/', '', $picture->path);
-                        if (Storage::disk('public')->exists($cleanPath)) {
-                            Storage::disk('public')->delete($cleanPath);
-                        }
-                    }
-                    $picture->delete();
+                    self::deletePictureAndAttachment($picture);
                 }
                 $blogPost->dogRace->delete();
             }
         });
+    }
+
+    /**
+     * Delete a picture and its associated attachment (if found).
+     *
+     * @param Pictures $picture
+     * @return void
+     */
+    private static function deletePictureAndAttachment($picture)
+    {
+        $filename = pathinfo($picture->path, PATHINFO_FILENAME);
+        $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
+
+        // Try to find the Attachment by name and extension
+        $attachment = Attachment::where('name', $filename)
+            ->where('extension', $extension)
+            ->first();
+
+        if ($attachment) {
+            $attachment->delete();
+        } else {
+            // Fallback: delete the file directly
+            $cleanPath = str_replace('storage/', '', $picture->path);
+            if (Storage::disk('public')->exists($cleanPath)) {
+                Storage::disk('public')->delete($cleanPath);
+            }
+        }
+        $picture->delete();
     }
 }
