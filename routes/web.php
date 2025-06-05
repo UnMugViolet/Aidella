@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlogPostController;
+use App\Http\Controllers\ContactFormController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SingleDogController;
@@ -25,3 +26,7 @@ Route::get('/{category}/{slug}', [BlogPostController::class, 'show']);
 
 // Generate all the routes for the Dog Pages
 Route::get('{slug}', [SingleDogController::class, 'show']);
+
+
+// Contact Form
+Route::post('/contact', [ContactFormController::class, 'submit']);
