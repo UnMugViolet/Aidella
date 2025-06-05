@@ -54,7 +54,7 @@ class DogRaceListLayout extends Table
                 ->render(fn ($dogRace) =>
                     $dogRace->blogPost
                         ? Link::make(Str::limit($dogRace->blogPost->slug, 20))
-                            ->href(config('app.url') . $dogRace->blogPost->slug)
+                            ->href(config('app.url') . '/'. $dogRace->blogPost->slug)
                             ->target('_blank')
                             ->icon('bs.eye')
                         : ''

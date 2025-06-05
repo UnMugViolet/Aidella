@@ -3,7 +3,7 @@
     <h1 class="text-5xl md:text-7xl font-semibold text-left py-4 uppercase">{{ blogPost.dog_race.name }}</h1>
     <div class="w-full flex flex-col md:flex-row items-center justify-between gap-6 mt-8">
       <div class="w-full md:w-1/2">
-        <img :src="pictures" :alt="'Chiot '+ blogPost.dog_race.name " class="w-full h-auto rounded-lg shadow-lg">
+        <img :src="pictures[0].path" :alt="'Chiot '+ blogPost.dog_race.name " class="w-full h-auto rounded-lg shadow-lg">
       </div>
       <div class="w-full md:w-1/2">
         <p class="text-2xl font-semibold text-left w-full">{{ blogPost.title }}</p>
@@ -25,6 +25,11 @@ const dogRaces = ref(window.pageData.dogRaces)
 const pictures = ref(blogPost.value.pictures);
 
 if (!pictures.value || pictures.value.length === 0) {
-  pictures.value = 'https://placehold.co/450x300';
+  pictures.value = [{ path: 'https://placehold.co/450x300' }];
 }
+
+console.log('Pictures array Lenght', pictures.value.length);
+console.log('Pictures array', pictures.value);
+
+console.log('BlogPost', blogPost.value);
 </script>

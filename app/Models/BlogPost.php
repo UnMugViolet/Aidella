@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Orchid\Attachment\Models\Attachment;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
 
@@ -135,33 +136,48 @@ class BlogPost extends Model
         parent::boot();
 
         static::deleting(function ($blogPost) {
-            // Load relationships
             $blogPost->load(['dogRace', 'pictures']);
-            
-            // Delete BlogPost pictures
+
+            // Delete BlogPost pictures and their attachments if they are Attachments
             foreach ($blogPost->pictures as $picture) {
-                // Remove 'storage/' prefix if it exists in the path
-                $cleanPath = str_replace('storage/', '', $picture->path);
-                
-                if (Storage::disk('public')->exists($cleanPath)) {
-                    Storage::disk('public')->delete($cleanPath);
-                    Log::info('Deleted BlogPost picture: ' . $cleanPath);
+                $filename = pathinfo($picture->path, PATHINFO_FILENAME);
+                $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
+
+                Log::info("Deleting picture: {$picture->path}, Filename: {$filename}, Extension: {$extension}");
+                // Find the Attachment by name and extension
+                $attachment = Attachment::where('name', $filename)
+                    ->where('extension', $extension)
+                    ->first();
+
+                if ($attachment) {
+                    $attachment->delete();
+                } else {
+                    // Fallback: delete the file directly
+                    $cleanPath = str_replace('storage/', '', $picture->path);
+                    if (Storage::disk('public')->exists($cleanPath)) {
+                        Storage::disk('public')->delete($cleanPath);
+                    }
                 }
                 $picture->delete();
             }
-            
+
             // Delete associated DogRace and its pictures
             if ($blogPost->dogRace) {
                 foreach ($blogPost->dogRace->pictures as $picture) {
-                    // Remove 'storage/' prefix if it exists in the path
-                    $cleanPath = str_replace('storage/', '', $picture->path);
-                    
-                    Log::info('Deleting DogRace picture: ' . $cleanPath);
-                    if (Storage::disk('public')->exists($cleanPath)) {
-                        Storage::disk('public')->delete($cleanPath);
-                        Log::info('Successfully deleted: ' . $cleanPath);
+                    $filename = pathinfo($picture->path, PATHINFO_FILENAME);
+                    $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
+
+                    $attachment = Attachment::where('name', $filename)
+                        ->where('extension', $extension)
+                        ->first();
+
+                    if ($attachment) {
+                        $attachment->delete();
                     } else {
-                        Log::warning('File not found: ' . $cleanPath);
+                        $cleanPath = str_replace('storage/', '', $picture->path);
+                        if (Storage::disk('public')->exists($cleanPath)) {
+                            Storage::disk('public')->delete($cleanPath);
+                        }
                     }
                     $picture->delete();
                 }

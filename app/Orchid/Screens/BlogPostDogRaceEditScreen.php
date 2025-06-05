@@ -6,6 +6,7 @@ use App\Models\DogRace;
 use App\Models\BlogPost;
 use App\Orchid\Layouts\BlogPostDogRaceLayout;
 use App\Orchid\Layouts\BlogPostPicturesLayout;
+use Orchid\Attachment\Models\Attachment;
 use App\Orchid\Layouts\BlogPostSeoLayout;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
@@ -85,7 +86,6 @@ class BlogPostDogRaceEditScreen extends Screen
                         ->storage('public')
                         ->path('uploads/dog-races')
                         ->acceptedFiles('image/*')
-                        ->maxFiles(1)
                         ->help('Téléchargez une image miniature'),
                 ]),
                 'Contenu' => BlogPostDogRaceLayout::class,
@@ -116,11 +116,7 @@ class BlogPostDogRaceEditScreen extends Screen
             'post.status' => 'required|in:draft,published,archived',
             'post.author_id' => 'required|exists:users,id',
             'post.html' => 'required|string',
-            'post.slug' => [
-                'string',
-                'max:255',
-                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
-            ],
+            'post.slug' => 'string|max:255|nullable',
             'post.meta_title' => self::NULLABLE_STRING_MAX_255,
             'post.meta_description' => self::NULLABLE_STRING_MAX_255,
         ]);
@@ -149,7 +145,7 @@ class BlogPostDogRaceEditScreen extends Screen
             ]);
             // Remove old gallery pictures
             $blogPostModel->pictures()->where('is_main', false)->delete();
-            $this->saveGalleryPictures($blogPostModel, $blogPost['pictures'] ?? [], $dogRace->name);
+            $this->saveGalleryPictures($blogPostModel, $blogPost['gallery'] ?? [], $dogRace->name);
         }
 
         Toast::success('Race de chien et page associée modifiées avec succès!');
@@ -168,15 +164,21 @@ class BlogPostDogRaceEditScreen extends Screen
         ]);
     }
 
-    private function saveGalleryPictures(BlogPost $post, array $pictures, $altText)
+    private function saveGalleryPictures(BlogPost $post, $pictures, $altText)
     {
-        foreach ($pictures as $picturePath) {
-            $cleanPath = $this->parsePath($picturePath);
-            $post->pictures()->create([
-                'path' => $cleanPath,
-                'alt_text' => $altText,
-                'is_main' => false,
-            ]);
+        foreach ($pictures as $attachmentId) {
+            if (!empty($attachmentId)) {
+                $attachment = Attachment::find($attachmentId);
+                if ($attachment) {
+                    // Build the path as storage/uploads/dog-races/filename
+                    $storagePath = 'storage/' . ltrim($attachment->path, '/') . '/' . $attachment->name . '.' . $attachment->extension;
+                    $post->pictures()->create([
+                        'path' => $storagePath,
+                        'alt_text' => $altText,
+                        'is_main' => false,
+                    ]);
+                }
+            }
         }
     }
 

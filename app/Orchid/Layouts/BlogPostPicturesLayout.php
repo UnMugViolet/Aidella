@@ -3,7 +3,7 @@
 namespace App\Orchid\Layouts;
 
 use Orchid\Screen\Field;
-use Orchid\Screen\Fields\Picture;
+use Orchid\Screen\Fields\Attach;
 use Orchid\Screen\Layouts\Rows;
 
 class BlogPostPicturesLayout extends Rows
@@ -23,12 +23,14 @@ class BlogPostPicturesLayout extends Rows
     protected function fields(): iterable
     {
         return [
-            Picture::make('post.thumbnail')
+            Attach::make('post.gallery')
                 ->title('Images carrousel')
+                ->maxCount(5)
+                ->save()
+                ->multiple()
                 ->storage('public')
-                ->path('uploads/posts')
+                ->path('uploads/dog-races')
                 ->acceptedFiles('image/*')
-                ->maxFiles(5)
                 ->help('Téléchargez jusqu\'à 5 images pour le carrousel du post'),
         ];
     }
