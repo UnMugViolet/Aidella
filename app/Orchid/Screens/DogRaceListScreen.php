@@ -55,12 +55,16 @@ class DogRaceListScreen extends Screen
 
     public function remove(Request $request): void
     {
-        $blogPost = BlogPost::findOrFail($request->get('id'));
-        
-        // The boot() method will automatically handle:
-        // - Deleting BlogPost pictures from storage and database
-        // - Deleting associated DogRace and its pictures
-        $blogPost->delete();
+        $dogRace = DogRace::findOrFail($request->get('id')); 
+
+        // Assuming DogRace has a relation to BlogPost, e.g. $dogRace->blogPost
+        $blogPost = $dogRace->blogPost;
+
+        if ($blogPost) {
+            $blogPost->delete();
+        } else {
+            $dogRace->delete(); // Case no blog post associated delete the dogRace
+        }
 
         Toast::info(__('Le chien et sa page associée ont été supprimées avec succès.'));
     }
