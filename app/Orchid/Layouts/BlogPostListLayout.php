@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
+
+
 use Orchid\Screen\TD;
 
 
@@ -35,11 +37,6 @@ class BlogPostListLayout extends Table
     protected function columns(): iterable
     {
         return [
-/*             TD::make('id', 'ID')
-                ->sort()
-                ->cantHide()
-                ->filter(TD::FILTER_NUMERIC),
- */
             TD::make('title', 'Titre')
                 ->sort()
                 ->cantHide()

@@ -116,6 +116,11 @@ class BlogPostDogRaceEditScreen extends Screen
             'post.status' => 'required|in:draft,published,archived',
             'post.author_id' => 'required|exists:users,id',
             'post.html' => 'required|string',
+            'post.slug' => [
+                'string',
+                'max:255',
+                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+            ],
             'post.meta_title' => self::NULLABLE_STRING_MAX_255,
             'post.meta_description' => self::NULLABLE_STRING_MAX_255,
         ]);
@@ -135,7 +140,7 @@ class BlogPostDogRaceEditScreen extends Screen
         if ($blogPostModel) {
             $blogPostModel->update([
                 'title' => $blogPost['title'],
-                'slug' => Str::slug($data['name'], '-', 'fr'),
+                'slug' => $blogPost['slug'] ?? Str::slug($data['name'], '-', 'fr'),
                 'content' => $blogPost['html'] ?? '',
                 'meta_title' => $blogPost['meta_title'] ?? 'Page de chien - ' . $dogRace->name,
                 'meta_description' => $blogPost['meta_description'] ?? 'Description page de chien pour ' . $dogRace->name,

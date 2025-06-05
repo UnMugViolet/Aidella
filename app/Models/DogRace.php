@@ -100,27 +100,4 @@ class DogRace extends Model
         return $main ? $main->path : null;
     }
 
-    /**
-     * Boot the model and add event listeners
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        // Delete related pictures when dog race is deleted
-        static::deleting(function ($dogRace) {
-            // Get all pictures before deleting database records
-            $pictures = $dogRace->pictures;
-            
-            // Delete image files from storage
-            foreach ($pictures as $picture) {
-                if ($picture->path && Storage::disk('public')->exists($picture->path)) {
-                        Storage::disk('public')->delete($picture->path);
-                }
-            }
-            
-            // Delete database records
-            $dogRace->pictures()->delete();
-        });
-    }
 }

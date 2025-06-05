@@ -28,6 +28,7 @@ class BlogPostSeoLayout extends Rows
             Input::make('post.meta_title')
                 ->title('Titre SEO')
                 ->placeholder('Meta Title du post')
+                ->max(255)
                 ->default(Str::limit('Titre du post', 60))
                 ->help('Le titre SEO est utilisé pour le référencement dans les moteurs de recherche'),
 
@@ -37,6 +38,13 @@ class BlogPostSeoLayout extends Rows
                 ->placeholder('Meta Description du post')
                 ->default(Str::limit('Description du post', 160))
                 ->help('Meta description de la page, utilisée pour le référencement dans les moteurs de recherche'),
+
+            Input::make('post.slug')
+                ->title('Slug')
+                ->placeholder('Slug du post')
+                ->help('Le slug est utilisé pour l\'URL du post, il doit être unique et ne pas contenir d\'espaces ou de caractères spéciaux')
+                ->max(255)
+                ->default(Str::slug('Titre du post')),
         ];
     }
 }
