@@ -21,7 +21,7 @@ Route::get('/politique-de-confidentialite', function () {
 
 // Blog Articles
 Route::get('/articles', [BlogPostController::class, 'index']);
-Route::get('/articles/{slug}', [BlogPostController::class, 'show']);
+Route::get('/{category}/{slug}', [BlogPostController::class, 'show']);
 
 // Generate all the routes for the Dog Pages
 Route::get('{slug}', [SingleDogController::class, 'show']);

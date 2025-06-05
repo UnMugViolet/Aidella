@@ -18,7 +18,7 @@
             <!-- Desktop Nav -->
             <nav 
                 class="hidden md:flex space-x-4"
-                aria-label="Menu Header Desktop"
+                aria-label="Menu Header Ordinateur"
             >
                 <div class="relative" @mouseenter="dropDownOpen = true" @mouseleave="dropDownOpen = false">
                     <button class="flex items-center gap-1 focus:outline-none">
@@ -40,7 +40,7 @@
                         <a href="/a-propos" class="hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out">A propos</a>
                     </li>
                     <li>
-                        <a href="/articles" class="hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out">Nos conseils</a>
+                        <a href="/articles" class="hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out">Nos Articles</a>
                     </li>
                     <li class="flex items-center gap-1 hover:text-gray-100 transition-colors duration-300 ease-in-out">
                         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" style="filter: drop-shadow(0 2px 8px rgba(0,0,0,1));">
@@ -55,7 +55,7 @@
                 <nav
                     v-if="burgerOpen"
                     class="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center space-y-6 md:hidden h-svh z-40"
-                    aria-label="Mobile Menu"
+                    aria-label="Menu Mobile"
                 >
                     <div class="relative w-full flex flex-col justify-center px-4">
                         <span class="text-2xl font-semibold mb-3">Nos Chiots</span>
@@ -65,9 +65,12 @@
                             </li>
                         </ul>
                     </div>
-                    <ul class="flex flex-col w-full items-left jusify-between">
+                    <ul class="flex flex-col w-full items-left jusify-between space-y-4">
                         <li>
                             <a href="/a-propos" class="text-2xl hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out px-4">A propos</a>
+                        </li>
+                        <li>
+                            <a href="/articles" class="text-2xl hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out px-4">Nos Articles</a>
                         </li>
                         <li class="absolute bottom-0 py-2 flex justify-center w-full gap-1">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-auto" style="filter: drop-shadow(0 2px 8px rgba(0,0,0,1));">

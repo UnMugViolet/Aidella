@@ -13,8 +13,8 @@ use Orchid\Screen\Screen;
 class BlogPostScreen extends Screen
 {
 
-    public $name = 'Ajouter un Post';
-    public $description = 'Cette page permet d\'ajouter un post.';
+    public $name = 'Ajouter un Article';
+    public $description = 'Cette page permet d\'ajouter un article.';
 
     /**
      * Fetch data to be displayed on the screen.

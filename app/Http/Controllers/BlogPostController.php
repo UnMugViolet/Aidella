@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
+use App\Models\PostCategory;
 use Illuminate\Http\Request;
 
 class BlogPostController extends Controller
 {
     public function index()
     {
-        $blogPosts = BlogPost::with(['category', 'pictures'])
+        $blogPosts = BlogPost::with(['category', 'pictures', 'author', 'dogRace'])
             ->whereNotNull('category_id')
             ->orderBy('created_at', 'desc')
+            ->where('status', 'published')
             ->paginate(10);
 
         return view('blog_posts', [
@@ -24,15 +26,16 @@ class BlogPostController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function show($slug)
+    public function show($category, $slug)
     {
-        $blogPost = BlogPost::with(['category', 'pictures'])
-            ->where('slug', $slug)
-            ->whereNotNull('category_id')
+        $categoryModel = PostCategory::where('slug', $category)->firstOrFail();
+
+        $post = BlogPost::where('slug', $slug)
+            ->where('category_id', $categoryModel->id)
             ->firstOrFail();
 
         return view('blog_post', [
-            'blogPost' => $blogPost,
+            'blogPost' => $post,
         ]);
     }
 }
