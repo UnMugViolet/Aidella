@@ -5,6 +5,8 @@ namespace App\Models;
 use Orchid\Filters\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
 
@@ -126,5 +128,45 @@ class BlogPost extends Model
     public function pictures()
     {
         return $this->morphMany(Pictures::class, 'imageable');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($blogPost) {
+            // Load relationships
+            $blogPost->load(['dogRace', 'pictures']);
+            
+            // Delete BlogPost pictures
+            foreach ($blogPost->pictures as $picture) {
+                // Remove 'storage/' prefix if it exists in the path
+                $cleanPath = str_replace('storage/', '', $picture->path);
+                
+                if (Storage::disk('public')->exists($cleanPath)) {
+                    Storage::disk('public')->delete($cleanPath);
+                    Log::info('Deleted BlogPost picture: ' . $cleanPath);
+                }
+                $picture->delete();
+            }
+            
+            // Delete associated DogRace and its pictures
+            if ($blogPost->dogRace) {
+                foreach ($blogPost->dogRace->pictures as $picture) {
+                    // Remove 'storage/' prefix if it exists in the path
+                    $cleanPath = str_replace('storage/', '', $picture->path);
+                    
+                    Log::info('Deleting DogRace picture: ' . $cleanPath);
+                    if (Storage::disk('public')->exists($cleanPath)) {
+                        Storage::disk('public')->delete($cleanPath);
+                        Log::info('Successfully deleted: ' . $cleanPath);
+                    } else {
+                        Log::warning('File not found: ' . $cleanPath);
+                    }
+                    $picture->delete();
+                }
+                $blogPost->dogRace->delete();
+            }
+        });
     }
 }

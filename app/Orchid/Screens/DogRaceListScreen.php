@@ -8,6 +8,8 @@ use App\Orchid\Layouts\DogRaceListLayout;
 use Orchid\Screen\Screen;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Support\Facades\Toast;
 
 class DogRaceListScreen extends Screen
@@ -53,16 +55,13 @@ class DogRaceListScreen extends Screen
 
     public function remove(Request $request): void
     {
-        $dogRace = DogRace::findOrFail($request->get('id'));
-        $blogPost = BlogPost::where('dog_race_id', $dogRace->id)
-            ->whereNull('category_id')
-            ->first();
+        $blogPost = BlogPost::findOrFail($request->get('id'));
+        
+        // The boot() method will automatically handle:
+        // - Deleting BlogPost pictures from storage and database
+        // - Deleting associated DogRace and its pictures
+        $blogPost->delete();
 
-        if ($blogPost) {
-            $blogPost->delete();
-        }
-        $dogRace->delete();
-
-        Toast::info(__('Race de chien et page associée supprimée'));
+        Toast::info(__('Le chien et sa page associée ont été supprimées avec succès.'));
     }
 }

@@ -12,19 +12,6 @@ use Orchid\Support\Color;
 
 class PlatformProvider extends OrchidServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     *
-     * @param Dashboard $dashboard
-     *
-     * @return void
-     */
-    public function boot(Dashboard $dashboard): void
-    {
-        parent::boot($dashboard);
-
-        // ...
-    }
 
     /**
      * Register the application menu.
