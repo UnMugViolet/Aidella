@@ -13,10 +13,10 @@
 		<div v-for="(posts, category) in filteredPostsByCategory" :key="category" class="mb-8">
 			<h2 class="text-2xl font-bold mb-4">{{ category.name }}</h2>
 			<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				<a	v-for="post in posts" 
+				<a v-for="post in posts" 
 					:key="post.id" 
 					class="rounded shadow flex flex-col items-center"
-					:href="`/${post.category}/${post.slug}`">
+					:href="`/${post.category.slug}/${post.slug}`">
 					<img :src="post.thumbnail || placeholder" :alt="post.title"
 						class="w-full h-auto object-cover mb-2 rounded" />
 					<div class="w-full px-4 py-2">

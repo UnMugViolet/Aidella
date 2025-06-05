@@ -7,26 +7,17 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SingleDogController;
 
 Route::get('/', [HomeController::class, 'index']);
-
-Route::get('/a-propos', function () {
-    return view('about');
-});
-
-Route::get('/mentions-legales', function () {
-    return view('legal_mentions');
-});
-
-Route::get('/politique-de-confidentialite', function () {
-    return view('privacy_policy');
-});
-
-// Blog Articles
-Route::get('/articles', [BlogPostController::class, 'index']);
-Route::get('/{category}/{slug}', [BlogPostController::class, 'show']);
-
-// Generate all the routes for the Dog Pages
-Route::get('{slug}', [SingleDogController::class, 'show']);
-
-
-// Contact Form
+Route::get('/a-propos', fn() => view('about'));
+Route::get('/mentions-legales', fn() => view('legal_mentions'));
+Route::get('/politique-de-confidentialite', fn() => view('privacy_policy'));
 Route::post('/contact', [ContactFormController::class, 'submit']);
+Route::get('/articles', [BlogPostController::class, 'index']);
+
+
+Route::get('/{category}/{slug}', [BlogPostController::class, 'show'])
+    ->where('category', '^(?!admin|aidella-admin-panel|dashboard|orchid).*');
+
+// Single dog profile
+Route::get('{slug}', [SingleDogController::class, 'show'])
+    ->where('slug', '^(?!admin|aidella-admin-panel|dashboard|orchid).*');
+
