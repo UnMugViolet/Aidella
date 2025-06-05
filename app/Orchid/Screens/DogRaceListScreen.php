@@ -55,7 +55,7 @@ class DogRaceListScreen extends Screen
 
     public function remove(Request $request): void
     {
-        $dogRace = DogRace::findOrFail($request->get('id')); 
+        $dogRace = DogRace::findOrFail($request->get('id'));
 
         // Assuming DogRace has a relation to BlogPost, e.g. $dogRace->blogPost
         $blogPost = $dogRace->blogPost;
