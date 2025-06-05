@@ -11,7 +11,7 @@
   </section>
   <section 
     v-html="blogPost.content"
-    class="px-4 md:px-8 md:py-8 mt-8 w-full">
+    class="px-4 md:px-8 md:py-8 mt-8 w-full single-dog-content">
   </section>
 </template>
 
@@ -25,3 +25,10 @@ const pictures = ref(blogPost.value.pictures);
 
 
 </script>
+
+<style scoped>
+h1 {
+  font-size: var(--text-7xl);
+  line-height: var(--tw-leading, var(--text-7xl--line-height));
+}
+</style>

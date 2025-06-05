@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Orchid\Support\Facades\Toast;
 
-class DogRaceListScreen extends Screen
+class BlogPostDogRaceListScreen extends Screen
 {
     public $name = 'Liste des races de chiens';
     public $description = 'Retrouvez ici la liste des pages de chiens vous pourrez les modifier ou les supprimer depuis l\'option "Action"';

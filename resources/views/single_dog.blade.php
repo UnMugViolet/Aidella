@@ -1,3 +1,7 @@
+@push('css')
+    <link rel="stylesheet" href="{{ asset('css/global.css') }}">
+@endpush
+
 @extends('layouts.app')
 
 @section('title', $blogPost->dogRace->name . ' - Aidella')

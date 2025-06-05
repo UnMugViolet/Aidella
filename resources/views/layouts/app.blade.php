@@ -4,6 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@yield('title', 'Aidella')</title>
+        
+        @stack('css')
 
         <!-- MetaTags General -->
         <meta name="title" content="@yield('meta_title', 'Aidella - Elevage canin')">

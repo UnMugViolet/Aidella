@@ -12,7 +12,7 @@
         <h1 class="text-6xl md:text-8xl font-bold mb-2">Aidella</h1>
         <p class="p-2 text-base md:text-xl">Bienvenue sur notre site web elevage de chiens depuis longtemps</p>
       </div>
-  </div>
+    </div>
     <DogRaceGrid :dogPages="dogPages"/>
     <section class="px-4 md:px-8 md:py-8 mt-10">
       <h2 class="text-6xl md:text-7xl font-semibold text-right py-4 uppercase">Qui sommes nous ?</h2>
