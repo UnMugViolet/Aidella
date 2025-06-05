@@ -2,6 +2,8 @@
 
 @section('title', 'Accueil - Aidella')
 
+@section('robots_content', 'index, follow')
+
 @section('component', "Homepage")
 
 @section('data')

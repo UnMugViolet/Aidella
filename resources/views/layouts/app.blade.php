@@ -5,12 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@yield('title', 'Aidella')</title>
         
-        @stack('css')
-
         <!-- MetaTags General -->
         <meta name="title" content="@yield('meta_title', 'Aidella - Elevage canin')">
         <meta name="description" content="@yield('meta_description', 'Aidella - Elevage canin')">
-        <meta name="robots" content="noindex, nofollow">
+        <meta name="robots" content="@yield('robots_content', 'noindex, nofollow')"/>
 
         <!-- Open Graph -->
         <meta property="og:title" content="@yield('meta_title', 'Aidella - Elevage canin')">
@@ -40,7 +38,9 @@
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <!-- Styles / Scripts -->
+        @stack('css')
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body>

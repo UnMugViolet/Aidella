@@ -8,6 +8,9 @@
 
 @section('component', 'SingleDog')
 
+@section('robots_content', 'index, follow')
+
+
 @section('meta_title', $blogPost->meta_title ? $blogPost->meta_title : $blogPost->dogRace->name . ' - Aidella')
 @section('meta_description', $blogPost->meta_description ? $blogPost->meta_description : $blogPost->dogRace->name . ' - Aidella')
 

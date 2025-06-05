@@ -6,6 +6,7 @@
 
 @section('meta_title', $blogPost->meta_title ? $blogPost->meta_title : $blogPost->dogRace->name . ' - Aidella')
 @section('meta_description', $blogPost->meta_description ? $blogPost->meta_description : $blogPost->dogRace->name . ' - Aidella')
+@section('robots_content', 'index, follow')
 
 @section('data')
     {!! json_encode([

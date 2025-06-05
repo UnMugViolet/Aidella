@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /
+Sitemap: https://elevage-canin-vosges.fr/sitemap.xml

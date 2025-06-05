@@ -4,6 +4,9 @@
 
 @section('component', 'LegalMentions')
 
+@section('robots_content', 'noindex, nofollow')
+
+
 @section('data')
     { dogPages: @json($dogPages) }
 @endsection
