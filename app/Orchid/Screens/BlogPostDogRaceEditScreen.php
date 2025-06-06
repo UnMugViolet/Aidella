@@ -15,6 +15,7 @@ use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Orchid\Support\Facades\Toast;
@@ -143,6 +144,12 @@ class BlogPostDogRaceEditScreen extends Screen
 
         if (!empty($data['thumbnail'])) {
             $this->saveThumbnail($dogRace, $data['thumbnail'], $data['name']);
+        } else {
+            // If thumbnail is removed, delete the old one
+            $oldThumbnail = $dogRace->pictures()->where('is_main', true)->first();
+            if ($oldThumbnail) {
+                $this->deletePictureAndAttachment($oldThumbnail);
+            }
         }
 
         $blogPostModel = BlogPost::where('dog_race_id', $dogRace->id)->first();
@@ -157,8 +164,10 @@ class BlogPostDogRaceEditScreen extends Screen
                 'author_id' => $blogPost['author_id'],
             ]);
             // Remove old gallery pictures
-            $blogPostModel->pictures()->where('is_main', false)->delete();
-            $this->saveGalleryPictures($blogPostModel, $blogPost['gallery'] ?? [], $dogRace->name);
+                foreach ($blogPostModel->pictures()->where('is_main', false)->get() as $picture) {
+                    $this->deletePictureAndAttachment($picture);
+                }
+                $this->saveGalleryPictures($blogPostModel, $blogPost['gallery'] ?? [], $dogRace->name);
         }
 
         Toast::success('Race de chien et page associée modifiées avec succès!');
@@ -229,6 +238,9 @@ class BlogPostDogRaceEditScreen extends Screen
             if (Storage::disk('public')->exists($cleanPath)) {
                 Storage::disk('public')->delete($cleanPath);
             }
+        }
+        if (!$attachment) {
+            Log::warning('Attachment not found for: ' . $picture->path);
         }
         $picture->delete();
     }
