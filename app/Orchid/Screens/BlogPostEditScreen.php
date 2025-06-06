@@ -112,11 +112,7 @@ class BlogPostEditScreen extends Screen
         $blogPost->fill($data);
         $blogPost->save();
 
-        // Remove old gallery pictures
-        foreach ($blogPost->pictures()->where('is_main', false)->get() as $picture) {
-            $this->deletePictureAndAttachment($picture);
-        }
-        $this->saveGalleryPictures($blogPost, $data['gallery'] ?? [], 'alt text par défaut');
+        $this->saveGalleryPictures($blogPost, $data['gallery'] ?? [], $blogPost->title ?? 'photo de chien illustration article');
         Toast::success(__('Article de blog mis à jour.'));
         return redirect()->route('platform.posts');
     }
@@ -147,7 +143,7 @@ class BlogPostEditScreen extends Screen
             if (!isset($currentAttachmentIds[$attachmentId])) {
                 $attachment = Attachment::find($attachmentId);
                 if ($attachment) {
-                    $storagePath = 'storage/' . ltrim($attachment->path, '/') . '/' . $attachment->name . '.' . $attachment->extension;
+                    $storagePath = 'storage/' . ltrim($attachment->path, '/')  . $attachment->name . '.' . $attachment->extension;
                     $post->pictures()->create([
                         'path' => $storagePath,
                         'alt_text' => $altText,

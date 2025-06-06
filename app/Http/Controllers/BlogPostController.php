@@ -15,9 +15,7 @@ class BlogPostController extends Controller
                 'category:id,name,slug',
                 'author:id,name',
                 'dogRace:id,name',
-                'pictures' => function ($query) {
-                    $query->select('id', 'imageable_type', 'path')->where('is_main', true);
-                }
+                'pictures',
             ])
             ->whereNotNull('category_id')
             ->where('status', 'published')
@@ -40,6 +38,10 @@ class BlogPostController extends Controller
 
         $post = BlogPost::where('slug', $slug)
             ->where('category_id', $categoryModel->id)
+            ->with([
+                'pictures',
+                'attachments',
+            ])
             ->firstOrFail();
 
         return view('blog_post', [

@@ -31,7 +31,7 @@ class BlogPostPicturesLayout extends Rows
                 ->storage('public')
                 ->path('uploads/dog-races')
                 ->acceptedFiles('image/*')
-                ->help('Téléchargez jusqu\'à 5 images pour le carrousel du post'),
+                ->help('Téléchargez jusqu\'à 5 images pour l\'article'),
         ];
     }
 }
