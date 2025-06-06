@@ -30,7 +30,7 @@
                     <ul v-if="dropDownOpen" class="absolute left-0 text-black rounded shadow-lg min-w-max z-50">
                         <div class="bg-white rounded mt-2">
                             <li v-for="dogPage in dogPages" :key="dogPage.id">
-                                <a :href="dogPage.blog_post.slug" class="block px-4 py-2 rounded hover:bg-gray-100">{{ dogPage.name }}</a>
+                                <a :href="'/' + dogPage.blog_post.slug" class="block px-4 py-2 rounded hover:bg-gray-100">{{ dogPage.name }}</a>
                             </li>
                         </div>
                     </ul>
