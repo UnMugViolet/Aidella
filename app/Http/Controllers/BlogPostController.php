@@ -40,7 +40,6 @@ class BlogPostController extends Controller
             ->where('category_id', $categoryModel->id)
             ->with([
                 'pictures',
-                'attachments',
             ])
             ->firstOrFail();
 

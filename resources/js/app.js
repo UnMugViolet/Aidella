@@ -12,7 +12,7 @@ const app = createApp(App)
 app.component('Homepage', Homepage)
 app.component('About', About)
 app.component('SingleDog', SingleDog)
-app.component('SinglePost', SingleDog)
+app.component('SinglePost', SinglePost)
 app.component('LegalMentions', LegalMentions)
 app.component('PrivacyPolicy', PrivacyPolicy)
 
