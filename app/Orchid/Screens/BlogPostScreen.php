@@ -70,7 +70,7 @@ class BlogPostScreen extends Screen
         $request->validate([
             'post.title' => 'required|string|max:255',
             'post.status' => 'in:draft,published,archived',
-            'post.content' => 'required',
+            'post.html' => 'required',
             'post.meta_title' => self::NULLABLE_STRING_MAX_255,
             'post.meta_description' => self::NULLABLE_STRING_MAX_255,
             'post.slug' => [
