@@ -38,7 +38,7 @@ use Tabuna\Breadcrumbs\Trail;
 */
 // Main
 Route::screen('/main', PlatformScreen::class)
-    ->name('platform.main');
+    ->name('custom.dashboard');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

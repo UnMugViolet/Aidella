@@ -9,6 +9,9 @@ use Orchid\Support\Facades\Layout;
 
 class PlatformScreen extends Screen
 {
+
+    public $name = 'Aidella - Panneau d\'Administration';
+    public $description = 'Bienvenue sur le panneau d\'administration d\'Aidella. Explorez les fonctionnalités disponibles pour gérer votre site web.';
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -17,22 +20,6 @@ class PlatformScreen extends Screen
     public function query(): iterable
     {
         return [];
-    }
-
-    /**
-     * The name of the screen displayed in the header.
-     */
-    public function name(): ?string
-    {
-        return 'Get Started';
-    }
-
-    /**
-     * Display header description.
-     */
-    public function description(): ?string
-    {
-        return 'Welcome to your Orchid application.';
     }
 
     /**
@@ -53,8 +40,7 @@ class PlatformScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::view('platform::partials.update-assets'),
-            Layout::view('platform::partials.welcome'),
+            Layout::view('dashboard.custom-dashboard'),
         ];
     }
 }
