@@ -1,4 +1,3 @@
-{{-- filepath: resources/views/dashboard/custom-dashboard.blade.php --}}
 <style>
 	.dashboard-cards {
 		display: flex;

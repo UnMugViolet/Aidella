@@ -81,8 +81,9 @@ class BlogPostScreen extends Screen
             ],
         ]);
 
-        if ($status === 'published')
+        if ($status === 'published') {
             $blogPost['published_at'] = now();
+        }
     
         $createdPost = BlogPost::create([
             'title' => $blogPost['title'],
@@ -119,7 +120,7 @@ class BlogPostScreen extends Screen
     }
 
     /*
-    * Parse the file 
+    * Parse the file
     */
     private function parsePath($path)
     {

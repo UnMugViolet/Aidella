@@ -147,8 +147,9 @@ class BlogPostDogRaceEditScreen extends Screen
         } else {
             // If thumbnail is removed, delete the old one
             $oldThumbnail = $dogRace->pictures()->where('is_main', true)->first();
-            if ($oldThumbnail)
+            if ($oldThumbnail) {
                 $this->deletePictureAndAttachment($oldThumbnail);
+            }
         }
 
         $blogPostModel = BlogPost::where('dog_race_id', $dogRace->id)->first();
@@ -163,8 +164,9 @@ class BlogPostDogRaceEditScreen extends Screen
                 'author_id' => $blogPost['author_id'],
             ]);
             // Remove old gallery pictures
-            foreach ($blogPostModel->pictures()->where('is_main', false)->get() as $picture)
+            foreach ($blogPostModel->pictures()->where('is_main', false)->get() as $picture) {
                 $this->deletePictureAndAttachment($picture);
+            }
             $this->saveGalleryPictures($blogPostModel, $blogPost['gallery'] ?? [], $dogRace->name);
         }
 
