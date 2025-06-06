@@ -54,14 +54,19 @@ class BlogPostCategoryLayout extends Rows
                 ->title('Catégorie d\'article')
                 ->fromModel(PostCategory::class, 'name')
                 ->displayAppend('name')
+                ->empty('Aucun chien')
                 ->help('Sélectionnez la categorie du post'),
 
-            Relation::make('post.dog_race_id')
+            Select::make('post.dog_race_id')
                 ->title('Race de chien')
                 ->fromModel(DogRace::class, 'name')
                 ->displayAppend('name')
+                ->searchable()
+                ->preload()
+                ->nullable()
                 ->default(null)
-                ->help('Associer ce post a une categorie de chien'),
+                ->empty('-')
+                ->help('Associer ce post à une catégorie de chien'),
 
             Relation::make('post.author_id')
                 ->title('Auteur')

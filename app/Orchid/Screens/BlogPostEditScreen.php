@@ -115,7 +115,7 @@ class BlogPostEditScreen extends Screen
         // Remove old gallery pictures
         foreach ($blogPost->pictures()->where('is_main', false)->get() as $picture)
             $this->deletePictureAndAttachment($picture);
-        $this->saveGalleryPictures($blogPost, $blogPost['gallery'] ?? [], 'alt text par défaut');    
+        $this->saveGalleryPictures($blogPost, $data['gallery'] ?? [], 'alt text par défaut');    
         Toast::success(__('Article de blog mis à jour.'));
     }
 
