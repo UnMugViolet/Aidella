@@ -66,6 +66,6 @@ class BlogPostDogRaceListScreen extends Screen
             $dogRace->delete(); // Case no blog post associated delete the dogRace
         }
 
-        Toast::info(__('Le chien et sa page associée ont été supprimées avec succès.'));
+        Toast::info(__('Le chien et sa page associée ont été supprimées avec succès !'));
     }
 }

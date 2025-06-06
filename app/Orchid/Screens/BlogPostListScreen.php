@@ -52,4 +52,12 @@ class BlogPostListScreen extends Screen
         ];
     }
 
+    public function remove(Request $request): void
+    {
+        $blogPost = BlogPost::findOrFail($request->get('id'));
+
+        $blogPost->delete();
+
+        Toast::info('Article de blog supprimé avec succès.');
+    }
 }
