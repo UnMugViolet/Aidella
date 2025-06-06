@@ -61,7 +61,7 @@
                         <span class="text-2xl font-semibold mb-3">Nos Chiots</span>
                         <ul class="rounded shadow-lg min-w-max truncate text-white">
                             <li v-for="dogPage in dogPages" :key="dogPage.id" class="py-1.5 ml-4 underline">
-                                <a :href="dogPage.blog_post.slug" >{{ dogPage.name }}</a>
+                                <a :href="'/' + dogPage.blog_post.slug" >{{ dogPage.name }}</a>
                             </li>
                         </ul>
                     </div>
