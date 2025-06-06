@@ -117,6 +117,7 @@ class BlogPostEditScreen extends Screen
             $this->deletePictureAndAttachment($picture);
         $this->saveGalleryPictures($blogPost, $data['gallery'] ?? [], 'alt text par défaut');    
         Toast::success(__('Article de blog mis à jour.'));
+        return redirect()->route('platform.posts');
     }
 
 
