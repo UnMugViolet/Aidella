@@ -19,7 +19,7 @@ class BlogPostController extends Controller
             ])
             ->whereNotNull('category_id')
             ->where('status', 'published')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('published_at', 'desc')
             ->paginate(10);
 
         return view('blog_posts', [
