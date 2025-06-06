@@ -17,7 +17,7 @@
 					:key="post.id" 
 					class="rounded shadow flex flex-col items-center"
 					:href="`/${post.category.slug}/${post.slug}`">
-					<img :src="post.thumbnail || placeholder" :alt="post.title"
+					<img :src="post.pictures[0]?.path || placeholder" :alt="post.title"
 						class="w-full h-auto object-cover mb-2 rounded" />
 					<div class="w-full px-4 py-2">
 						<div class="text-xl font-semibold mb-1">{{ post.title }}</div>
@@ -29,7 +29,7 @@
 					</div>
 				</a>
 			</ul>
-			<div v-if="posts.length === 0" class="text-red-600 text-xl md:text-2xl font-semibold italic md:py-28">Aucun article trouvé dans cette catégorie ou race de chien.</div>
+			<div v-if="posts.length === 0" class="text-red-600 text-lg md:text-2xl font-semibold italic md:py-28">Aucun article trouvé dans cette catégorie ou race de chien.</div>
 		</div>
 	</section>
 </template>
@@ -38,15 +38,12 @@
 import { computed, ref } from 'vue';
 
 const props = defineProps(['initialData', 'blogPosts']);
+
 const placeholder = 'https://placehold.co/250x150';
-
-// Use either initialData.blogPosts.data or blogPosts, depending on your API
 const allPosts = props.initialData.blogPosts?.data || [];
-
-console.log('BlogPost', allPosts)
-// Search state
 const search = ref('');
 
+console.log('All posts', allPosts)
 // Group posts by category
 const postsByCategory = computed(() => {
 	const grouped = {};

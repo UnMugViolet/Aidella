@@ -18,9 +18,8 @@ Route::get('/sitemap.xml', function () {
 
     foreach (BlogPost::all() as $post) {
         if (!$post->category || !$post->category->slug) {
-            // Correct: pass slug as the second argument to route()
             $sitemap->add(Url::create(route('dog.show', ['slug' => $post->slug])));
-            continue; // Don't add as blog.show if it's a dog page
+            continue;
         }
         $sitemap->add(Url::create(route('blog.show', [
             'category' => $post->category->slug,
