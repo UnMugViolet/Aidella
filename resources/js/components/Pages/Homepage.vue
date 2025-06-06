@@ -38,6 +38,5 @@ const videoPath = '/videos/video_banniere_aidella.mp4';
 
 let dogPages = ref(props.initialData.dogPages);
 
-console.log('DogPages ', window.pageData.dogPages)
 
 </script>
