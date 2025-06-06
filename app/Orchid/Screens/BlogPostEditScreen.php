@@ -65,7 +65,7 @@ class BlogPostEditScreen extends Screen
         return [
             Button::make('Enregistrer')
                 ->icon('check')
-                ->method('save'),
+                ->method('update'),
         ];
     }
 
@@ -85,9 +85,38 @@ class BlogPostEditScreen extends Screen
         ];
     }
 
-    public function save(Request $request)
+    public function update(BlogPost $blogPost, Request $request)
     {
-        dd($request);
+        $data = $request->get('post', []);
+
+        $request->validate([
+            'post.title' => 'required|string|max:255',
+            'post.status' => 'in:draft,published,archived',
+            'post.html' => 'required',
+            'post.meta_title' => self::NULLABLE_STRING_MAX_255,
+            'post.meta_description' => self::NULLABLE_STRING_MAX_255,
+            'post.slug' => [
+                'nullable',
+                'string',
+                'max:255',
+                'regex:/^[a-z0-9-]+$/',
+            ],
+        ]);
+
+        if ($data['status'] === 'published') {
+            $data['published_at'] = now();
+        } else {
+            $data['published_at'] = null;
+        }
+
+        $blogPost->fill($data);
+        $blogPost->save();
+
+        // Remove old gallery pictures
+        foreach ($blogPost->pictures()->where('is_main', false)->get() as $picture)
+            $this->deletePictureAndAttachment($picture);
+        $this->saveGalleryPictures($blogPost, $blogPost['gallery'] ?? [], 'alt text par défaut');    
+        Toast::success(__('Article de blog mis à jour.'));
     }
 
 
