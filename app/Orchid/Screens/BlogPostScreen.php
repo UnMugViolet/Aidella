@@ -2,6 +2,8 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\BlogPost;
+use App\Models\DogRace;
 use App\Models\PostCategory;
 use App\Orchid\Layouts\BlogPostCategoryLayout;
 use App\Orchid\Layouts\BlogPostPicturesLayout;
@@ -9,9 +11,14 @@ use App\Orchid\Layouts\BlogPostSeoLayout;
 use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
+use Illuminate\Http\Request;
+use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Str;
+
 
 class BlogPostScreen extends Screen
 {
+    private const NULLABLE_STRING_MAX_255 = 'nullable|string|max:255';
 
     public $name = 'Ajouter un Article';
     public $description = 'Cette page permet d\'ajouter un article.';
@@ -36,7 +43,7 @@ class BlogPostScreen extends Screen
         return [
             Button::make('Enregistrer')
                 ->icon('check')
-                ->method('publish')
+                ->method('save')
         ];
     }
 
@@ -54,5 +61,76 @@ class BlogPostScreen extends Screen
                 'Images'  => BlogPostPicturesLayout::class,
             ]),
         ];
+    }
+
+    public function save(Request $request)
+    {
+        $blogPost = $request->get('post', []);
+        $status = $blogPost['status'] ?? 'draft';
+
+        $request->validate([
+            'post.title' => 'required|string|max:255',
+            'post.status' => 'in:draft,published,archived',
+            'post.content' => 'required',
+            'post.meta_title' => self::NULLABLE_STRING_MAX_255,
+            'post.meta_description' => self::NULLABLE_STRING_MAX_255,
+            'post.slug' => [
+                'nullable',
+                'string',
+                'max:255',
+                'regex:/^[a-z0-9-]+$/',
+            ],
+        ]);
+
+        if ($status === 'published')
+            $blogPost['published_at'] = now();
+    
+        $createdPost = BlogPost::create([
+            'title' => $blogPost['title'],
+            'status' => $blogPost['status'] ?? 'draft',
+            'content' => $blogPost['html'],
+            'category_id' => $blogPost['category_id'] ?? $this->getGeneralCategoryId(),
+            'dog_race_id' => $blogPost['dog_race_id'] ?? null,
+            'author_id' => $blogPost['author_id'] ?? 1,
+            'meta_title' => $blogPost['meta_title'] ?? 'Article - ' . $blogPost['title'],
+            'meta_description' => $blogPost['meta_description'] ?? 'Description pour l\'article ' . $blogPost['title'],
+            'slug' => $blogPost['slug'] ?? Str::slug($blogPost['title']),
+            'published_at' => $blogPost['published_at'] ?? null,
+        ]);
+
+        $this->saveGalleryPictures($createdPost, $blogPost['pictures'] ?? [], $blogPost['title']);
+
+        Toast::success('Article enregistrée avec succès!');
+        return redirect()->route('platform.posts');
+    }
+
+    /**
+     * Save gallery pictures for the BlogPost.
+     */
+    private function saveGalleryPictures(BlogPost $post, array $pictures, $altText)
+    {
+        foreach ($pictures as $picturePath) {
+            $cleanPath = $this->parsePath($picturePath);
+            $post->pictures()->create([
+                'path' => $cleanPath,
+                'alt_text' => $altText,
+                'is_main' => false,
+            ]);
+        }
+    }
+
+    /*
+    * Parse the file 
+    */
+    private function parsePath($path)
+    {
+        $parsedUrl = parse_url($path, PHP_URL_PATH);
+        return ltrim($parsedUrl, '/');
+    }
+
+    private function getGeneralCategoryId(): int
+    {
+        $generalCategory = PostCategory::where('slug', 'general')->first();
+        return $generalCategory ? $generalCategory->id : 0;
     }
 }

@@ -45,7 +45,7 @@ class BlogPostCategoryLayout extends Rows
                 ->default('draft')
                 ->help('Choisissez le statut du post'),
 
-            Quill::make('html')
+            Quill::make('post.html')
                 ->title('Contenu')
                 ->placeholder('Contenu du post')
                 ->required(),
@@ -54,7 +54,6 @@ class BlogPostCategoryLayout extends Rows
                 ->title('Catégorie d\'article')
                 ->fromModel(PostCategory::class, 'name')
                 ->displayAppend('name')
-                ->default($this->getGeneralCategoryId())
                 ->help('Sélectionnez la categorie du post'),
 
             Relation::make('post.dog_race_id')
@@ -72,11 +71,5 @@ class BlogPostCategoryLayout extends Rows
                 ->default(1)
                 ->help('Sélectionnez l\'auteur du post'),
             ];
-    }
-
-    public function getGeneralCategoryId(): int
-    {
-        $generalCategory = PostCategory::where('slug', 'general')->first();
-        return $generalCategory ? $generalCategory->id : 0;
     }
 }

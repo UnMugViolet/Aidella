@@ -129,7 +129,7 @@ class BlogPostDogRaceScreen extends Screen
         $createdPost = BlogPost::create([
             'title' => $blogPost['title'],
             'slug' => Str::slug($data['name'], '-', 'fr'),
-            'content' => $blogPost['html'] ?? '',
+            'content' => $blogPost['html'],
             'meta_title' => $blogPost['meta_title'] ?? 'Page de chien - ' . $dogRace->name,
             'meta_description' => $blogPost['meta_description'] ?? 'Description page de chien pour ' . $dogRace->name,
             'status' => $blogPost['status'],

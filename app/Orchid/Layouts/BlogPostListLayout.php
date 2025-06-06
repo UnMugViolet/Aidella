@@ -65,7 +65,9 @@ class BlogPostListLayout extends Table
                 ->sort()
                 ->cantHide()
                 ->filter(TD::FILTER_TEXT)
-                ->render(fn ($blogPost) => Str::limit(strip_tags($blogPost->dogRace->name), 9)),
+                ->render(fn ($blogPost) => $blogPost->dogRace
+                    ? Str::limit(strip_tags($blogPost->dogRace->name), 9)
+                    : '-'),
             
             TD::make('author.name', 'Auteur')
                 ->sort()
@@ -76,7 +78,9 @@ class BlogPostListLayout extends Table
             TD::make('published_at', 'Créé le')
             ->sort()
             ->cantHide()
-                ->render(fn ($blogPost) => $blogPost->published_at->format(self::DATE_FORMAT)),
+            ->render(fn ($blogPost) => $blogPost->published_at
+                ? $blogPost->published_at->format(self::DATE_FORMAT)
+                : '-'),
             
             TD::make('slug', 'Voir la page')
                 ->sort()
