@@ -10,6 +10,7 @@ use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Str;
 
 class PostCategoryEditScreen extends Screen
 {
@@ -86,6 +87,32 @@ class PostCategoryEditScreen extends Screen
 
         Toast::info(__('Catégorie de blog supprimée'));
         
+        return redirect()->route('platform.post-categories');
+    }
+
+    public function save(PostCategory $postCategory, Request $request)
+    {
+        $data = $request->get('postCategory');
+
+        $request->validate([
+            'postCategory.name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[\pL\pN\s\-]+$/u',
+            ],
+            'postCategory.description' => 'nullable|string|max:255',
+        ]);
+
+        if (PostCategory::where('name', $data['name'])->where('id', '!=', $postCategory->id)->exists()) {
+            Toast::error('Cette categorie existe déjà.');
+            return null;
+        }
+        $data['slug'] = Str::slug($data['name'], '-', 'fr');
+        $postCategory->fill($data)->save();
+
+        Toast::info(__('Catégorie de blog enregistrée'));
+
         return redirect()->route('platform.post-categories');
     }
 }
