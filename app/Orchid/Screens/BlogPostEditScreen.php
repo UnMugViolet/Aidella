@@ -110,6 +110,7 @@ class BlogPostEditScreen extends Screen
         }
 
         $blogPost->fill($data);
+        $blogPost->content = $data['html'] ?? '';
         $blogPost->save();
 
         $this->saveGalleryPictures($blogPost, $data['gallery'] ?? [], $blogPost->title ?? 'photo de chien illustration article');

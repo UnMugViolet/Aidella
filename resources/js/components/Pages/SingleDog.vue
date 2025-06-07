@@ -11,7 +11,7 @@
   </section>
   <section 
     v-html="blogPost.content"
-    class="px-4 md:px-8 md:py-8 mt-8 w-full single-dog-content">
+    class="px-4 md:px-8 md:py-8 mt-8 w-full single-wysiwyg-content">
   </section>
 </template>
 

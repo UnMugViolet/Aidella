@@ -50,7 +50,7 @@ class BlogPostController extends Controller
             ])
             ->firstOrFail();
 
-        return view('blog_post', [
+        return view('single_post', [
             'blogPost' => $post,
         ]);
     }
