@@ -61,7 +61,7 @@ class BlogPostListLayout extends Table
                 ->filter(TD::FILTER_TEXT)
                 ->render(fn ($blogPost) => Str::limit(strip_tags($blogPost->category->name), 9)),
 
-            TD::make('dogRace.name', 'Race de chien')
+            TD::make('dogRace.name', 'Chien')
                 ->sort()
                 ->cantHide()
                 ->filter(TD::FILTER_TEXT)
@@ -75,7 +75,7 @@ class BlogPostListLayout extends Table
                 ->filter(TD::FILTER_TEXT)
                 ->render(fn ($blogPost) => Str::limit(strip_tags($blogPost->author->name), 10)),
             
-            TD::make('published_at', 'Créé le')
+            TD::make('published_at', 'Publié le')
             ->sort()
             ->cantHide()
             ->render(fn ($blogPost) => $blogPost->published_at
