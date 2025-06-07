@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class BlogPostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $blogPosts = BlogPost::select(['id', 'title', 'slug', 'category_id', 'published_at', 'author_id', 'dog_race_id'])
             ->with([
@@ -20,7 +20,11 @@ class BlogPostController extends Controller
             ->whereNotNull('category_id')
             ->where('status', 'published')
             ->orderBy('published_at', 'desc')
-            ->paginate(10);
+            ->paginate(12);
+
+        if ($request->ajax()) {
+            return response()->json($blogPosts);
+        }
 
         return view('blog_posts', [
             'blogPosts' => $blogPosts,
