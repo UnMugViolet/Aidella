@@ -5,7 +5,7 @@
       <Carroussel :pictures="pictures" />
       <div class="w-full md:w-1/2">
         <p class="text-2xl font-semibold text-left w-full">{{ blogPost.title }}</p>
-        <p class="text-lg text-left w-full">{{  blogPost.dog_race.description }}</p>
+        <p class="text-lg text-left w-full">{{ blogPost.dog_race.description }}</p>
       </div>
     </div>
   </section>

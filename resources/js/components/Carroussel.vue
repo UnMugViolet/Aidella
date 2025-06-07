@@ -5,7 +5,7 @@
 				v-if="pictures.length > 0"
 				class="w-full [height:55svh] rounded-lg shadow-lg"
 				:style="{
-					backgroundImage: `url('${pictures[currentIndex].path}')`,
+					backgroundImage: `url('/${pictures[currentIndex].path}')`,
 					backgroundSize: 'cover',
 					backgroundPosition: 'center'
 				}"

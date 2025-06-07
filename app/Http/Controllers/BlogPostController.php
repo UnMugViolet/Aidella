@@ -44,6 +44,9 @@ class BlogPostController extends Controller
             ->where('category_id', $categoryModel->id)
             ->with([
                 'pictures',
+                'author:id,name',
+                'category:id,name,slug',
+                'dogRace:id,name',
             ])
             ->firstOrFail();
 
