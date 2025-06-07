@@ -8,11 +8,11 @@
 
 @section('component', 'SingleDog')
 
-@section('robots_content', 'index, follow')
-
-
+{{-- SEO --}}
 @section('meta_title', $blogPost->meta_title ? $blogPost->meta_title : $blogPost->dogRace->name . ' - Aidella')
 @section('meta_description', $blogPost->meta_description ? $blogPost->meta_description : $blogPost->dogRace->name . ' - Aidella')
+@section('thumbnail', isset($blogPost->pictures[0]) && $blogPost->pictures[0]->path ? asset($blogPost->pictures[0]->path) : asset('images/logo-terres-aidella-big.webp'))
+@section('robots_content', 'index, follow')
 
 @section('data')
     {!! json_encode([

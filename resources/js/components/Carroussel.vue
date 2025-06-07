@@ -4,11 +4,13 @@
             <div
 				v-if="pictures.length > 0"
 				class="w-full [height:55svh] rounded-lg shadow-lg"
-				:style="{
-					backgroundImage: `url('/${pictures[currentIndex].path}')`,
-					backgroundSize: 'cover',
-					backgroundPosition: 'center'
-				}"
+                :style="{
+                    backgroundImage: pictures[currentIndex].path.startsWith('http')
+                        ? `url('${pictures[currentIndex].path}')`
+                        : `url('/${pictures[currentIndex].path}')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                }"
             >
             <button
                 v-if="pictures.length > 1"

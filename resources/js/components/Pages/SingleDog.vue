@@ -23,5 +23,7 @@ const props = defineProps(['initialData'])
 const blogPost = ref(window.pageData.blogPost)
 const pictures = ref(blogPost.value.pictures);
 
+console.log(blogPost.value);
+
 </script>
 

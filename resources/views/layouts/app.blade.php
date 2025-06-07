@@ -14,7 +14,7 @@
         <meta property="og:title" content="@yield('meta_title', 'Aidella - Elevage canin')">
         <meta property="og:description" content="@yield('meta_description', '')">
         <meta property="og:country-name" content="France">
-        <meta property="og:image" content="/images/logo-aidella.webp">
+        <meta property="og:image" content="@yield('thumbnail', '/images/logo-terres-aidella-big.webp')">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:type" content="website">
 
@@ -23,15 +23,15 @@
         <meta property="og:type" content="website">
         <meta property="og:title" content="@yield('meta_title', 'Aidella - Elevage canin')">
         <meta property="og:description" content="@yield('meta_description', 'Aidella - Elevage canin')">
-        <meta property="og:image" content="/images/logo-aidella.webp">
+        <meta property="og:image" content="@yield('thumbnail', '/images/logo-terres-aidella-big.webp')">
 
         <!-- Twitter Meta Tags -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta property="twitter:domain" content="logma-production.com">
+        <meta property="twitter:domain" content="elevage-canin-vosges.fr">
         <meta property="twitter:url" content="{{ url()->current() }}">
         <meta name="twitter:title" content="@yield('meta_title', 'Aidella - Elevage canin')">
         <meta name="twitter:description" content="@yield('meta_description', 'Aidella - Elevage canin')">
-        <meta name="twitter:image" content="/images/logo-aidella.webp">
+        <meta name="twitter:image" content="@yield('thumbnail')">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
