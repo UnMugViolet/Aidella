@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('css')
-    <link rel="stylesheet" href="{{ asset('/css/global.css') }}">
+<link rel="stylesheet" href="{{ asset('/css/global.css') }}?v={{ filemtime(public_path('css/global.css')) }}">
 @endpush
 
 @section('title', $blogPost->title . ' - Aidella')
