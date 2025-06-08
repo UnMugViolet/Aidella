@@ -22,7 +22,7 @@
   Add, edit, and manage dog breeds with descriptions, images, and display order.
 
 - **Blog Posts:**  
-  Create articles, categorize them, and associate them with dog breeds. Each post supports SEO fields, images, and author attribution.
+  Create articles, categorize them, and associate them with dog breeds and categories. Each post supports SEO fields, images, and author attribution.
 
 - **Relational Database:**  
   The database schema is fully relational, with tables for users, blog posts, categories, dog breeds, and images.
