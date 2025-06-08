@@ -1,5 +1,10 @@
 {
-    "private": true,
+    "name": "aidella",
+    "version": "1.0.0",
+    "private": false,
+    "author": "Paul Jaguin <paul@rocketegg.systems>",
+    "license": "MIT",
+    "homepage": "https://elevage-canin-vosges.fr/",
     "type": "module",
     "scripts": {
         "build": "vite build",
