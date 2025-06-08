@@ -163,10 +163,6 @@ class BlogPostDogRaceEditScreen extends Screen
                 'status' => $blogPost['status'],
                 'author_id' => $blogPost['author_id'],
             ]);
-            // Remove old gallery pictures
-            foreach ($blogPostModel->pictures()->where('is_main', false)->get() as $picture) {
-                $this->deletePictureAndAttachment($picture);
-            }
             $this->saveGalleryPictures($blogPostModel, $blogPost['gallery'] ?? [], $dogRace->name);
         }
 
