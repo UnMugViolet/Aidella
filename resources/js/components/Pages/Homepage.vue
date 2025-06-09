@@ -7,8 +7,8 @@
       </video>
       <div class="absolute inset-0 bg-black opacity-50"></div>
       <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white ">
-        <h1 class="text-6xl md:text-8xl font-bold mb-2">Aidella</h1>
-        <p class="p-2 text-base md:text-xl">Bienvenue sur notre site web elevage de chiens depuis longtemps</p>
+        <h1 class="text-6xl md:text-8xl font-bold mb-2">Les Terres d'Aidella</h1>
+        <p class="p-2 text-base md:text-xl">Élevage de chiens LOF à Aydoilles dans les Vosges.</p>
       </div>
     </div>
     <DogRaceGrid :dogPages="dogPages"/>
