@@ -1,5 +1,5 @@
 <template>
-  <section class="px-4 md:px-8 pt-11 md:w-10/12 md:pb-11 mt-11 overflow-hidden">
+  <section class="px-4 md:px-8 pt-11 md:pb-11 mt-11 overflow-hidden">
     <h1 class="text-5xl md:text-7xl font-semibold text-left py-4 uppercase">{{ blogPost.dog_race.name }}</h1>
     <div class="w-full flex flex-col md:flex-row items-center justify-between gap-6 mt-2 md:mt-8">
       <Carroussel :pictures="pictures" />
