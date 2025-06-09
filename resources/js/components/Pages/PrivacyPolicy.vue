@@ -1,82 +1,87 @@
 <template>
-	  <section class="px-4 md:px-8 pt-13 md:pb-11 mt-11 w-full overflow-hidden">
-			<h1 class="text-4xl md:text-6xl font-bold my-2 uppercase">Conditions Générales d’Utilisation (CGU)</h1>
-			<h2 class="text-2xl md:text-4xl font-bold mb-4">Élevage canin Les Terres d’Aidella</h2>
+	<section class="flex justify-center px-4 md:px-8 pt-13 md:pb-11 mt-11 w-full overflow-hidden">
+		<div class="md:w-10/12">
+			<h1 class="text-4xl md:text-6xl font-bold my-2 uppercase">Politique de Confidentialité</h1>
+			<div class="flex items-baseline gap-2">
+				<h2 class="text-2xl md:text-4xl font-bold mb-4">Les Terres d’Aidella –</h2> 
+				<a href="https://elevage-canin-vosges.fr/" class="text-xl md:text-3xl font-bold mb-4 text-blue-500 hover:underline">https://elevage-canin-vosges.fr/</a>
+			</div>
 			<p class="italic mb-11">Dernière mise à jour : 9 juin 2025</p>
-
 			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">1. Objet</h3>
+				<h3 class="text-xl md:text-2xl font-bold mb-2">1. Responsable du traitement</h3>
 				<p>
-					Les présentes Conditions Générales d’Utilisation (ci-après les « CGU ») ont pour objet de définir les modalités d’accès et d’utilisation du site internet https://elevage-canin-vosges.fr/ (ci-après le « Site »), <br/>
-					édité par l’élevage Les Terres d’Aidella, situé 29 route de Vaudeville 88600 Aydoilles. <br/> <br/>
-				</p>
-				<p>
-					En naviguant sur ce site, l’utilisateur reconnaît avoir pris connaissance des présentes CGU et les accepter sans réserve.
+					Le responsable du traitement des données est : <br/>
+					<strong> Les Terres d'Aidella</strong> <br/>
+					Élevage canin situé au 29 route de Vaudeville, 88600 Aydoilles, France. <br/>
+					
+					Email : <a href="mailto:aidella@elevage-canin-vosges.fr" class="text-blue-500 hover:underline">aidella@elevage-canin-vosges.fr</a>
 				</p>
 			</div>
 			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">2. Accès au site</h3>
+				<h3 class="text-xl md:text-2xl font-bold mb-2">2. Données collectées</h3>
 				<p>
-					Le site est accessible gratuitement à tout utilisateur disposant d’un accès à Internet.<br/>
-					L’éleveur s’efforce d’assurer un accès permanent, sans pour autant être tenu à une obligation de résultat.<br/>
-					Des interruptions peuvent survenir pour maintenance, mise à jour ou cas de force majeure.<br/>
+					Nous collectons les données suivantes : <br/>
+					- Nom et prénom <br/>
+					- Adresse e-mail <br/>
+					- Message via le formulaire de contact <br/>
+					- Statistiques de navigation via Matomo (anonymisées) <br/>
+				</p>
+				<p>
+					Ces données sont uniquement destinées à permettre à l’élevage de <strong> répondre à votre demande.</strong>
 				</p>
 			</div>
 			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">3. Contenu du site</h3>
+				<h3 class="text-xl md:text-2xl font-bold mb-2">3. Finalités du traitement</h3>
 				<p>
-					Le Site propose des contenus informatifs à titre purement indicatif sur l’élevage, les chiens, les portées éventuelles, ainsi que des photos et vidéos à vocation illustrative.<br/>
-					Aucun achat, réservation ou paiement en ligne n’est possible via ce Site.
+					Les données collectées sont utilisées pour : <br/>
+					- Répondre aux demandes via le formulaire de contact <br/>
+					- Améliorer le site et les services proposés <br/>
+					- Analyser la fréquentation du site via Matomo <br/>
+				</p>
+				<strong>Aucune utilisation commerciale ou marketing n’est faite de ces données.</strong>
+			</div>
+			<div class="mb-8">
+				<h3 class="text-xl md:text-2xl font-bold mb-2">4. Durée de conservation</h3>
+				<p>
+					Les données collectées via le formulaire de contact sont conservées pendant une durée maximale de <strong>12 mois</strong> à compter du dernier contact émis par l’utilisateur, sauf obligation légale contraire.<br/>
 				</p>
 			</div>
 			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">4. Propriété intellectuelle</h3>
+				<h3 class="text-xl md:text-2xl font-bold mb-2">5. Cookies et statistiques</h3>
 				<p>
-					L’ensemble des éléments figurant sur le Site (textes, images, vidéos, logos, graphismes, design, etc.) est protégé par les lois en vigueur sur la propriété intellectuelle.<br/>
-					Sauf autorisation écrite préalable, toute reproduction, représentation, diffusion ou exploitation, même partielle, est strictement interdite, notamment les photos des chiens ou tout autre visuel appartenant à l’élevage.
+					Le Site utilise <strong>Matomo</strong>, un outil d’analyse web respectueux de la vie privée et  <strong>hébergé en Europe.</strong>
+					- Les données de navigation sont <strong> anonymisées.</strong> <br/>
+					- Aucun transfert de données à des tiers. <br/>
+					- Aucun cookie publicitaire ou de traçage individuel n’est utilisé. <br/>
+					Des cookies techniques peuvent être déposés pour assurer le bon fonctionnement du site (langue, session, sécurité, etc.).
 				</p>
 			</div>
 			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">5. Formulaire de contact</h3>
+				<h3 class="text-xl md:text-2xl font-bold mb-2">6. Sécurité des données</h3>
 				<p>
-					Les utilisateurs peuvent contacter l’élevage via le formulaire présent sur le Site.<br/>
-					Les données collectées à cette occasion (nom, prénom, adresse e-mail, message, etc.) sont strictement confidentielles et ne font l’objet d’aucune cession à des tiers.
+					Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger les données personnelles contre la perte, l’accès non autorisé, la divulgation ou la destruction.<br/>
+					Cependant, aucune méthode de transmission sur Internet ou de stockage électronique n’est totalement sécurisée. <br/>
+					Nous ne pouvons garantir une sécurité absolue.
 				</p>
 			</div>
 			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">6. Cookies et statistiques</h3>
+				<h3 class="text-xl md:text-2xl font-bold mb-2">7. Droits des utilisateurs</h3>
 				<p>
-					Le Site utilise l’outil de mesure d’audience Matomo, respectueux de la confidentialité et des exigences de la CNIL.<br/>
-					Les données collectées sont anonymisées, ne sont pas revendues, et ne permettent pas de suivre les utilisateurs individuellement à des fins commerciales.<br/>
-					L’utilisateur est informé que des cookies techniques peuvent être déposés sur son terminal pour assurer le bon fonctionnement du site.
+					Conformément au <strong> Règlement Général sur la Protection des Données (RGPD)</strong>, vous disposez des droits suivants : <br/>
+					- Droit d’accès et de rectification de vos données <br/>
+					- Droit à l’effacement de vos données <br/>
+					- Droit à la limitation du traitement <br/>
+					- Droit à la portabilité de vos données <br/>
+					Pour exercer l’un de ces droits, il suffit d’en faire la demande via le formulaire de contact du site. Une réponse vous sera apportée sous 30 jours.
 				</p>
 			</div>
 			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">7. Responsabilité</h3>
+				<h3 class="text-xl md:text-2xl font-bold mb-2">8. Contact et réclamations</h3>
 				<p>
-					L’éleveur met tout en œuvre pour fournir des informations fiables et à jour. Toutefois, il ne saurait garantir l’exactitude ou l’exhaustivité du contenu.<br/><br/>
-					L’utilisateur reste seul responsable de l’usage qu’il fait des informations fournies sur le Site.
+					Pour toute question relative à cette politique ou à vos données personnelles, vous pouvez contacter l’élevage via le formulaire du site.
+					En cas de désaccord, vous avez également le droit d’introduire une réclamation auprès de la <strong>CNIL</strong> <a class="text-blue-500 hover:underline" href="https://cnil.fr" target="_blank"> (www.cnil.fr)</a>.
 				</p>
 			</div>
-			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">8. Liens externes</h3>
-				<p>
-					Des liens vers le réseau social Facebook sont proposés à titre de commodité. <br/>
-					L’éleveur ne peut être tenu responsable des contenus publiés sur des sites tiers.
-				</p>
-			</div>
-			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">9. Modifications des CGU</h3>
-				<p>
-					L’éleveur se réserve le droit de modifier les présentes CGU à tout moment. <br/>
-					Les utilisateurs sont invités à les consulter régulièrement pour prendre connaissance des éventuelles mises à jour.
-				</p>
-			</div>
-			<div class="mb-8">
-				<h3 class="text-xl md:text-2xl font-bold mb-2">10. Droit applicable</h3>
-				<p>
-					Les présentes CGU sont régies par le droit français. En cas de litige, et à défaut de résolution amiable, les tribunaux français seront seuls compétents.
-				</p>
-			</div>
+		</div>
 	</section>
 </template>
