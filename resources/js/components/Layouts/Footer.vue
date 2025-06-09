@@ -30,8 +30,7 @@
 			<p class="text-center">&copy; {{ year }} Aidella. Tous droits réservés</p>
 			<p>
 				<a href="/mentions-legales" class="text-blue-400 hover:underline">Mentions légales</a> |
-				<a href="/politique-de-confidentialite" class="text-blue-400 hover:underline">Politique de
-					confidentialité</a>
+				<a href="/cgu" class="text-blue-400 hover:underline">Conditions générales d'utilisation</a>
 			</p>
 			<p class="flex gap-1 justify-center mt-5">
 				Site web réalisé par

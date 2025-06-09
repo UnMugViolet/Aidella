@@ -33,7 +33,7 @@ Route::get('/sitemap.xml', function () {
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/a-propos', fn() => view('about'));
 Route::get('/mentions-legales', fn() => view('legal_mentions'));
-Route::get('/politique-de-confidentialite', fn() => view('privacy_policy'));
+Route::get('/cgu', fn() => view('privacy_policy'));
 Route::post('/contact', [ContactFormController::class, 'submit']);
 Route::get('/articles', [BlogPostController::class, 'index']);
 
