@@ -4,7 +4,7 @@
       <div class="md:w-1/2">
         <h1 class="text-5xl md:text-7xl font-semibold text-left py-4 uppercase">{{ blogPost.title }}</h1>
         <div class="ml-2 capitalize text-2xl font-semibold text-left w-full flex gap-1.5">
-          <h2 class="">
+          <h2>
             {{ blogPost.category.name || 'Sans catégorie' }}
           </h2>
           <h2 v-if="blogPost.dog_race?.name"> - {{ blogPost.dog_race.name }}</h2>
@@ -16,9 +16,10 @@
       <Carroussel :pictures="pictures" class="w-1/2 "/>
     </div>
   </section>
-  <section 
-    v-html="blogPost.content"
-    class="px-4 md:px-8 md:py-8 mt-8 w-full single-wysiwyg-content">
+  <section class="flex items-center justify-center w-full">
+    <div v-html="blogPost.content"
+      class="px-4 md:px-8 md:py-8 mt-8 md:w-10/12 single-wysiwyg-content">
+    </div>
   </section>
 </template>
 

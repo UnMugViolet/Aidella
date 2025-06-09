@@ -3,9 +3,9 @@
 		<div class="w-full flex flex-col md:flex-row gap-3 md:gap-6 my-20">
 			<div class="w-full md:w-1/2 flex flex-col  items-start">
 				<h2 class="text-5xl md:text-7xl font-semibold text-left pb-4 uppercase">Nous contacter</h2>
-				<p class="pr-2 md:pr-8">Demander un renseignement ou simplement nous poser une question n'esithez pas a
-					nous
-					contacter !</p>
+				<p class="pr-2 text-lg md:pr-8">
+					Demander un renseignement ou simplement nous poser une question, <br/>
+					N'hésitez pas à nous contacter par téléphone ou en utilisant notre formulaire de contact !</p>
 			</div>
 			<form @submit="submitForm" class="flex flex-col items-center justify-center md:w-1/2 mt-5 md:px-4">
 				<div class="w-full flex flex-col md:flex-row md:gap-4 md:mb-2">
@@ -30,8 +30,7 @@
 			<p class="text-center">&copy; {{ year }} Aidella. Tous droits réservés</p>
 			<p>
 				<a href="/mentions-legales" class="text-blue-400 hover:underline">Mentions légales</a> |
-				<a href="/politique-de-confidentialite" class="text-blue-400 hover:underline">Politique de
-					confidentialité</a>
+				<a href="/cgu" class="text-blue-400 hover:underline">Conditions générales d'utilisation</a>
 			</p>
 			<p class="flex gap-1 justify-center mt-5">
 				Site web réalisé par
