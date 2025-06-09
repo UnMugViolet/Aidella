@@ -16,9 +16,10 @@
       <Carroussel :pictures="pictures" class="w-1/2 "/>
     </div>
   </section>
-  <section 
-    v-html="blogPost.content"
-    class="px-4 md:px-8 md:py-8 mt-8 w-full single-wysiwyg-content">
+  <section class="flex items-center justify-center w-full">
+    <div v-html="blogPost.content"
+      class="px-4 md:px-8 md:py-8 mt-8 md:w-10/12 single-wysiwyg-content">
+    </div>
   </section>
 </template>
 

@@ -8,7 +8,7 @@
 	}
 
 	.single-wysiwyg-content h2 {
-    	font-size: var(--text-xl);
+    	font-size: var(--text-2xl);
     	line-height: var(--tw-leading, var(--text-5xl--line-height));
 		--tw-font-weight: var(--font-weight-semibold);
     	font-weight: var(--font-weight-semibold);
@@ -21,6 +21,32 @@
     	font-weight: var(--font-weight-semibold);
 	}
 
+	.single-wysiwyg-content p {
+    	font-size: var(--text-sm);
+    	line-height: var(--tw-leading, var(--text-sm-line-height));
+	}
+
+	.single-wysiwyg-content .ql-align-right {
+		text-align: right;
+	}
+
+	.single-wysiwyg-content .ql-align-left {
+		text-align: left;
+	}
+	.single-wysiwyg-content .ql-align-center {
+		text-align: center;
+	}
+
+	.single-wysiwyg-content a {
+		text-decoration: underline;
+		color: var(--color-blue-400);
+		transition: color 0.3s ease-in-out;
+	}
+
+	.single-wysiwyg-content a:hover {
+		text-decoration: none;
+		color: var(--color-blue-500);
+	}
 }
 
 @media (width >= 48rem) {
@@ -34,8 +60,8 @@
 	}
 
 	.single-wysiwyg-content h2 {
-    	font-size: var(--text-5xl);
-    	line-height: var(--tw-leading, var(--text-5xl--line-height));
+    	font-size: var(--text-4xl);
+    	line-height: var(--tw-leading, var(--text-4xl--line-height));
 		--tw-font-weight: var(--font-weight-semibold);
     	font-weight: var(--font-weight-semibold);
 	}
@@ -46,6 +72,9 @@
 		--tw-font-weight: var(--font-weight-semibold);
     	font-weight: var(--font-weight-semibold);
 	}
+
+	.single-wysiwyg-content p {
+    	font-size: var(--text-lg);
+    	line-height: var(--tw-leading, var(--text-lg--line-height));
+	}
 }
-
-
