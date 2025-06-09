@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Conditions Générales d\utilisation - Aidella')
+@section('title', 'Conditions Générales d\'utilisation - Aidella')
 
 @section('component', 'CGU')
 
