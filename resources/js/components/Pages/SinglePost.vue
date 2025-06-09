@@ -4,7 +4,7 @@
       <div class="md:w-1/2">
         <h1 class="text-5xl md:text-7xl font-semibold text-left py-4 uppercase">{{ blogPost.title }}</h1>
         <div class="ml-2 capitalize text-2xl font-semibold text-left w-full flex gap-1.5">
-          <h2 class="">
+          <h2>
             {{ blogPost.category.name || 'Sans catégorie' }}
           </h2>
           <h2 v-if="blogPost.dog_race?.name"> - {{ blogPost.dog_race.name }}</h2>

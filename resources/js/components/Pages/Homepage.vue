@@ -32,7 +32,7 @@ import { ref } from 'vue';
 import DogRaceGrid from '../Homepage/DogRaceGrid.vue';
 
 const props = defineProps(['initialData'])
-const videoPath = '/videos/video_banniere_aidella.mp4';
+const videoPath = '/videos/les-terres-daidella-elevage-canin-grand-est.mp4';
 
 let dogPages = ref(props.initialData.dogPages);
 
