@@ -3,7 +3,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <a href="/" class="text-white hover:text-gray-300 transition-colors duration-600 ease-in-out flex items-center gap-2">
                 <img :src="logoPath" alt="Logo Aidella" class="h-14 w-auto">
-                <h1 class="text-2xl font-bold text-shadow-custom">Terres d'Aidella</h1>
+                <h1 class="text-2xl font-bold text-shadow-custom">Les Terres d'Aidella</h1>
             </a>
             <!-- Burger Button -->
             <button

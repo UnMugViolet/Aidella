@@ -27,14 +27,23 @@
 	}
 
 	.single-wysiwyg-content .ql-align-right {
-		text-align: right;
+		text-align: right;		
+		width: 100%;
+		display: flex;
+		justify-content: right;
 	}
 
 	.single-wysiwyg-content .ql-align-left {
 		text-align: left;
+		width: 100%;
+		display: flex;
+		justify-content: left;
 	}
 	.single-wysiwyg-content .ql-align-center {
 		text-align: center;
+		width: 100%;
+		display: flex;
+		justify-content: center;
 	}
 
 	.single-wysiwyg-content a {
@@ -46,6 +55,12 @@
 	.single-wysiwyg-content a:hover {
 		text-decoration: none;
 		color: var(--color-blue-500);
+	}
+	
+	.single-wysiwyg-content img {
+		width: 100%;
+		height: auto;
+		display: block;
 	}
 }
 
@@ -76,5 +91,11 @@
 	.single-wysiwyg-content p {
     	font-size: var(--text-lg);
     	line-height: var(--tw-leading, var(--text-lg--line-height));
+	}
+
+	.single-wysiwyg-content img {
+		width: 33%;
+		height: auto;
+		display: block;
 	}
 }

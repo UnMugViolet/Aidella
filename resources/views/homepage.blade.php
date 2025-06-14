@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Accueil - Aidella')
+@section('title', 'Elevage canin Les Terres d\'Aidella')
 
 
 {{-- SEO --}}
