@@ -143,8 +143,8 @@ class BlogPost extends Model
                 self::deletePictureAndAttachment($picture);
             }
 
-            // Delete all pictures for the associated DogRace (if any)
-            if ($blogPost->dogRace) {
+            // Only delete DogRace and its pictures if it is a dogPage and has no category
+            if (is_null($blogPost->category_id) && $blogPost->dogRace) {
                 foreach ($blogPost->dogRace->pictures as $picture) {
                     self::deletePictureAndAttachment($picture);
                 }
