@@ -60,6 +60,8 @@ user: ## Create a new admin user
 prod: ## Install production dependencies and build assets
 	@echo "$(CLR_YELLOW) Running production environment...$(CLR_RESET)"
 	@mkdir -p bootstrap/cache
+	@mkdir -p storage/app/public/uploads/
+	@mkdir -p storage/app/public/uploads/dog-races/
 	@chmod -R 755 storage bootstrap/cache
 	@cp ~/env_aidella/.env .env
 	@$(COMPOSER_PROD) install --no-dev --optimize-autoloader
