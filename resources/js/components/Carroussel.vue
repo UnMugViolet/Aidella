@@ -1,7 +1,7 @@
 <template>
     <div class="w-full md:w-9/12 flex flex-col items-center">
         <div class="relative w-full">
-            <div v-if="pictures.length > 0" class="w-full [height:55svh] rounded-lg shadow-lg" :style="{
+            <div v-if="pictures.length > 0" class="w-full [height:58svh] rounded-lg shadow-lg" :style="{
                 backgroundImage: pictures[currentIndex].path.startsWith('http')
                     ? `url('${pictures[currentIndex].path}')`
                     : `url('/${pictures[currentIndex].path}')`,
