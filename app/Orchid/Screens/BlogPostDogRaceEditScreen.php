@@ -209,7 +209,7 @@ class BlogPostDogRaceEditScreen extends Screen
             if (!isset($currentAttachmentIds[$attachmentId])) {
                 $attachment = Attachment::find($attachmentId);
                 if ($attachment) {
-                    $storagePath = 'storage/' . ltrim($attachment->path, '/') . '/' . $attachment->name . '.' . $attachment->extension;
+                    $storagePath = 'storage/' . ltrim($attachment->path, '/') . $attachment->name . '.' . $attachment->extension;
                     $post->pictures()->create([
                         'path' => $storagePath,
                         'alt_text' => $altText,
