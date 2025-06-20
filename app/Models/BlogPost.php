@@ -128,15 +128,16 @@ class BlogPost extends Model
 
         static::deleting(function ($blogPost) {
             $attachments = $blogPost->attachments()->get();
-
+            
             foreach ($attachments as $attachment) {
-                $file = 'storage/' . $attachment->path . '/' . $attachment->filename . '.' . $attachment->extension;
+                $file = $attachment->path . $attachment->name . '.' . $attachment->extension;
                 if (Storage::disk('public')->exists($file)) {
                     Storage::disk('public')->delete($file);
                 } else {
                     Log::warning("File not found: {$file}");
                 }
                 $attachment->delete();
+                $blogPost->attachments()->detach($attachment->id);
             }
         });
     }
