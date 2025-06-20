@@ -13,7 +13,7 @@
           {{ blogPost.author.name }} - {{ formatDate(blogPost.published_at) }}
         </p>
       </div>
-      <Carroussel :pictures="pictures" class="w-1/2 "/>
+      <Carroussel :pictures="attachments" class="w-1/2 "/>
     </div>
   </section>
   <section class="flex items-center justify-center w-full">
@@ -29,8 +29,7 @@ import Carroussel from '../Carroussel.vue';
 const props = defineProps(['initialData'])
 
 const blogPost = ref(window.pageData.blogPost)
-const dogRaces = ref(window.pageData.dogRaces)
-const pictures = ref(blogPost.value.pictures);
+const attachments = ref(blogPost.value.attachments);
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -41,5 +40,7 @@ function formatDate(dateStr) {
     month: 'long'
   });
 }
+
+console.log('Blog Post:', blogPost.value);
 
 </script>

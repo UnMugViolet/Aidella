@@ -15,6 +15,7 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Orchid\Attachment\Models\Attachment;
 use Orchid\Support\Facades\Toast;
 
 class BlogPostDogRaceScreen extends Screen
@@ -79,6 +80,7 @@ class BlogPostDogRaceScreen extends Screen
                     Picture::make('dogRace.thumbnail')
                         ->title('Miniature')
                         ->storage('public')
+                        ->groups('thumbnail')
                         ->path('uploads/dog-races')
                         ->acceptedFiles('image/*')
                         ->maxFiles(1)
@@ -152,12 +154,15 @@ class BlogPostDogRaceScreen extends Screen
         $thumbnailPath = $this->parsePath($thumbnail);
 
         // Remove old thumbnails
-        $dogRace->pictures()->where('is_main', true)->delete();
+        $dogRace->attachments()->where('group', 'thumbnail')->delete();
 
-        $dogRace->pictures()->create([
-            'path' => $thumbnailPath,
-            'is_main' => true,
-            'alt_text' => $altText,
+        $dogRace->attachments()->syncWithoutDetaching([
+            Attachment::create([
+                'name' => $thumbnailPath,
+                'group' => 'thumbnail',
+                'path' => $thumbnailPath,
+                'alt_text' => $altText,
+            ]),
         ]);
     }
 
@@ -167,11 +172,15 @@ class BlogPostDogRaceScreen extends Screen
     private function saveGalleryPictures(BlogPost $post, array $pictures, $altText)
     {
         foreach ($pictures as $picturePath) {
-            $cleanPath = $this->parsePath($picturePath);
-            $post->pictures()->create([
-                'path' => $cleanPath,
-                'alt_text' => $altText,
-                'is_main' => false,
+            $picturePath = $this->parsePath($picturePath);
+            $post->attachments()->syncWithoutDetaching([
+                Attachment::create([
+                    'name' => pathinfo($picturePath, PATHINFO_FILENAME),
+                    'extension' => pathinfo($picturePath, PATHINFO_EXTENSION),
+                    'group' => 'gallery',
+                    'path' => $picturePath,
+                    'alt_text' => $altText,
+                ])->id
             ]);
         }
     }

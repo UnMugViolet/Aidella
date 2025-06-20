@@ -46,7 +46,7 @@
 
 - Each **DogRace** can have one **BlogPost** (its page) and multiple images.
 - Each **BlogPost** belongs to a **PostCategory** and can be linked to a **DogRace**.
-- **Pictures** are linked to either a **DogRace** or a **BlogPost** via a polymorphic relationship.
+- **Pictures** are linked to either a **DogRace** or a **BlogPost** via a polymorphic relationship. Using the builtion Orchid Model Attachment.
 
 ## 🔑 Usage
 

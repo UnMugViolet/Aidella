@@ -15,7 +15,7 @@ class BlogPostController extends Controller
                 'category:id,name,slug',
                 'author:id,name',
                 'dogRace:id,name',
-                'pictures',
+                'attachments',
             ])
             ->whereNotNull('category_id')
             ->where('status', 'published')
@@ -43,7 +43,7 @@ class BlogPostController extends Controller
         $post = BlogPost::where('slug', $slug)
             ->where('category_id', $categoryModel->id)
             ->with([
-                'pictures',
+                'attachments',
                 'author:id,name',
                 'category:id,name,slug',
                 'dogRace:id,name',

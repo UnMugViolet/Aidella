@@ -5,14 +5,17 @@ namespace App\Models;
 use Orchid\Filters\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Orchid\Attachment\Attachable;
 use Orchid\Attachment\Models\Attachment;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
 
 class BlogPost extends Model
 {
+    use Attachable;
     use Filterable;
     /** @use HasFactory<\Database\Factories\BlogPostFactory> */
     use HasFactory;
@@ -84,18 +87,6 @@ class BlogPost extends Model
     ];
 
     /**
-     * Get all the images for the BlogPost.
-     * 
-     * @return string|null
-     */
-    public function images()
-    {
-        $images = $this->pictures()->pluck('path')->toArray();
-        return !empty($images) ? implode(',', $images) : null;
-    }
-
-
-    /**
      * Relationship: A BlogPost can belongs to a DogRace.
      * Whatch out this function can return NULL.
      */
@@ -122,13 +113,13 @@ class BlogPost extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    /**
-     * Relationship: A BlogPost can have many pictures.
-     * Returns the pictures linked to the post.
-     */
-    public function pictures()
+    public function attachments(): MorphToMany
     {
-        return $this->morphMany(Pictures::class, 'imageable');
+        return $this->morphToMany(
+            Attachment::class,
+            'attachmentable',
+            'attachmentable',
+        );
     }
 
     protected static function boot()
@@ -136,6 +127,7 @@ class BlogPost extends Model
         parent::boot();
 
         static::deleting(function ($blogPost) {
+<<<<<<< Updated upstream
             $blogPost->load(['dogRace', 'pictures']);
 
             // Delete all pictures for the BlogPost
@@ -150,34 +142,12 @@ class BlogPost extends Model
                 }
                 $blogPost->dogRace->delete();
             }
+=======
+            // Delete all attachments related to this blog post
+            $blogPost->attachments()->each(function ($attachment) {
+                $attachment->delete();
+            });
+>>>>>>> Stashed changes
         });
-    }
-
-    /**
-     * Delete a picture and its associated attachment (if found).
-     *
-     * @param Pictures $picture
-     * @return void
-     */
-    private static function deletePictureAndAttachment($picture)
-    {
-        $filename = pathinfo($picture->path, PATHINFO_FILENAME);
-        $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
-
-        // Try to find the Attachment by name and extension
-        $attachment = Attachment::where('name', $filename)
-            ->where('extension', $extension)
-            ->first();
-
-        if ($attachment) {
-            $attachment->delete();
-        } else {
-            // Fallback: delete the file directly
-            $cleanPath = str_replace('storage/', '', $picture->path);
-            if (Storage::disk('public')->exists($cleanPath)) {
-                Storage::disk('public')->delete($cleanPath);
-            }
-        }
-        $picture->delete();
     }
 }

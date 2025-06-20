@@ -11,7 +11,7 @@ class SingleDogController extends Controller
 
     public function show($slug)
     {
-        $blogPost = BlogPost::with(['dogRace', 'pictures'])
+        $blogPost = BlogPost::with(['dogRace', 'attachments'])
             ->where('slug', $slug)
             ->whereNotNull('dog_race_id')
             ->firstOrFail();

@@ -35,29 +35,9 @@ class BlogPostDogRaceEditScreen extends Screen
         $blogPost = BlogPost::where('dog_race_id', $dogRace->id)->first();
 
         $dogRaceData = $dogRace->toArray();
-        $dogRaceData['thumbnail'] = optional($dogRace->pictures()->where('is_main', true)->first())->path;
-        if ($dogRaceData['thumbnail'] && $dogRaceData['thumbnail'][0] !== '/') {
-            $dogRaceData['thumbnail'] = '/' . $dogRaceData['thumbnail'];
-        }
 
         $blogPostData = $blogPost ? $blogPost->toArray() : [];
         $blogPostData['html'] = $blogPostData['content'] ?? '';
-
-        // Get attachment IDs for gallery pictures
-        $galleryAttachmentIds = [];
-        if ($blogPost) {
-            foreach ($blogPost->pictures()->where('is_main', false)->get() as $picture) {
-                $filename = pathinfo($picture->path, PATHINFO_FILENAME);
-                $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
-                $attachment = Attachment::where('name', $filename)
-                    ->where('extension', $extension)
-                    ->first();
-                if ($attachment) {
-                    $galleryAttachmentIds[] = $attachment->id;
-                }
-            }
-        }
-        $blogPostData['gallery'] = $galleryAttachmentIds;
 
         return [
             'dogRace' => $dogRaceData,
@@ -114,8 +94,6 @@ class BlogPostDogRaceEditScreen extends Screen
         $data = $request->get('dogRace');
         $blogPost = $request->get('post', []);
 
-        $thumbnailRule = is_string($data['thumbnail'] ?? null) ? 'nullable|string' : 'nullable|image';
-
         $request->validate([
             'dogRace.name' => [
                 'required',
@@ -124,7 +102,7 @@ class BlogPostDogRaceEditScreen extends Screen
                 'regex:/^[\pL\pN\s\-]+$/u',
             ],
             'dogRace.description' => self::NULLABLE_STRING_MAX_255,
-            'dogRace.thumbnail' => $thumbnailRule,
+            'dogRace.thumbnail' => 'nullable',
             'dogRace.order' => 'integer|min:1',
             'post.title' => 'required|string|max:255',
             'post.status' => 'required|in:draft,published,archived',
@@ -141,16 +119,6 @@ class BlogPostDogRaceEditScreen extends Screen
         }
 
         $dogRace->fill($data)->save();
-
-        if (!empty($data['thumbnail'])) {
-            $this->saveThumbnail($dogRace, $data['thumbnail'], $data['name']);
-        } else {
-            // If thumbnail is removed, delete the old one
-            $oldThumbnail = $dogRace->pictures()->where('is_main', true)->first();
-            if ($oldThumbnail) {
-                $this->deletePictureAndAttachment($oldThumbnail);
-            }
-        }
 
         $blogPostModel = BlogPost::where('dog_race_id', $dogRace->id)->first();
         if ($blogPostModel) {
@@ -170,80 +138,81 @@ class BlogPostDogRaceEditScreen extends Screen
         return redirect()->route('platform.dog-races');
     }
 
-    private function saveThumbnail(DogRace $dogRace, $thumbnail, $altText)
-    {
-        $oldThumbnail = $dogRace->pictures()->where('is_main', true)->first();
-        if ($oldThumbnail) {
-            $this->deletePictureAndAttachment($oldThumbnail);
-        }
-        $thumbnailPath = $this->parsePath($thumbnail);
-        $dogRace->pictures()->create([
-            'path' => $thumbnailPath,
-            'is_main' => true,
-            'alt_text' => $altText,
-        ]);
-    }
-
     private function saveGalleryPictures(BlogPost $post, $pictures, $altText)
     {
-        $currentPictures = $post->pictures()->where('is_main', false)->get();
-        $currentAttachmentIds = [];
-        foreach ($currentPictures as $picture) {
-            $filename = pathinfo($picture->path, PATHINFO_FILENAME);
-            $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
-            $attachment = Attachment::where('name', $filename)
-                ->where('extension', $extension)
-                ->first();
-            if ($attachment) {
-                $currentAttachmentIds[$attachment->id] = $picture;
-            }
+        if (empty($pictures)) {
+            return;
         }
 
-        foreach ($currentAttachmentIds as $attachmentId => $picture) {
-            if (!in_array($attachmentId, $pictures)) {
-                $this->deletePictureAndAttachment($picture);
-            }
-        }
-        // Add new pictures that are not already present
-        foreach ($pictures as $attachmentId) {
-            if (!isset($currentAttachmentIds[$attachmentId])) {
-                $attachment = Attachment::find($attachmentId);
+        $currentPictures = $post->attachments()->where('type', 'gallery')->get();
+        $currentPictureIds = $currentPictures->pluck('id')->toArray();
+        $newPictureIds = [];
+
+        foreach ($pictures as $picture) {
+            if (is_string($picture)) {
+                // If it's a string, it means it's an existing attachment ID
+                $attachment = Attachment::find($picture);
                 if ($attachment) {
+<<<<<<< Updated upstream
                     $storagePath = 'storage/' . ltrim($attachment->path, '/') . '/' . $attachment->name . '.' . $attachment->extension;
                     $post->pictures()->create([
                         'path' => $storagePath,
                         'alt_text' => $altText,
                         'is_main' => false,
                     ]);
+=======
+                    $newPictureIds[] = $attachment->id;
+                }
+            } elseif (is_array($picture) && isset($picture['id'])) {
+                // If it's an array with an ID, find the attachment
+                $attachment = Attachment::find($picture['id']);
+                if ($attachment) {
+                    $newPictureIds[] = $attachment->id;
+>>>>>>> Stashed changes
                 }
             }
         }
+        // Attach new pictures that are not already attached
+        $newPictures = array_diff($newPictureIds, $currentPictureIds);
+
+        foreach ($newPictures as $pictureId) {
+            $post->attachments()->attach($pictureId, [
+                'group' => 'gallery',
+                'alt' => $altText,
+            ]);
+        }
+
+        $picturesToDelete = array_diff($currentPictureIds, $newPictureIds);
+        if (!empty($picturesToDelete)) {
+            $this->deleteAttachment($picturesToDelete);
+        }
     }
 
-    private function deletePictureAndAttachment($picture)
+    /**
+     * Delete a picture and its associated attachment (if found).
+     *
+     * @param Pictures $picture
+     * @return void
+     */
+    private static function deleteAttachment($picture)
     {
         $filename = pathinfo($picture->path, PATHINFO_FILENAME);
         $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
+
+        // Try to find the Attachment by name and extension
         $attachment = Attachment::where('name', $filename)
             ->where('extension', $extension)
             ->first();
+
         if ($attachment) {
             $attachment->delete();
         } else {
-            $cleanPath = ltrim($picture->path, '/');
-            if (Storage::disk('public')->exists($cleanPath)) {
-                Storage::disk('public')->delete($cleanPath);
+            // Fallback: delete the file directly
+            $completePath = 'storage/' . $picture->path;
+            if (Storage::disk('public')->exists($completePath)) {
+                Storage::disk('public')->delete($completePath);
             }
         }
-        if (!$attachment) {
-            Log::warning('Attachment not found for: ' . $picture->path);
-        }
         $picture->delete();
-    }
-
-    private function parsePath($path)
-    {
-        $parsedUrl = parse_url($path, PHP_URL_PATH);
-        return ltrim($parsedUrl, '/');
     }
 }

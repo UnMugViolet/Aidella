@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Orchid\Attachment\Models\Attachment;
 use Orchid\Filters\Filterable;
 use Orchid\Filters\Types\Where;
 use Orchid\Filters\Types\Like;
@@ -53,8 +55,12 @@ class PostCategory extends Model
         'slug'          => Like::class,
     ];
 
-    public function pictures()
+    public function attachments(): MorphToMany
     {
-        return $this->morphMany(Pictures::class, 'imageable');
+        return $this->morphToMany(
+            Attachment::class,
+            'attachmentable',
+            'attachmentable',
+        );
     }
 }

@@ -26,9 +26,9 @@ class DogPagesViewServiceProvider extends ServiceProvider
                 $query->where('status', 'published');
             })
             ->with(['blogPost' => function ($query) {
-                $query->where('status', 'published'); // constraint repeated here
+                $query->where('status', 'published'); // Ensure only published blog posts are included
             }])
-            ->with('pictures')
+            ->with('attachments')
             ->orderBy('order')
             ->get());
     }

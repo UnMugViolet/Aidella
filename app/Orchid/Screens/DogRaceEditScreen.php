@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\BlogPost;
 use App\Models\DogRace;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -86,7 +87,7 @@ class DogRaceEditScreen extends Screen
         $dogRace->fill($data)->save();
 
         // Update associated BlogPost if exists
-        $blogPost = \App\Models\BlogPost::where('title', $dogRace->getOriginal('name'))->first();
+        $blogPost = BlogPost::where('title', $dogRace->getOriginal('name'))->first();
         if ($blogPost) {
             $blogPost->update([
                 'title' => $blogPost->title ?? $blogPost->name,

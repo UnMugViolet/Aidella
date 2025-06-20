@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $dogRaces = DogRace::with('pictures')->get();
+        $dogRaces = DogRace::with('attachments')->get();
 
         return view('homepage', compact('dogRaces'));
     }

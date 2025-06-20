@@ -28,6 +28,7 @@ class BlogPostPicturesLayout extends Rows
                 ->maxCount(5)
                 ->save()
                 ->multiple()
+                ->groups('gallery')
                 ->storage('public')
                 ->path('uploads/dog-races')
                 ->acceptedFiles('image/*')

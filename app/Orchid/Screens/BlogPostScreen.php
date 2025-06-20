@@ -110,22 +110,11 @@ class BlogPostScreen extends Screen
     private function saveGalleryPictures(BlogPost $post, array $pictures, $altText)
     {
         foreach ($pictures as $picturePath) {
-            $cleanPath = $this->parsePath($picturePath);
-            $post->pictures()->create([
-                'path' => $cleanPath,
-                'alt_text' => $altText,
-                'is_main' => false,
+            $post->attachments()->attach($picturePath, [
+                'type' => 'gallery',
+                'alt' => $altText,
             ]);
         }
-    }
-
-    /*
-    * Parse the file
-    */
-    private function parsePath($path)
-    {
-        $parsedUrl = parse_url($path, PHP_URL_PATH);
-        return ltrim($parsedUrl, '/');
     }
 
     private function getGeneralCategoryId(): int

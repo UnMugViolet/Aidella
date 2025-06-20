@@ -5,12 +5,16 @@ namespace App\Models;
 use Orchid\Filters\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Storage;
+use Orchid\Attachment\Attachable;
+use Orchid\Attachment\Models\Attachment;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
 
 class DogRace extends Model
 {
+    use Attachable;
     use Filterable;
     /** @use HasFactory<\Database\Factories\DogRaceFactory> */
     use HasFactory;
@@ -56,10 +60,13 @@ class DogRace extends Model
         'slug'          => Like::class,
     ];
 
-
-    public function pictures()
+    public function attachments(): MorphToMany
     {
-        return $this->morphMany(Pictures::class, 'imageable');
+        return $this->morphToMany(
+            Attachment::class,
+            'attachmentable',
+            'attachmentable',
+        );
     }
 
     public function blogPost()
@@ -68,36 +75,14 @@ class DogRace extends Model
     }
 
     /**
-     * Get related dog races
-     */
-    public function getRelated($limit = 5)
-    {
-        return static::where('id', '!=', $this->id)
-                    ->limit($limit)
-                    ->get();
-    }
-
-    /**
      * Get the image name without the prefix and underscore
      */
-    public function getMainImageName()
+    public function getThumbnail()
     {
-        $mainPicture = $this->pictures()->where('is_main', 1)->first();
-        if (!$mainPicture) {
-            return '';
+        $main = $this->attachments()->where('group', 'thumbnail')->first();
+        if ($main) {
+            return pathinfo($main->name, PATHINFO_FILENAME);
         }
-        $filename = basename($mainPicture->path);
-        $pos = strpos($filename, '_');
-        if (!$pos ) {
-            return $filename;
-        }
-        return substr($filename, $pos + 1);
+        return null;
     }
-
-    public function getMainImageAttribute()
-    {
-        $main = $this->pictures()->where('is_main', 1)->first();
-        return $main ? $main->path : null;
-    }
-
 }

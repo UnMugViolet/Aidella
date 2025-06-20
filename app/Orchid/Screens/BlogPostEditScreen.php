@@ -33,22 +33,7 @@ class BlogPostEditScreen extends Screen
     {
         $blogPostData = $blogPost ? $blogPost->toArray() : [];
         $blogPostData['html'] = $blogPostData['content'] ?? '';
-
-        // Get attachment IDs for gallery pictures
-        $galleryAttachmentIds = [];
-        if ($blogPost) {
-            foreach ($blogPost->pictures()->where('is_main', false)->get() as $picture) {
-                $filename = pathinfo($picture->path, PATHINFO_FILENAME);
-                $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
-                $attachment = Attachment::where('name', $filename)
-                    ->where('extension', $extension)
-                    ->first();
-                if ($attachment) {
-                    $galleryAttachmentIds[] = $attachment->id;
-                }
-            }
-        }
-        $blogPostData['gallery'] = $galleryAttachmentIds;
+        $blogPostData['gallery'] = $blogPost->attachments()->get();
 
         return [
             'post' => $blogPostData,
@@ -112,6 +97,10 @@ class BlogPostEditScreen extends Screen
         $blogPost->fill($data);
         $blogPost->content = $data['html'] ?? '';
         $blogPost->save();
+        $blogPost->attachments()->sync(
+            $request->get('post.gallery', []),
+            ['group' => 'gallery']
+        );
 
         $this->saveGalleryPictures($blogPost, $data['gallery'] ?? [], $blogPost->title ?? 'photo de chien illustration article');
         Toast::success(__('Article de blog mis à jour.'));
@@ -121,57 +110,76 @@ class BlogPostEditScreen extends Screen
 
     private function saveGalleryPictures(BlogPost $post, $pictures, $altText)
     {
-        $currentPictures = $post->pictures()->where('is_main', false)->get();
-        $currentAttachmentIds = [];
-        foreach ($currentPictures as $picture) {
-            $filename = pathinfo($picture->path, PATHINFO_FILENAME);
-            $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
-            $attachment = Attachment::where('name', $filename)
-                ->where('extension', $extension)
-                ->first();
-            if ($attachment) {
-                $currentAttachmentIds[$attachment->id] = $picture;
-            }
+        if (empty($pictures)) {
+            return;
         }
 
-        foreach ($currentAttachmentIds as $attachmentId => $picture) {
-            if (!in_array($attachmentId, $pictures)) {
-                $this->deletePictureAndAttachment($picture);
-            }
-        }
-        // Add new pictures that are not already present
-        foreach ($pictures as $attachmentId) {
-            if (!isset($currentAttachmentIds[$attachmentId])) {
-                $attachment = Attachment::find($attachmentId);
+        $currentPictures = $post->attachments()->where('group', 'gallery')->get();
+        $currentPictureIds = $currentPictures->pluck('id')->toArray();
+        $newPictureIds = [];
+
+        foreach ($pictures as $picture) {
+            if (is_string($picture)) {
+                // If it's a string, it means it's an existing attachment ID
+                $attachment = Attachment::find($picture);
                 if ($attachment) {
+<<<<<<< Updated upstream
                     $storagePath = 'storage/' . ltrim($attachment->path, '/')  . $attachment->name . '.' . $attachment->extension;
                     $post->pictures()->create([
                         'path' => $storagePath,
                         'alt_text' => $altText,
                         'is_main' => false,
                     ]);
+=======
+                    $newPictureIds[] = $attachment->id;
+                    $attachment->alt = $altText;
+                    $attachment->group = 'gallery';
+                    $attachment->save();
+                }
+            } elseif (is_array($picture) && isset($picture['id'])) {
+                // If it's an array with an ID, find the attachment
+                $attachment = Attachment::find($picture['id']);
+                if ($attachment) {
+                    $newPictureIds[] = $attachment->id;
+                    $attachment->alt = $altText;
+                    $attachment->group = 'gallery';
+                    $attachment->save();
+>>>>>>> Stashed changes
                 }
             }
         }
+        // Attach new pictures that are not already attached
+        $newPictures = array_diff($newPictureIds, $currentPictureIds);
+
+        foreach ($newPictures as $pictureId) {
+            $post->attachments()->attach($pictureId);
+        }
+
+        // Delete pictures that are no longer in the new list
+        $picturesToDetach = array_diff($currentPictureIds, $newPictureIds);
+        foreach ($picturesToDetach as $pictureId) {
+            $this->deleteAttachment($currentPictures->find($pictureId));
+        }
     }
 
-    private function deletePictureAndAttachment($picture)
+    private function deleteAttachment($picture)
     {
         $filename = pathinfo($picture->path, PATHINFO_FILENAME);
         $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
+
+        // Try to find the Attachment by name and extension
         $attachment = Attachment::where('name', $filename)
             ->where('extension', $extension)
             ->first();
+
         if ($attachment) {
             $attachment->delete();
         } else {
-            $cleanPath = ltrim($picture->path, '/');
+            // Fallback: delete the file directly
+            $cleanPath = str_replace('storage/', '', $picture->path);
             if (Storage::disk('public')->exists($cleanPath)) {
                 Storage::disk('public')->delete($cleanPath);
             }
-        }
-        if (!$attachment) {
-            Log::warning('Attachment not found for: ' . $picture->path);
         }
         $picture->delete();
     }
