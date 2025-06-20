@@ -127,10 +127,17 @@ class BlogPost extends Model
         parent::boot();
 
         static::deleting(function ($blogPost) {
-            // Delete all attachments related to this blog post
-            $blogPost->attachments()->each(function ($attachment) {
+            $attachments = $blogPost->attachments()->get();
+
+            foreach ($attachments as $attachment) {
+                $file = 'storage/' . $attachment->path . '/' . $attachment->filename . '.' . $attachment->extension;
+                if (Storage::disk('public')->exists($file)) {
+                    Storage::disk('public')->delete($file);
+                } else {
+                    Log::warning("File not found: {$file}");
+                }
                 $attachment->delete();
-            });
+            }
         });
     }
 }

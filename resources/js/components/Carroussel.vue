@@ -4,7 +4,7 @@
             <div v-if="pictures.length > 0" class="w-full [height:58svh] rounded-lg shadow-lg" :style="{
                 backgroundImage: pictures[currentIndex].relativeUrl
                     ? `url('${pictures[currentIndex].relativeUrl}')`
-                    : `url('/${pictures[currentIndex].relativeUrl}')`,
+                    : `url('${pictures[currentIndex].placeholdUrl}')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
             }">
@@ -35,7 +35,7 @@ const props = defineProps(['pictures'])
 const pictures = computed(() => {
     return props.pictures && props.pictures.length > 0
         ? props.pictures
-        : [{ path: 'https://placehold.co/450x300' }]
+        : [{ placeholdUrl: 'https://placehold.co/450x300' }]
 })
 
 const currentIndex = ref(0)
@@ -48,4 +48,6 @@ function prevImage() {
 function nextImage() {
     currentIndex.value = (currentIndex.value + 1) % pictures.value.length
 }
+
+console.log('Carroussel pictures:', pictures.value);
 </script>

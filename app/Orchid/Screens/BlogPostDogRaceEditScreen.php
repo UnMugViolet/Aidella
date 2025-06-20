@@ -144,7 +144,7 @@ class BlogPostDogRaceEditScreen extends Screen
             return;
         }
 
-        $currentPictures = $post->attachments()->where('type', 'gallery')->get();
+        $currentPictures = $post->attachments()->where('group', 'gallery')->get();
         $currentPictureIds = $currentPictures->pluck('id')->toArray();
         $newPictureIds = [];
 
@@ -154,12 +154,18 @@ class BlogPostDogRaceEditScreen extends Screen
                 $attachment = Attachment::find($picture);
                 if ($attachment) {
                     $newPictureIds[] = $attachment->id;
+                    $attachment->alt = $altText;
+                    $attachment->group = 'gallery';
+                    $attachment->save();
                 }
             } elseif (is_array($picture) && isset($picture['id'])) {
                 // If it's an array with an ID, find the attachment
                 $attachment = Attachment::find($picture['id']);
                 if ($attachment) {
                     $newPictureIds[] = $attachment->id;
+                    $attachment->alt = $altText;
+                    $attachment->group = 'gallery';
+                    $attachment->save();
                 }
             }
         }
@@ -167,15 +173,7 @@ class BlogPostDogRaceEditScreen extends Screen
         $newPictures = array_diff($newPictureIds, $currentPictureIds);
 
         foreach ($newPictures as $pictureId) {
-            $post->attachments()->attach($pictureId, [
-                'group' => 'gallery',
-                'alt' => $altText,
-            ]);
-        }
-
-        $picturesToDelete = array_diff($currentPictureIds, $newPictureIds);
-        if (!empty($picturesToDelete)) {
-            $this->deleteAttachment($picturesToDelete);
+            $post->attachments()->attach($pictureId);
         }
     }
 

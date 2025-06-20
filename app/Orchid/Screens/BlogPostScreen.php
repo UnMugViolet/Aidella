@@ -13,7 +13,7 @@ use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Str;
-
+use Orchid\Attachment\Models\Attachment;
 
 class BlogPostScreen extends Screen
 {
@@ -64,11 +64,11 @@ class BlogPostScreen extends Screen
 
     public function save(Request $request)
     {
-        $blogPost = $request->get('post', []);
+        $blogPost = $request->get('post');
         $status = $blogPost['status'] ?? 'draft';
 
         $request->validate([
-            'post.title' => 'required|string|max:255',
+            'post.title' => 'required|string|unique:blog_posts,title|max:255',
             'post.status' => 'in:draft,published,archived',
             'post.html' => 'required',
             'post.meta_title' => self::NULLABLE_STRING_MAX_255,
@@ -98,8 +98,15 @@ class BlogPostScreen extends Screen
             'published_at' => $blogPost['published_at'] ?? null,
         ]);
 
-        $this->saveGalleryPictures($createdPost, $blogPost['pictures'] ?? [], $blogPost['title']);
+        // Add the gallery pictures to the post
+        $createdPost->attachments()->sync(
+            $request->get('post.gallery', []),
+            ['group' => 'gallery']
+        );
 
+        $this->saveGalleryPictures($createdPost, $blogPost['gallery'] ?? [], $blogPost['title']);
+
+        $createdPost->save();
         Toast::success('Article enregistrée avec succès!');
         return redirect()->route('platform.posts');
     }
@@ -109,11 +116,34 @@ class BlogPostScreen extends Screen
      */
     private function saveGalleryPictures(BlogPost $post, array $pictures, $altText)
     {
-        foreach ($pictures as $picturePath) {
-            $post->attachments()->attach($picturePath, [
-                'type' => 'gallery',
-                'alt' => $altText,
-            ]);
+        if (empty($pictures)) {
+            return;
+        }
+
+        foreach ($pictures as $picture) {
+            if (is_string($picture)) {
+                // If it's a string, it means it's an existing attachment ID
+                $attachment = Attachment::find($picture);
+                if ($attachment) {
+                    $newPictureIds[] = $attachment->id;
+                    $attachment->alt = $altText;
+                    $attachment->group = 'gallery';
+                    $attachment->save();
+                }
+            } elseif (is_array($picture) && isset($picture['id'])) {
+                // If it's an array with an ID, find the attachment
+                $attachment = Attachment::find($picture['id']);
+                if ($attachment) {
+                    $newPictureIds[] = $attachment->id;
+                    $attachment->alt = $altText;
+                    $attachment->group = 'gallery';
+                    $attachment->save();
+                }
+            }
+        }
+
+        foreach ($newPictureIds as $pictureId) {
+            $post->attachments()->attach($pictureId);
         }
     }
 

@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Log;
 use Orchid\Screen\Screen;
 use Illuminate\Http\Request;
 use Orchid\Support\Facades\Toast;
-use Illuminate\Support\Str;
 
 class BlogPostEditScreen extends Screen
 {
@@ -33,7 +32,7 @@ class BlogPostEditScreen extends Screen
     {
         $blogPostData = $blogPost ? $blogPost->toArray() : [];
         $blogPostData['html'] = $blogPostData['content'] ?? '';
-        $blogPostData['gallery'] = $blogPost->attachments()->get();
+        $blogPostData['gallery'] = $blogPost->attachments()->where('group', 'gallery')->get();
 
         return [
             'post' => $blogPostData,
@@ -96,17 +95,17 @@ class BlogPostEditScreen extends Screen
 
         $blogPost->fill($data);
         $blogPost->content = $data['html'] ?? '';
-        $blogPost->save();
         $blogPost->attachments()->sync(
             $request->get('post.gallery', []),
             ['group' => 'gallery']
         );
 
         $this->saveGalleryPictures($blogPost, $data['gallery'] ?? [], $blogPost->title ?? 'photo de chien illustration article');
+    
+        $blogPost->save();
         Toast::success(__('Article de blog mis à jour.'));
         return redirect()->route('platform.posts');
     }
-
 
     private function saveGalleryPictures(BlogPost $post, $pictures, $altText)
     {
@@ -145,33 +144,5 @@ class BlogPostEditScreen extends Screen
         foreach ($newPictures as $pictureId) {
             $post->attachments()->attach($pictureId);
         }
-
-        // Delete pictures that are no longer in the new list
-        $picturesToDetach = array_diff($currentPictureIds, $newPictureIds);
-        foreach ($picturesToDetach as $pictureId) {
-            $this->deleteAttachment($currentPictures->find($pictureId));
-        }
-    }
-
-    private function deleteAttachment($picture)
-    {
-        $filename = pathinfo($picture->path, PATHINFO_FILENAME);
-        $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
-
-        // Try to find the Attachment by name and extension
-        $attachment = Attachment::where('name', $filename)
-            ->where('extension', $extension)
-            ->first();
-
-        if ($attachment) {
-            $attachment->delete();
-        } else {
-            // Fallback: delete the file directly
-            $cleanPath = str_replace('storage/', '', $picture->path);
-            if (Storage::disk('public')->exists($cleanPath)) {
-                Storage::disk('public')->delete($cleanPath);
-            }
-        }
-        $picture->delete();
     }
 }

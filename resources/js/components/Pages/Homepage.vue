@@ -38,5 +38,4 @@ let dogPages = ref(props.initialData.dogPages);
 
 console.log('Dog pages:', dogPages.value);
 
-
 </script>
