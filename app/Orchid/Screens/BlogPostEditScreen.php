@@ -123,14 +123,6 @@ class BlogPostEditScreen extends Screen
                 // If it's a string, it means it's an existing attachment ID
                 $attachment = Attachment::find($picture);
                 if ($attachment) {
-<<<<<<< Updated upstream
-                    $storagePath = 'storage/' . ltrim($attachment->path, '/')  . $attachment->name . '.' . $attachment->extension;
-                    $post->pictures()->create([
-                        'path' => $storagePath,
-                        'alt_text' => $altText,
-                        'is_main' => false,
-                    ]);
-=======
                     $newPictureIds[] = $attachment->id;
                     $attachment->alt = $altText;
                     $attachment->group = 'gallery';
@@ -144,7 +136,6 @@ class BlogPostEditScreen extends Screen
                     $attachment->alt = $altText;
                     $attachment->group = 'gallery';
                     $attachment->save();
->>>>>>> Stashed changes
                 }
             }
         }

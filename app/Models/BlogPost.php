@@ -127,27 +127,10 @@ class BlogPost extends Model
         parent::boot();
 
         static::deleting(function ($blogPost) {
-<<<<<<< Updated upstream
-            $blogPost->load(['dogRace', 'pictures']);
-
-            // Delete all pictures for the BlogPost
-            foreach ($blogPost->pictures as $picture) {
-                self::deletePictureAndAttachment($picture);
-            }
-
-            // Delete all pictures for the associated DogRace (if any)
-            if ($blogPost->dogRace) {
-                foreach ($blogPost->dogRace->pictures as $picture) {
-                    self::deletePictureAndAttachment($picture);
-                }
-                $blogPost->dogRace->delete();
-            }
-=======
             // Delete all attachments related to this blog post
             $blogPost->attachments()->each(function ($attachment) {
                 $attachment->delete();
             });
->>>>>>> Stashed changes
         });
     }
 }

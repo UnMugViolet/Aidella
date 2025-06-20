@@ -153,14 +153,6 @@ class BlogPostDogRaceEditScreen extends Screen
                 // If it's a string, it means it's an existing attachment ID
                 $attachment = Attachment::find($picture);
                 if ($attachment) {
-<<<<<<< Updated upstream
-                    $storagePath = 'storage/' . ltrim($attachment->path, '/') . '/' . $attachment->name . '.' . $attachment->extension;
-                    $post->pictures()->create([
-                        'path' => $storagePath,
-                        'alt_text' => $altText,
-                        'is_main' => false,
-                    ]);
-=======
                     $newPictureIds[] = $attachment->id;
                 }
             } elseif (is_array($picture) && isset($picture['id'])) {
@@ -168,7 +160,6 @@ class BlogPostDogRaceEditScreen extends Screen
                 $attachment = Attachment::find($picture['id']);
                 if ($attachment) {
                     $newPictureIds[] = $attachment->id;
->>>>>>> Stashed changes
                 }
             }
         }
