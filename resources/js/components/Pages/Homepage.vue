@@ -36,6 +36,4 @@ const videoPath = '/videos/les-terres-daidella-elevage-canin-grand-est.mp4';
 
 let dogPages = ref(props.initialData.dogPages);
 
-console.log('Dog pages:', dogPages.value);
-
 </script>

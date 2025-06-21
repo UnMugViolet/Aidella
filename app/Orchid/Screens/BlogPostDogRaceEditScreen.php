@@ -18,7 +18,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Orchid\Screen\Fields\Attach;
 use Orchid\Support\Facades\Toast;
+use PhpParser\Node\Expr\FuncCall;
 
 class BlogPostDogRaceEditScreen extends Screen
 {
@@ -38,6 +40,8 @@ class BlogPostDogRaceEditScreen extends Screen
 
         $blogPostData = $blogPost ? $blogPost->toArray() : [];
         $blogPostData['html'] = $blogPostData['content'] ?? '';
+        $dogRaceData['thumbnail'] = $dogRace->attachments()->where('group', 'thumbnail')->get();
+        $blogPostData['gallery'] = $blogPost->attachments()->where('group', 'gallery')->get();
 
         return [
             'dogRace' => $dogRaceData,
@@ -75,7 +79,7 @@ class BlogPostDogRaceEditScreen extends Screen
                         ->placeholder('Ordre')
                         ->min(1),
 
-                    Picture::make('dogRace.thumbnail')
+                    Attach::make('dogRace.thumbnail')
                         ->title('Miniature')
                         ->storage('public')
                         ->path('uploads/dog-races')
@@ -118,6 +122,10 @@ class BlogPostDogRaceEditScreen extends Screen
             return null;
         }
 
+        if (!empty($data['thumbnail'])) {
+            $this->saveThumbnail($dogRace, $data['thumbnail']);
+        }
+
         $dogRace->fill($data)->save();
 
         $blogPostModel = BlogPost::where('dog_race_id', $dogRace->id)->first();
@@ -131,11 +139,32 @@ class BlogPostDogRaceEditScreen extends Screen
                 'status' => $blogPost['status'],
                 'author_id' => $blogPost['author_id'],
             ]);
-            $this->saveGalleryPictures($blogPostModel, $blogPost['gallery'] ?? [], $dogRace->name);
+
+            $newGalleryIds = $request->input('gallery', []);
+            $blogPostModel->attachments()->sync($newGalleryIds);
+                $removed = $blogPostModel->attachments()->whereNotIn('id', $newGalleryIds)->get();
+            foreach ($removed as $attachment) {
+                $attachment->delete();
+            }
+            $this->saveGalleryPictures($blogPostModel, $blogPost['gallery'] ?? [], 'image carroussel pour le ' . $dogRace->name);
         }
 
         Toast::success('Race de chien et page associée modifiées avec succès!');
         return redirect()->route('platform.dog-races');
+    }
+
+    private function saveThumbnail(DogRace $dogRace, $thumbnailId)
+    {
+        $dogRace->attachments()->where('attachments.group', 'thumbnail')->detach();
+
+        $attachment = Attachment::find($thumbnailId);
+        if ($attachment) {
+            $attachment->group = 'thumbnail';
+            $attachment->alt = $dogRace->name . ' - Miniature';
+            $attachment->save();
+
+            $dogRace->attachments()->attach($attachment->id);
+        }
     }
 
     private function saveGalleryPictures(BlogPost $post, $pictures, $altText)
@@ -175,33 +204,5 @@ class BlogPostDogRaceEditScreen extends Screen
         foreach ($newPictures as $pictureId) {
             $post->attachments()->attach($pictureId);
         }
-    }
-
-    /**
-     * Delete a picture and its associated attachment (if found).
-     *
-     * @param Pictures $picture
-     * @return void
-     */
-    private static function deleteAttachment($picture)
-    {
-        $filename = pathinfo($picture->path, PATHINFO_FILENAME);
-        $extension = pathinfo($picture->path, PATHINFO_EXTENSION);
-
-        // Try to find the Attachment by name and extension
-        $attachment = Attachment::where('name', $filename)
-            ->where('extension', $extension)
-            ->first();
-
-        if ($attachment) {
-            $attachment->delete();
-        } else {
-            // Fallback: delete the file directly
-            $completePath = 'storage/' . $picture->path;
-            if (Storage::disk('public')->exists($completePath)) {
-                Storage::disk('public')->delete($completePath);
-            }
-        }
-        $picture->delete();
     }
 }

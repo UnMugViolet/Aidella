@@ -49,5 +49,4 @@ function nextImage() {
     currentIndex.value = (currentIndex.value + 1) % pictures.value.length
 }
 
-console.log('Carroussel pictures:', pictures.value);
 </script>

@@ -41,6 +41,4 @@ function formatDate(dateStr) {
   });
 }
 
-console.log('Blog Post:', blogPost.value);
-
 </script>

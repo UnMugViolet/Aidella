@@ -100,7 +100,7 @@ class BlogPostEditScreen extends Screen
             ['group' => 'gallery']
         );
 
-        $this->saveGalleryPictures($blogPost, $data['gallery'] ?? [], $blogPost->title ?? 'photo de chien illustration article');
+        $this->saveGalleryPictures($blogPost, $data['gallery'] ?? [], $blogPost->title ?? 'photo de chien illustrat`ion article');
     
         $blogPost->save();
         Toast::success(__('Article de blog mis à jour.'));

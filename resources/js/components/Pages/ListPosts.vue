@@ -54,8 +54,6 @@ const loading = ref(false);
 const search = ref('');
 
 
-console.log('Posts:', posts.value);
-
 // Group posts by category
 const postsByCategory = computed(() => {
 	const grouped = {};

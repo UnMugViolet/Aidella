@@ -22,13 +22,16 @@ class DogPagesViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Share the dog pages with all views (initialData)
         View::share('dogPages', DogRace::whereHas('blogPost', function ($query) {
                 $query->where('status', 'published');
             })
             ->with(['blogPost' => function ($query) {
-                $query->where('status', 'published'); // Ensure only published blog posts are included
+                $query->where('status', 'published')
+                    ->select('id', 'title', 'slug', 'dog_race_id');
             }])
-            ->with('attachments')
+            ->with(['attachments'])
+            ->select('id', 'name', 'order')
             ->orderBy('order')
             ->get());
     }

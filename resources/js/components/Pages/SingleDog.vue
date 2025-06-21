@@ -22,6 +22,8 @@ import Carroussel from '../Carroussel.vue';
 const props = defineProps(['initialData'])
 
 const blogPost = ref(window.pageData.blogPost)
-const pictures = ref(blogPost.value.pictures);
+const pictures = ref(blogPost.value.attachments);
+
+console.log('Blog Post:', blogPost.value);
 
 </script>

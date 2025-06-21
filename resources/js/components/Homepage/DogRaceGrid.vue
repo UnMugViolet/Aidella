@@ -8,8 +8,8 @@
           <div
             class="w-full h-60 md:h-80 bg-center bg-cover rounded-sm mb-2 shadow-lg transition-transform duration-500 ease-in-out group-hover:scale-102"
             :style="{
-              backgroundImage: getMainPicture(dogPages.pictures)
-                ? `url('${getMainPicture(dogPages.pictures).path}')`
+              backgroundImage: getMainPicture(dogPages.attachments)
+                ? `url('${getMainPicture(dogPages.attachments).relativeUrl}')`
                 : `url('${noImagePath}')`
             }"
           ></div>
@@ -43,7 +43,7 @@ const getMainPicture = (pictures) => {
   }
   
   for (const picture of pictures) {
-    if (picture.is_main) {
+    if (picture.group === 'thumbnail') {
       return picture;
     }
   }
