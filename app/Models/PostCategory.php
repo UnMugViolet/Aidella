@@ -63,4 +63,21 @@ class PostCategory extends Model
             'attachmentable',
         );
     }
+
+
+    public function posts()
+    {
+        return $this->hasMany(BlogPost::class, 'category_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($category) {
+            $category->posts()->each(function ($post) {
+                $post->delete();
+            });
+        });
+    }
 }
