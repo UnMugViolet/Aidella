@@ -14,8 +14,11 @@
             <transition-group name="fade" tag="ul"  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <a v-for="post in posts" :key="post.id" class="rounded shadow flex flex-col items-center"
                         :href="`/${post.category.slug}/${post.slug}`">
-                        <img :src="post.attachments[0]?.relativeUrl || placeholder" :alt="post.title"
-                            class="w-full h-auto object-cover mb-2 rounded" />
+                        <div class="w-full h-80 md:h-120 bg-center bg-cover rounded-sm " 
+							:style="{
+								backgroundImage: `url('${post.attachments[0]?.relativeUrl || placeholder }')`
+								}"
+                            />
                         <div class="w-full px-4 py-2">
                             <div class="text-xl font-semibold mb-1">{{ post.title }}</div>
                             <div class="text-sm text-gray-500 capitalize mb-2">
