@@ -60,7 +60,7 @@
                     <div class="relative w-full flex flex-col justify-center px-4">
                         <span class="text-2xl font-semibold mb-3">Nos Chiots</span>
                         <ul class="rounded shadow-lg min-w-max truncate text-white">
-                            <li v-for="dogPage in dogPages" :key="dogPage.id" class="py-1.5 ml-4 underline">
+                            <li v-for="dogPage in dogPages" :key="dogPage.id" class="py-1.5 ml-4">
                                 <a :href="'/' + dogPage.blog_post.slug" >{{ dogPage.name }}</a>
                             </li>
                         </ul>
@@ -72,11 +72,16 @@
                         <li>
                             <a href="/articles" class="text-2xl hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out px-4">Nos Articles</a>
                         </li>
-                        <li class="absolute bottom-0 py-2 flex justify-center w-full gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-auto" style="filter: drop-shadow(0 2px 8px rgba(0,0,0,1));">
-                                <path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24c1.12.37 2.33.57 3.57.57c.55 0 1 .45 1 1V20c0 .55-.45 1-1 1c-9.39 0-17-7.61-17-17c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1c0 1.25.2 2.45.57 3.57c.11.35.03.74-.25 1.02z"/>
-                            </svg>
-                            <a href="tel:+33669107661" class="text-xl hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out">06 69 10 76 61</a>
+                        <li class="absolute bottom-0 py-2 w-full">
+                            <div class="w-full flex flex-col items-center justify-center">
+                                <div class="flex justify-center w-full gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-auto" style="filter: drop-shadow(0 2px 8px rgba(0,0,0,1));">
+                                        <path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24c1.12.37 2.33.57 3.57.57c.55 0 1 .45 1 1V20c0 .55-.45 1-1 1c-9.39 0-17-7.61-17-17c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1c0 1.25.2 2.45.57 3.57c.11.35.03.74-.25 1.02z"/>
+                                    </svg>
+                                    <a href="tel:+33669107661" class="text-xl hover:underline text-shadow-custom font-medium transition-all duration-400 ease-out">06 69 10 76 61</a>
+                                </div>
+                                <p class="italic mt-2 text-sm">29 route de Vaudeville 88600 Aydoilles</p>
+                            </div>
                         </li>
                     </ul>
                 </nav>
