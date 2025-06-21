@@ -4,8 +4,9 @@
 
 [![Quality Gate Status](https://sonarqube.rocketegg.systems/api/project_badges/measure?project=Aidella&metric=alert_status&token=sqb_148abec97537a0f60b5a9dfaee348ec2b24b9c75)](https://sonarqube.rocketegg.systems/dashboard?id=Aidella)
 [![Lines of Code](https://sonarqube.rocketegg.systems/api/project_badges/measure?project=Aidella&metric=ncloc&token=sqb_148abec97537a0f60b5a9dfaee348ec2b24b9c75)](https://sonarqube.rocketegg.systems/dashboard?id=Aidella)
-![GitHub repo size](https://img.shields.io/github/repo-size/UnMugViolet/Aidella)
-![GitHub License](https://img.shields.io/github/license/UnMugViolet/portfolio)
+![GitHub repo size](https://img.shields.io/github/repo-size/UnMugViolet/aidella)
+![GitHub License](https://img.shields.io/github/license/unmugviolet/Aidella)
+
 
 # 🐕 Les terres d'Aidella
 

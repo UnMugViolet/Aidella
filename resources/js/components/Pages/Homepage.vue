@@ -17,10 +17,11 @@
       <div class="flex flex-col md:flex-row gap-4 md:items-center mt-2">
         <img src="https://placehold.co/600x400" alt="a propos de notre elevage" class="w-full md:w-1/2 h-auto rounded-lg shadow-lg mb-4">
         <p class="w-full md:w-1/2 text-lg h-auto md:text-xl">
-          A remplir Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <br/>
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <br/>
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          Situé dans les Vosges, près d'Epinal, notre élevage canin est spécialisé dans les chiens de race LOF Berger Australien, Labrador Retriver, Bouledogue Français, Cavalier King Charles Coton de Tulear et Spitz Nain. <br/> <br/>
+          Nous sommes passionnés par les chiens et nous nous engageons à offrir un environnement sain et aimant pour nos animaux. Notre élevage est reconnu pour sa qualité et son sérieux, avec des chiots élevés dans le respect des standards de la race. <br/>
+          Nous mettons un point d'honneur à la socialisation, la santé et le bien-être de nos chiots, garantissant des compagnons fidèles et équilibrés. <br/> <br/>
+          Venez nous rencontrer ! <br/>
+          <a href="/a-propos" class="text-blue-400 hover:text-blue-500 hover:underline">En savoir plus sur notre élevage</a>
         </p>
       </div>
     </section>

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full md:w-1/2 flex flex-col items-center">
+    <div class="w-full md:w-9/12 flex flex-col items-center">
         <div class="relative w-full">
             <div v-if="pictures.length > 0" class="w-full [height:58svh] rounded-lg shadow-lg" :style="{
                 backgroundImage: pictures[currentIndex].relativeUrl

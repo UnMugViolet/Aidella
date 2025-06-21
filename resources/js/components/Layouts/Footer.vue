@@ -1,6 +1,6 @@
 <template>
-	<footer class="w-full text-black p-4">
-		<div class="w-full flex flex-col md:flex-row gap-3 md:gap-6 my-20">
+	<footer class="w-full flex flex-col items-center text-black p-4">
+		<div class="w-full md:w-11/12 flex flex-col md:flex-row gap-3 md:gap-6 my-20">
 			<div class="w-full md:w-1/2 flex flex-col  items-start">
 				<h2 class="text-5xl md:text-7xl font-semibold text-left pb-4 uppercase">Nous contacter</h2>
 				<p class="pr-2 text-lg md:pr-8">
@@ -30,7 +30,8 @@
 			<p class="text-center">&copy; {{ year }} Aidella. Tous droits réservés</p>
 			<p>
 				<a href="/mentions-legales" class="text-blue-400 hover:underline">Mentions légales</a> |
-				<a href="/cgu" class="text-blue-400 hover:underline">Conditions générales d'utilisation</a>
+				<a href="/politique-de-confidentialite" class="text-blue-400 hover:underline">Politique de confidentialité</a> |
+				<a href="/cgu" class="text-blue-400 hover:underline">CGU</a>
 			</p>
 			<p class="flex gap-1 justify-center mt-5">
 				Site web réalisé par
