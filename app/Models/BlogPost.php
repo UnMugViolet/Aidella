@@ -128,6 +128,24 @@ class BlogPost extends Model
 
         static::deleting(function ($blogPost) {
             $attachments = $blogPost->attachments()->get();
+            $dogRace = $blogPost->dogRace;
+
+            if ($dogRace) {
+                $dogRaceAttachments = $dogRace->attachments()->get();
+                
+                foreach ($dogRaceAttachments as $attachment) {
+                    $file = $attachment->path . $attachment->name . '.' . $attachment->extension;
+                    if (Storage::disk('public')->exists($file)) {
+                        Storage::disk('public')->delete($file);
+                    } else {
+                        Log::warning("File not found: {$file}");
+                    }
+                    $attachment->delete();
+                    $dogRace->attachments()->detach($attachment->id);
+                }
+                
+                $dogRace->delete();
+            }
             
             foreach ($attachments as $attachment) {
                 $file = $attachment->path . $attachment->name . '.' . $attachment->extension;

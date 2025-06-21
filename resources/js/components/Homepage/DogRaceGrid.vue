@@ -30,39 +30,37 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const props = defineProps(['dogPages'])
+  import { ref } from 'vue'
+  const props = defineProps(['dogPages'])
 
-let dogPages = ref(props.dogPages);
-const noImagePath = 'https://placehold.co/800x800?text=NO+IMAGE';
+  let dogPages = ref(props.dogPages);
+  const noImagePath = 'https://placehold.co/800x800?text=NO+IMAGE';
 
 
-const getMainPicture = (pictures) => {
-  if (!pictures || pictures.length === 0) {
+  const getMainPicture = (pictures) => {
+    if (!pictures || pictures.length === 0) {
+      return null;
+    }
+    
+    for (const picture of pictures) {
+      if (picture.group === 'thumbnail') {
+        return picture;
+      }
+    }
     return null;
   }
-  
-  for (const picture of pictures) {
-    if (picture.group === 'thumbnail') {
-      return picture;
-    }
-  }
-  return null;
-}
-
 </script>
 
 <style scoped>
+  .card {
+    overflow: hidden;
+  }
 
-.card {
-  overflow: hidden;
-}
+  .dog-image {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-.dog-image {
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card:hover .dog-image {
-  transform: scale(1.015);
-}
+  .card:hover .dog-image {
+    transform: scale(1.015);
+  }
 </style>

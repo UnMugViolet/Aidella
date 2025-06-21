@@ -122,9 +122,7 @@ class BlogPostDogRaceEditScreen extends Screen
             return null;
         }
 
-        if (!empty($data['thumbnail'])) {
-            $this->saveThumbnail($dogRace, $data['thumbnail']);
-        }
+        $this->saveThumbnail($dogRace, $data['thumbnail']);
 
         $dogRace->fill($data)->save();
 

@@ -16,6 +16,7 @@ use Orchid\Support\Facades\Layout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Orchid\Attachment\Models\Attachment;
+use Orchid\Screen\Fields\Attach;
 use Orchid\Support\Facades\Toast;
 
 class BlogPostDogRaceScreen extends Screen
@@ -77,7 +78,7 @@ class BlogPostDogRaceScreen extends Screen
                         ->help('Plus le nombre est petit, plus la race apparaît en haut dans l\'affichage.')
                         ->min(1),
 
-                    Picture::make('dogRace.thumbnail')
+                    Attach::make('dogRace.thumbnail')
                         ->title('Miniature')
                         ->storage('public')
                         ->groups('thumbnail')
@@ -99,8 +100,6 @@ class BlogPostDogRaceScreen extends Screen
         $data = $request->get('dogRace');
         $blogPost = $request->get('post', []);
 
-        $thumbnailRule = is_string($data['thumbnail'] ?? null) ? 'nullable|string' : 'nullable|image';
-
         $request->validate([
             'dogRace.name' => [
                 'required',
@@ -109,7 +108,7 @@ class BlogPostDogRaceScreen extends Screen
                 'regex:/^[\pL\pN\s\-]+$/u',
             ],
             'dogRace.description' => self::NULLABLE_STRING_MAX_255,
-            'dogRace.thumbnail' => $thumbnailRule,
+            'dogRace.thumbnail' => 'nullable',
             'post.title' => self::NULLABLE_STRING_MAX_255,
             'post.status' => 'required|in:draft,published,archived',
             'post.meta_title' => self::NULLABLE_STRING_MAX_255,
@@ -124,9 +123,7 @@ class BlogPostDogRaceScreen extends Screen
         $data['order'] = $data['order'] ?? DogRace::max('order') + 1;
         $dogRace->fill($data)->save();
 
-        if (!empty($data['thumbnail'])) {
-            $this->saveThumbnail($dogRace, $data['thumbnail'], $data['name']);
-        }
+        $this->saveThumbnail($dogRace, $data['thumbnail']);
 
         $createdPost = BlogPost::create([
             'title' => $blogPost['title'],
@@ -140,7 +137,7 @@ class BlogPostDogRaceScreen extends Screen
             'published_at' => now(),
         ]);
 
-        $this->saveGalleryPictures($createdPost, $blogPost['pictures'] ?? [], $dogRace->name);
+        $this->saveGalleryPictures($createdPost, $blogPost['gallery'] ?? [], 'image carroussel pour le ' . $dogRace->name);
 
         Toast::success('Race de chien enregistrée avec succès!');
         return redirect()->route('platform.dog-races');
@@ -149,48 +146,59 @@ class BlogPostDogRaceScreen extends Screen
     /**
      * Save the main thumbnail for the DogRace.
      */
-    private function saveThumbnail(DogRace $dogRace, $thumbnail, $altText)
+    private function saveThumbnail(DogRace $dogRace, $thumbnailId)
     {
-        $thumbnailPath = $this->parsePath($thumbnail);
+        $dogRace->attachments()->where('attachments.group', 'thumbnail')->detach();
 
-        // Remove old thumbnails
-        $dogRace->attachments()->where('group', 'thumbnail')->delete();
+        $attachment = Attachment::find($thumbnailId);
+        if ($attachment) {
+            $attachment->group = 'thumbnail';
+            $attachment->alt = $dogRace->name . ' - Miniature';
+            $attachment->save();
 
-        $dogRace->attachments()->syncWithoutDetaching([
-            Attachment::create([
-                'name' => $thumbnailPath,
-                'group' => 'thumbnail',
-                'path' => $thumbnailPath,
-                'alt_text' => $altText,
-            ]),
-        ]);
+            $dogRace->attachments()->attach($attachment->id);
+        }
     }
 
     /**
      * Save gallery pictures for the BlogPost.
      */
-    private function saveGalleryPictures(BlogPost $post, array $pictures, $altText)
+    private function saveGalleryPictures(BlogPost $post, $pictures, $altText)
     {
-        foreach ($pictures as $picturePath) {
-            $picturePath = $this->parsePath($picturePath);
-            $post->attachments()->syncWithoutDetaching([
-                Attachment::create([
-                    'name' => pathinfo($picturePath, PATHINFO_FILENAME),
-                    'extension' => pathinfo($picturePath, PATHINFO_EXTENSION),
-                    'group' => 'gallery',
-                    'path' => $picturePath,
-                    'alt_text' => $altText,
-                ])->id
-            ]);
+        if (empty($pictures)) {
+            return;
         }
-    }
 
-    /**
-     * Parse the file path from a URL or string.
-     */
-    private function parsePath($path)
-    {
-        $parsedUrl = parse_url($path, PHP_URL_PATH);
-        return ltrim($parsedUrl, '/');
+        $currentPictures = $post->attachments()->where('group', 'gallery')->get();
+        $currentPictureIds = $currentPictures->pluck('id')->toArray();
+        $newPictureIds = [];
+
+        foreach ($pictures as $picture) {
+            if (is_string($picture)) {
+                // If it's a string, it means it's an existing attachment ID
+                $attachment = Attachment::find($picture);
+                if ($attachment) {
+                    $newPictureIds[] = $attachment->id;
+                    $attachment->alt = $altText;
+                    $attachment->group = 'gallery';
+                    $attachment->save();
+                }
+            } elseif (is_array($picture) && isset($picture['id'])) {
+                // If it's an array with an ID, find the attachment
+                $attachment = Attachment::find($picture['id']);
+                if ($attachment) {
+                    $newPictureIds[] = $attachment->id;
+                    $attachment->alt = $altText;
+                    $attachment->group = 'gallery';
+                    $attachment->save();
+                }
+            }
+        }
+        // Attach new pictures that are not already attached
+        $newPictures = array_diff($newPictureIds, $currentPictureIds);
+
+        foreach ($newPictures as $pictureId) {
+            $post->attachments()->attach($pictureId);
+        }
     }
 }
