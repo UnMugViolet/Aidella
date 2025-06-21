@@ -55,17 +55,15 @@ class BlogPostDogRaceListScreen extends Screen
 
     public function remove(Request $request): void
     {
-        $dogRace = DogRace::findOrFail($request->get('id'));
+        $dogRaceId = $request->get('id');
 
-        // Assuming DogRace has a relation to BlogPost, e.g. $dogRace->blogPost
-        $blogPost = $dogRace->blogPost;
+        $blogPost = BlogPost::where('dog_race_id', $dogRaceId)
+            ->whereNull('category_id')
+            ->first();
 
         if ($blogPost) {
             $blogPost->delete();
-        } else {
-            $dogRace->delete(); // Case no blog post associated delete the dogRace
         }
-
         Toast::info(__('Le chien et sa page associée ont été supprimées avec succès !'));
     }
 }
