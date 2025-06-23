@@ -63,10 +63,10 @@ pipeline {
                                         .gitignore,
                                         .gitattributes,
                                         **/README.md,
-                                        Jenkinsfile
-                                        sonar-project.properties
-                                        phpunit.xml
-                                        LICENSE
+                                        /Jenkinsfile
+                                        /sonar-project.properties
+                                        /phpunit.xml
+                                        /LICENSE
                                         **/storage/app/public/**
                                     ''',
                                     remoteDirectory: '/domains/elevage-canin-vosges.fr/',
