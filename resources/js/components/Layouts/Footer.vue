@@ -1,5 +1,5 @@
 <template>
-	<footer class="w-full flex flex-col items-center text-black p-4">
+	<footer id="contact" class="w-full flex flex-col items-center text-black p-4">
 		<div class="w-full md:w-11/12 flex flex-col md:flex-row gap-3 md:gap-6 my-20">
 			<div class="w-full md:w-1/2 flex flex-col  items-start">
 				<h2 class="text-5xl md:text-7xl font-semibold text-left pb-4 uppercase">Nous contacter</h2>
