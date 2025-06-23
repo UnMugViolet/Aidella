@@ -60,11 +60,13 @@ pipeline {
                                         **/composer.lock,
                                         **/package-lock.json,
                                         **/yarn.lock,
-                                        **/.gitignore,
+                                        .gitignore,
+                                        .gitattributes,
                                         **/README.md,
-                                        **/Jenkinsfile
-                                        **/sonar-project.properties
-                                        **/phpunit.xml
+                                        Jenkinsfile
+                                        sonar-project.properties
+                                        phpunit.xml
+                                        LICENSE
                                         **/storage/app/public/**
                                     ''',
                                     remoteDirectory: '/domains/elevage-canin-vosges.fr/',
