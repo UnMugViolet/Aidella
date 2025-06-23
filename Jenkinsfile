@@ -60,8 +60,8 @@ pipeline {
                                         **/composer.lock,
                                         **/package-lock.json,
                                         **/yarn.lock,
-                                        .gitignore,
-                                        .gitattributes,
+                                        /.gitignore,
+                                        /.gitattributes,
                                         **/README.md,
                                         /Jenkinsfile
                                         /sonar-project.properties
