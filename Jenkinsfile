@@ -65,11 +65,12 @@ pipeline {
                                         **/Jenkinsfile
                                         **/sonar-project.properties
                                         **/phpunit.xml
+                                        **/storage/app/public/**
                                     ''',
                                     remoteDirectory: '/domains/elevage-canin-vosges.fr/',
                                     removePrefix: '', 
-                                    cleanRemote: true, 
-                                    makeEmptyDirs: true, 
+                                    cleanRemote: false,
+                                    makeEmptyDirs: true,
                                     flatten: false, 
                                     noDefaultExcludes: false
                                 )
