@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: production
+        VITE_APP_GOOGLE_MAPS_API_KEY: ${VITE_APP_GOOGLE_MAPS_API_KEY}
+        VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID: ${VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID}
+    image: unmugviolet/aidella:latest
+    container_name: aidella-app
+    restart: unless-stopped
+    ports:
+      - "35001:35001"
+    
+    env_file:
+      - .env
+    
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+    
+    networks:
+      - aidella-network
+
+networks:
+  aidella-network:
+    driver: bridge

@@ -1,0 +1,49 @@
+# Node.js
+node_modules
+npm-debug.log
+dist
+.nyc_output
+coverage
+.cache
+
+# Laravel
+/vendor/
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# IDE
+.vscode
+.idea
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+/tests/
+phpunit.xml
+
+# Build tools
+/public/hot
+/public/storage
+/storage/*.key
+
+# Development files
+artisan
+*.lock

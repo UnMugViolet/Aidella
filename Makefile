@@ -55,29 +55,32 @@ user: ## Create a new admin user
 	@echo "$(CLR_YELLOW) Creating a new user...$(CLR_RESET)"
 	@$(ARTISAN) orchid:admin
 	
-## —— Production ——————————————————————————————————————————————————————————————
 
-prod: ## Install production dependencies and build assets
-	@echo "$(CLR_YELLOW) Running production environment...$(CLR_RESET)"
-	@mkdir -p bootstrap/cache
-	@mkdir -p storage/app/public/uploads/
-	@mkdir -p storage/app/public/uploads/dog-races/
-	@chmod -R 755 storage bootstrap/cache
-	@cp ~/env_aidella/.env .env
-	@$(COMPOSER_PROD) install --no-dev --optimize-autoloader
-	@$(ARTISAN) migrate --force
+## —— Docker Utils ———————————————————————————————————————————————————————————————————
 
-deploy: ## Deploy the Laravel app to a the production server
-	@echo "Deploying Laravel app to the production server..."
-	@$(MAKE) prod
-	@rm -rf public_html
-	@ln -s public public_html
-	@$(ARTISAN) config:cache
-	@$(ARTISAN) route:cache
-	@$(ARTISAN) view:cache
-	@${ARTISAN} storage:link
-	@$(ARTISAN) optimize:clear
-	@$(ARTISAN) optimize
+up: ## Start the production environment
+	@echo "$(CLR_YELLOW) Starting production environment...$(CLR_RESET)"
+	@docker compose up -d
 
-.PHONY: dev install migration prod deploy help clean fclean user
+down: ## Stop the production environment
+	@echo "$(CLR_YELLOW) Stopping production environment...$(CLR_RESET)"
+	@docker compose down
+
+## —— Docker Production Deployment ————————————————————————————————————————————————————
+
+build-frontend: ## Build frontend assets
+	@echo "$(CLR_YELLOW)📦 Installing frontend dependencies...$(CLR_RESET)"
+	@$(NPM) install 
+	@echo "$(CLR_YELLOW)🏗️  Building frontend assets with environment variables...$(CLR_RESET)"
+	@$(NPM) run build
+
+build: build-frontend ## Build Docker container after frontend is ready
+	@echo "$(CLR_YELLOW)🐳 Building Docker container...$(CLR_RESET)"
+	@docker compose build --no-cache
+	@docker compose push
+
+deploy: build up ## Complete secure Docker deployment
+	@echo "$(CLR_GREEN)✅ Deployment completed successfully!$(CLR_RESET)"
+
+.PHONY: dev install migration prod deploy help clean fclean user build-frontend build deploy
 
