@@ -25,15 +25,21 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 
 COPY . .
 
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
-
+# Clear any cached service provider discovery and rebuild for production
+RUN rm -rf bootstrap/cache/packages.php bootstrap/cache/services.php \
+    && composer dump-autoload --optimize --no-dev --no-scripts \
+    && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod +rw /var/www/html/storage/logs/laravel.log \
+    && chmod -R 775 /var/www/html/bootstrap/cache \
+    && mkdir -p /var/log/supervisor /var/log/nginx /run/nginx \
+    && chown -R www-data:www-data /var/log/nginx /run/nginx \
+    && chown -R www-data:www-data /var/log/supervisor
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-RUN mkdir -p /var/log/supervisor
+COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 
 EXPOSE 35001
 
