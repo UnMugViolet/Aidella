@@ -1,6 +1,5 @@
 <script setup>
-import { shallowRef, onMounted } from 'vue'
-import { defineAsyncComponent } from 'vue'
+import { shallowRef, onMounted, defineAsyncComponent } from 'vue'
 import Header from './Layouts/Header.vue'
 import Footer from './Layouts/Footer.vue'
 
