@@ -1,10 +1,19 @@
 # Node.js
 node_modules
 npm-debug.log
+package-lock.json
 dist
 .nyc_output
 coverage
 .cache
+
+# Composer
+vendor
+composer.lock
+
+# Pipeline
+sonar-project.properties
+Jenkinsfile
 
 # Laravel
 /vendor/
@@ -45,5 +54,4 @@ phpunit.xml
 /storage/*.key
 
 # Development files
-artisan
 *.lock

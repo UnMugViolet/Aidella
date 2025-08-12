@@ -54,7 +54,6 @@ fclean: ## Run database migrations
 user: ## Create a new admin user
 	@echo "$(CLR_YELLOW) Creating a new user...$(CLR_RESET)"
 	@$(ARTISAN) orchid:admin
-	
 
 ## —— Docker Utils ———————————————————————————————————————————————————————————————————
 
@@ -79,8 +78,17 @@ build: build-frontend ## Build Docker container after frontend is ready
 	@docker compose build --no-cache
 	@docker compose push
 
-deploy: build up ## Complete secure Docker deployment
-	@echo "$(CLR_GREEN)✅ Deployment completed successfully!$(CLR_RESET)"
+deploy: ## Complete secure Docker deployment
+	@echo "$(CLR_YELLOW)⏳ Waiting for database to be ready...$(CLR_RESET)"
+	@sleep 3
+	@echo "$(CLR_YELLOW)🔄 Preping for prod environment$(CLR_RESET)"
+	@docker exec aidella-app php artisan migrate --force
+	@php artisan optimize:clear
+	@php artisan config:cache
+	@php artisan route:cache
+	@php artisan view:cache
+	@php artisan storage:link
+	@echo "✅ Deployment completed successfully!"
 
 .PHONY: dev install migration prod deploy help clean fclean user build-frontend build deploy
 

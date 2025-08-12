@@ -5,6 +5,7 @@ RUN apk add --no-cache \
     curl \
 	gd \
     libzip-dev \
+    make \
     mysql-client \
     nginx \
     supervisor \
