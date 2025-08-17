@@ -90,7 +90,7 @@ pipeline {
                                         cd ~/websites/aidella &&
                                         docker compose down &&
                                         docker compose pull &&
-                                        docker compose up -d --build &&
+                                        docker compose up -d &&
                                         sleep 10 &&
                                         echo "🧹 Clearing Laravel caches..." &&
                                         docker exec aidella-app make deploy &&
