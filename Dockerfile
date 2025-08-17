@@ -3,15 +3,20 @@ FROM php:8.2-fpm-alpine
 # Install system dependencies and PHP extensions
 RUN apk add --no-cache \
     curl \
-	gd \
+    freetype-dev \
+    jpeg-dev \
+    libpng-dev \
     libzip-dev \
     make \
     mysql-client \
+    netcat-openbsd \
     nginx \
     supervisor \
     unzip \
     zip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
+    gd \
     pdo_mysql \
     zip
 
@@ -38,10 +43,14 @@ RUN rm -rf bootstrap/cache/packages.php bootstrap/cache/services.php \
     && chown -R www-data:www-data /var/log/nginx /run/nginx \
     && chown -R www-data:www-data /var/log/supervisor
 
+COPY docker/wait-for-db.sh /usr/local/bin/wait-for-db.sh
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 
+RUN chmod +x /usr/local/bin/wait-for-db.sh
+
 EXPOSE 35001
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+ENTRYPOINT ["/usr/local/bin/wait-for-db.sh"]
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

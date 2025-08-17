@@ -79,9 +79,7 @@ build: build-frontend ## Build Docker container after frontend is ready
 	@docker compose push
 
 deploy: ## Complete secure Docker deployment
-	@echo "$(CLR_YELLOW)⏳ Waiting for database to be ready...$(CLR_RESET)"
-	@sleep 3
-	@echo "$(CLR_YELLOW)🔄 Preping for prod environment$(CLR_RESET)"
+	@echo "🔄 Preping for prod environment"
 	@php artisan migrate --force
 	@php artisan optimize:clear
 	@php artisan config:cache
