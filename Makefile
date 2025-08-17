@@ -79,13 +79,21 @@ build: build-frontend ## Build Docker container after frontend is ready
 	@docker compose push
 
 deploy: ## Complete secure Docker deployment
-	@echo "🔄 Preping for prod environment"
-	@$(ARTISAN) migrate --force
+	@rm -rf ./bootstrap/cache/*
+	@echo "🔄 Preparing for prod environment"
+	@$(ARTISAN) config:clear
+	@$(ARTISAN) cache:clear
+	@$(ARTISAN) route:clear
+	@$(ARTISAN) view:clear
 	@$(ARTISAN) optimize:clear
+	@echo "🗄️  Running database migrations..."
+	@$(ARTISAN) migrate --force
+	@echo "🔗 Creating storage link..."
+	@$(ARTISAN) storage:link
+	@echo "⚡ Rebuilding optimized caches..."
 	@$(ARTISAN) config:cache
 	@$(ARTISAN) route:cache
 	@$(ARTISAN) view:cache
-	@$(ARTISAN) storage:link
 	@echo "✅ Deployment completed successfully!"
 
 .PHONY: dev install migration prod deploy help clean fclean user build-frontend build deploy
