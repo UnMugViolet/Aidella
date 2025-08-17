@@ -16,10 +16,5 @@ until nc -z "$DB_HOST" "$DB_PORT"; do
     sleep 2
 done
 
-echo "Database is up - preparing Laravel application"
-
-# Run Laravel optimization commands
-make deploy
-
 echo "Starting application services..."
 exec "$@"

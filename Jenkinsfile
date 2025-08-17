@@ -3,6 +3,8 @@ pipeline {
     
     environment {
         NODE_ENV = 'production'
+        DOCKER_REGISTRY = 'unmugviolet'
+        DOCKER_BUILDKIT = '0'
     }
     tools {
         nodejs 'Main NodeJS'
@@ -13,14 +15,7 @@ pipeline {
                 git url: 'git@github.com:UnMugViolet/Aidella.git', branch: 'main'
             }
         }
-        
-        stage('Build Assets') {
-            steps {
-                sh 'npm install --include=dev'
-                sh 'npm run build'
-            }
-        }
-        
+
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('Sonar-Server') {
@@ -28,7 +23,8 @@ pipeline {
                 }
             }
         }
-        
+
+        // Wait for the SonarQube analysis to be completed by getting the webhook response
         stage('Quality Gate') {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
@@ -36,66 +32,79 @@ pipeline {
                 }
             }
         }
-        stage('Publish') {
+
+        stage('Check Docker') {
             steps {
-                sshPublisher(
-                    continueOnError: false, 
-                    failOnError: true, 
-                    publishers: [
-                        sshPublisherDesc(
-                            configName: 'Hostinger',
-                            transfers: [
-                                sshTransfer(
-                                    sourceFiles: '**/*',
-                                    excludes: '''
-                                        **/.env.example,
-                                        **/node_modules/**,
-                                        **/Examples/**,
-                                        **/coverage/**,
-                                        **/tests/**,
-                                        **/.git/**,
-                                        **/storage/logs/**,
-                                        **/bootstrap/cache/**,
-                                        **/.phpunit.result.cache,
-                                        **/composer.lock,
-                                        **/package-lock.json,
-                                        **/yarn.lock,
-                                        /.gitignore,
-                                        /.gitattributes,
-                                        **/README.md,
-                                        /Jenkinsfile
-                                        /sonar-project.properties
-                                        /phpunit.xml
-                                        /LICENSE
-                                        **/storage/app/public/**
-                                    ''',
-                                    remoteDirectory: '/domains/elevage-canin-vosges.fr/',
-                                    removePrefix: '', 
-                                    cleanRemote: false,
-                                    makeEmptyDirs: true,
-                                    flatten: false, 
-                                    noDefaultExcludes: false
-                                )
-                            ],
-                            usePromotionTimestamp: false,
-                            verbose: true 
-                        )
-                    ]
-                )
+                sh 'docker --version'
+                sh 'docker info'
+            }
+        }
+
+        stage('Build Assets') {
+            steps {
+                sh 'npm install --include=dev'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Build Image') { 
+            steps {
+                script {
+                    try {
+                        // Check if Dockerfile exists
+                        sh 'ls -la ./Dockerfile || echo "Dockerfile not found"'
+
+                        def imageName = "${DOCKER_REGISTRY}/aidella:latest"
+                        sh """
+                            docker build -t ${imageName} \
+                            --build-arg NODE_ENV='${env.NODE_ENV}' \
+                            --build-arg VITE_APP_GOOGLE_MAPS_API_KEY='${env.VITE_APP_GOOGLE_MAPS_API_KEY}' \
+                            --build-arg VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID='${env.VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID}' \
+                            .
+                        """
+
+                        env.IMAGE_NAME = imageName
+
+                        echo "Docker image built successfully: ${env.IMAGE_NAME}"
+
+                    } catch (Exception e) {
+                        error "Failed to build Docker image: ${e.getMessage()}"
+                    }
+                }
             }
         }
         
-        stage('Post Deploy') {
+        stage('Push Image') {
+            steps {
+                script {
+                    // Login to Docker Hub and push image
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        def imageName = docker.image("${env.IMAGE_NAME}")
+                        imageName.push()
+                        echo "Successfully pushed ${imageName} to Docker Hub"
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy') {
             steps {
                 sshPublisher(
                     publishers: [
                         sshPublisherDesc(
-                            configName: 'Hostinger',
+                            configName: 'Infomaniak',
                             transfers: [
                                 sshTransfer(
                                     execCommand: '''
-                                        cd ~/domains/elevage-canin-vosges.fr/ &&
-                                        make deploy
+                                        cd ~/websites/aidella &&
+                                        docker compose down &&
+                                        docker compose pull &&
+                                        docker compose up -d --build &&
+                                        docker exec -it aidella-app make deploy &&
+                                        docker system prune -f &&
+                                        docker image prune -f &&
+                                        docker volume prune -f &&
+                                        docker network prune -f
                                     '''
                                 )
                             ]
@@ -105,4 +114,27 @@ pipeline {
             }
         }
     }
-}
+    
+    post {
+        always {
+            emailext (
+                mimeType: 'text/html',
+                subject: "[${env.JOB_NAME}] Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                body: """<div style="background-color: black; padding: 5px 20px; display: inline-block;">
+                            <table style="color: white; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 0;">
+                                        <img src="https://www.jenkins.io/images/logos/jenkins/jenkins.png" alt="Jenkins logo" style="width: 29px; height: 40px;"/>
+                                    </td>
+                                    <td style="padding-left: 0.5rem;">
+                                        <h2 style="margin: 0;">${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}</h2>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <p>The build was ${currentBuild.currentResult}. Check the <a href="${env.BUILD_URL}console">Console output</a> for details.</p>
+                        <p>Check <a href="${env.BUILD_URL}">Jenkins build</a> to view the results.</p>""",
+                to: "${env.VITE_APP_ADMIN_EMAIL_ADDRESS}"
+            )
+        }
+    }

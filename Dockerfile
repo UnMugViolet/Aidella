@@ -24,6 +24,15 @@ RUN apk add --no-cache \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+ARG NODE_ENV
+ARG VITE_APP_GOOGLE_MAPS_API_KEY
+ARG VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID
+
+# Use them during build
+ENV NODE_ENV=$NODE_ENV
+ENV VITE_APP_GOOGLE_MAPS_API_KEY=$VITE_APP_GOOGLE_MAPS_API_KEY
+ENV VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID=$VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID
+
 WORKDIR /var/www/html
 
 COPY composer*.json ./
