@@ -40,7 +40,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 COPY . .
 
 # Create storage directories and set proper permissions
-RUN npm install --include=dev \
+RUN npm install --include=dev --ignore-scripts\
     && mkdir -p /var/www/html/storage/app/public/uploads/dog-races \
     && mkdir -p /var/www/html/storage/framework/cache \
     && mkdir -p /var/www/html/storage/framework/sessions \

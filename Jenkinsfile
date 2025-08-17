@@ -91,16 +91,8 @@ pipeline {
                                         docker compose down &&
                                         docker compose pull &&
                                         docker compose up -d --build &&
-                                        sleep 7 &&
-                                        docker exec aidella-app php artisan config:clear &&
-                                        docker exec aidella-app php artisan cache:clear &&
-                                        docker exec aidella-app php artisan route:clear &&
-                                        docker exec aidella-app php artisan view:clear &&
-                                        docker exec aidella-app php artisan key:generate --force &&
-                                        docker exec aidella-app php artisan migrate --force &&
-                                        docker exec aidella-app php artisan config:cache &&
-                                        docker exec aidella-app php artisan route:cache &&
-                                        docker exec aidella-app php artisan view:cache &&
+                                        sleep 10 &&
+                                        docker exec aidella-app make deploy &&
                                         docker system prune -f &&
                                         docker image prune -f &&
                                         docker volume prune -f &&

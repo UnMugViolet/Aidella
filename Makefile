@@ -80,12 +80,12 @@ build: build-frontend ## Build Docker container after frontend is ready
 
 deploy: ## Complete secure Docker deployment
 	@echo "🔄 Preping for prod environment"
-	@php artisan migrate --force
-	@php artisan optimize:clear
-	@php artisan config:cache
-	@php artisan route:cache
-	@php artisan view:cache
-	@php artisan storage:link
+	@$(ARTISAN) migrate --force
+	@$(ARTISAN) optimize:clear
+	@$(ARTISAN) config:cache
+	@$(ARTISAN) route:cache
+	@$(ARTISAN) view:cache
+	@$(ARTISAN) storage:link
 	@echo "✅ Deployment completed successfully!"
 
 .PHONY: dev install migration prod deploy help clean fclean user build-frontend build deploy
