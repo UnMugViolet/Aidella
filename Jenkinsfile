@@ -92,6 +92,15 @@ pipeline {
                                         docker compose pull &&
                                         docker compose up -d --build &&
                                         sleep 10 &&
+                                        echo "🧹 Clearing Laravel caches..." &&
+                                        docker exec aidella-app rm -rf /var/www/html/bootstrap/cache/*.php &&
+                                        docker exec aidella-app php artisan config:clear &&
+                                        docker exec aidella-app php artisan cache:clear &&
+                                        docker exec aidella-app php artisan view:clear &&
+                                        docker exec aidella-app php artisan route:clear &&
+                                        echo "🔧 Testing database connection..." &&
+                                        docker exec aidella-app php artisan migrate:status &&
+                                        echo "🚀 Running deployment..." &&
                                         docker exec aidella-app make deploy &&
                                         docker system prune -f &&
                                         docker image prune -f &&
