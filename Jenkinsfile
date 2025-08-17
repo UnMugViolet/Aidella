@@ -40,13 +40,6 @@ pipeline {
             }
         }
 
-        stage('Build Assets') {
-            steps {
-                sh 'npm install --include=dev'
-                sh 'npm run build'
-            }
-        }
-
         stage('Build Image') { 
             steps {
                 script {
@@ -58,8 +51,6 @@ pipeline {
                         sh """
                             docker build -t ${imageName} \
                             --build-arg NODE_ENV='${env.NODE_ENV}' \
-                            --build-arg VITE_APP_GOOGLE_MAPS_API_KEY='${env.VITE_APP_GOOGLE_MAPS_API_KEY}' \
-                            --build-arg VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID='${env.VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID}' \
                             .
                         """
 
@@ -100,7 +91,16 @@ pipeline {
                                         docker compose down &&
                                         docker compose pull &&
                                         docker compose up -d --build &&
-                                        docker exec -it aidella-app make deploy &&
+                                        sleep 7 &&
+                                        docker exec aidella-app php artisan config:clear &&
+                                        docker exec aidella-app php artisan cache:clear &&
+                                        docker exec aidella-app php artisan route:clear &&
+                                        docker exec aidella-app php artisan view:clear &&
+                                        docker exec aidella-app php artisan key:generate --force &&
+                                        docker exec aidella-app php artisan migrate --force &&
+                                        docker exec aidella-app php artisan config:cache &&
+                                        docker exec aidella-app php artisan route:cache &&
+                                        docker exec aidella-app php artisan view:cache &&
                                         docker system prune -f &&
                                         docker image prune -f &&
                                         docker volume prune -f &&

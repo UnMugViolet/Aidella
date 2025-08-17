@@ -12,6 +12,8 @@ RUN apk add --no-cache \
     make \
     mysql-client \
     nginx \
+    nodejs \
+    npm \
     supervisor \
     unzip \
     zip \
@@ -25,13 +27,9 @@ RUN apk add --no-cache \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 ARG NODE_ENV
-ARG VITE_APP_GOOGLE_MAPS_API_KEY
-ARG VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID
 
 # Use them during build
 ENV NODE_ENV=$NODE_ENV
-ENV VITE_APP_GOOGLE_MAPS_API_KEY=$VITE_APP_GOOGLE_MAPS_API_KEY
-ENV VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID=$VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID
 
 WORKDIR /var/www/html
 
@@ -42,7 +40,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 COPY . .
 
 # Create storage directories and set proper permissions
-RUN mkdir -p /var/www/html/storage/app/public/uploads/dog-races \
+RUN npm install --include=dev \
+    && mkdir -p /var/www/html/storage/app/public/uploads/dog-races \
     && mkdir -p /var/www/html/storage/framework/cache \
     && mkdir -p /var/www/html/storage/framework/sessions \
     && mkdir -p /var/www/html/storage/framework/views \

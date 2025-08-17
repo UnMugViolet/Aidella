@@ -13,8 +13,16 @@ services:
     ports:
       - "35001:35001"
     
+    environment:
+      - VITE_APP_GOOGLE_MAPS_API_KEY=${VITE_APP_GOOGLE_MAPS_API_KEY}
+      - VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID=${VITE_APP_AIDELLA_GOOGLE_MAPS_MAP_ID}
+    
     env_file:
       - .env
+    
+    command: >
+      sh -c "npm run build && 
+             /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"
     
     volumes:
       - ./storage:/var/www/html/storage
