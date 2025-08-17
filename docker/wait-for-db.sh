@@ -19,18 +19,7 @@ done
 echo "Database is up - preparing Laravel application"
 
 # Run Laravel optimization commands
-echo "Running Laravel optimization..."
-php artisan config:cache --no-interaction
-php artisan route:cache --no-interaction
-php artisan view:cache --no-interaction
-
-# Try to run migrations (if database is ready)
-echo "Running database migrations..."
-if php artisan migrate --force --no-interaction; then
-    echo "Migrations completed successfully"
-else
-    echo "Migrations failed, but continuing startup..."
-fi
+make deploy
 
 echo "Starting application services..."
 exec "$@"

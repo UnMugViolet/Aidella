@@ -4,17 +4,18 @@ FROM php:8.2-fpm-alpine
 RUN apk add --no-cache \
     curl \
     freetype-dev \
-    jpeg-dev \
+    gd \
+    libjpeg-turbo-dev \
     libpng-dev \
+    libwebp-dev \
     libzip-dev \
     make \
     mysql-client \
-    netcat-openbsd \
     nginx \
     supervisor \
     unzip \
     zip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install \
     gd \
     pdo_mysql \
@@ -31,26 +32,35 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 
 COPY . .
 
-# Clear any cached service provider discovery and rebuild for production
-RUN rm -rf bootstrap/cache/packages.php bootstrap/cache/services.php \
-    && composer dump-autoload --optimize --no-dev --no-scripts \
-    && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views \
+# Create storage directories and set proper permissions
+RUN mkdir -p /var/www/html/storage/app/public/uploads/dog-races \
+    && mkdir -p /var/www/html/storage/framework/cache \
+    && mkdir -p /var/www/html/storage/framework/sessions \
+    && mkdir -p /var/www/html/storage/framework/views \
+    && mkdir -p /var/www/html/storage/logs \
+    && mkdir -p /tmp/nginx-client-body \
+    && mkdir -p /tmp/nginx-proxy \
+    && mkdir -p /tmp/nginx-fastcgi \
+    && mkdir -p /tmp/nginx-uwsgi \
+    && mkdir -p /tmp/nginx-scgi \
     && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod +rw /var/www/html/storage/logs/laravel.log \
-    && chmod -R 775 /var/www/html/bootstrap/cache \
-    && mkdir -p /var/log/supervisor /var/log/nginx /run/nginx \
-    && chown -R www-data:www-data /var/log/nginx /run/nginx \
-    && chown -R www-data:www-data /var/log/supervisor
+    && chown -R www-data:www-data /tmp/nginx-* \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache \
+    && chmod -R 755 /tmp/nginx-*
 
-COPY docker/wait-for-db.sh /usr/local/bin/wait-for-db.sh
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/wait-for-db.sh /usr/local/bin/wait-for-db.sh
 
-RUN chmod +x /usr/local/bin/wait-for-db.sh
+RUN mkdir -p /var/log/supervisor \
+    && mkdir -p /var/log/nginx \
+    && chown -R www-data:www-data /var/log/nginx \
+    && chmod +x /usr/local/bin/wait-for-db.sh
 
 EXPOSE 35001
 
 ENTRYPOINT ["/usr/local/bin/wait-for-db.sh"]
-CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
