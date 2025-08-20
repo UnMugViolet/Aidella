@@ -79,7 +79,6 @@ build: build-frontend ## Build Docker container after frontend is ready
 	@docker compose push
 
 deploy: ## Complete secure Docker deployment
-	@rm -rf ./bootstrap/cache/*
 	@echo "🔄 Preparing for prod environment"
 	@$(ARTISAN) config:clear
 	@$(ARTISAN) cache:clear
