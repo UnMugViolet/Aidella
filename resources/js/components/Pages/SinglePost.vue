@@ -28,7 +28,7 @@ import { ref } from 'vue';
 import Carroussel from '../Carroussel.vue';
 const props = defineProps(['initialData'])
 
-const blogPost = ref(window.pageData.blogPost)
+const blogPost = ref(globalThis.pageData.blogPost)
 const attachments = ref(blogPost.value.attachments);
 
 function formatDate(dateStr) {

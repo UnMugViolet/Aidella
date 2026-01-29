@@ -7,8 +7,8 @@ const currentComponent = shallowRef(null)
 const pageData = shallowRef({})
 
 onMounted(() => {
-  const name = window.currentComponent || 'Homepage'
-  pageData.value = window.pageData || {}
+  const name = globalThis.currentComponent || 'Homepage'
+  pageData.value = globalThis.pageData || {}
 
   try {
     currentComponent.value = defineAsyncComponent(() => import(`./Pages/${name}.vue`))
