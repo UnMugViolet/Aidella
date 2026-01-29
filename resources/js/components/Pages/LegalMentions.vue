@@ -21,10 +21,10 @@
 			<div class="mb-8">
 				<h3 class="text-xl md:text-2xl font-bold mb-2">2. Hébergement</h3>
 				<p>
-					<strong>Hébergeur :</strong> Hostinger International Ltd.<br/>
-					<strong>Adresse :</strong> 61 Lordou Vironos Street, 6023 Larnaca, Chypre<br/>
-					<strong>Téléphone :</strong> 1007<br/>
-					<strong>Site web :</strong> <a href="https://www.hostinger.fr" class="text-blue-500 hover:underline">https://www.hostinger.fr</a>
+					<strong>Hébergeur :</strong> Infomaniak Network SA<br/>
+					<strong>Adresse :</strong> Rue Eugène Marziano 25, 1227 Les Acacias (GE)<br/>
+					<strong>Contact :</strong> <a href="https://https://www.infomaniak.com/fr/aide	" class="text-blue-500 hover:underline">https://https://www.infomaniak.com/fr/aide	</a>
+					<strong>Site web :</strong> <a href="https://www.infomaniak.com" class="text-blue-500 hover:underline">https://www.infomaniak.com</a>
 				</p>
 			</div>
 			<div class="mb-8">
