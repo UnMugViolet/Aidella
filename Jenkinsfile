@@ -93,7 +93,7 @@ pipeline {
                                         docker compose up -d &&
                                         sleep 10 &&
                                         echo "🧹 Clearing Laravel caches..." &&
-                                        docker exec aidella-app make deploy &&
+                                        docker exec aidella make deploy &&
                                         docker system prune -f &&
                                         docker image prune -f &&
                                         docker volume prune -f &&
