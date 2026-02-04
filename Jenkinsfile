@@ -4,7 +4,7 @@ pipeline {
     environment {
         NODE_ENV = 'production'
         DOCKER_REGISTRY = 'unmugviolet'
-        DOCKER_BUILDKIT = '0'
+        DOCKER_BUILDKIT = '1'
     }
     tools {
         nodejs 'Main NodeJS'
@@ -47,14 +47,19 @@ pipeline {
                         // Check if Dockerfile exists
                         sh 'ls -la ./Dockerfile || echo "Dockerfile not found"'
 
-                        def imageName = "${DOCKER_REGISTRY}/aidella:latest"
+                        def imageName = "${DOCKER_REGISTRY}/aidella:${env.BUILD_NUMBER}"
+                        def latestImageName = "${DOCKER_REGISTRY}/aidella:latest"
+                        
                         sh """
                             docker build -t ${imageName} \
+                            -t ${latestImageName} \
                             --build-arg NODE_ENV='${env.NODE_ENV}' \
+                            --build-arg BUILD_NUMBER='${env.BUILD_NUMBER}' \
                             .
                         """
 
                         env.IMAGE_NAME = imageName
+                        env.LATEST_IMAGE_NAME = latestImageName
 
                         echo "Docker image built successfully: ${env.IMAGE_NAME}"
 
@@ -70,9 +75,13 @@ pipeline {
                 script {
                     // Login to Docker Hub and push image
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                        def imageName = docker.image("${env.IMAGE_NAME}")
-                        imageName.push()
-                        echo "Successfully pushed ${imageName} to Docker Hub"
+                        def versionedImage = docker.image("${env.IMAGE_NAME}")
+                        def latestImage = docker.image("${env.LATEST_IMAGE_NAME}")
+                        
+                        versionedImage.push()
+                        latestImage.push()
+                        
+                        echo "Successfully pushed ${versionedImage} and ${latestImage} to Docker Hub"
                     }
                 }
             }
@@ -88,16 +97,20 @@ pipeline {
                                 sshTransfer(
                                     execCommand: '''
                                         cd ~/websites/aidella &&
+                                        echo "🛑 Stopping containers..." &&
                                         docker compose down &&
+                                        echo "📥 Pulling latest images..." &&
                                         docker compose pull &&
+                                        echo "🚀 Starting containers..." &&
                                         docker compose up -d &&
-                                        sleep 10 &&
-                                        echo "🧹 Clearing Laravel caches..." &&
+                                        echo "⏳ Waiting for containers to be ready..." &&
+                                        sleep 15 &&
+                                        echo "🔧 Running deployment tasks..." &&
                                         docker exec aidella make deploy &&
+                                        echo "🧹 Cleaning up..." &&
                                         docker system prune -f &&
                                         docker image prune -f &&
-                                        docker volume prune -f &&
-                                        docker network prune -f
+                                        echo "✅ Deployment completed successfully!"
                                     '''
                                 )
                             ]
