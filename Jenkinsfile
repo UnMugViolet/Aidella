@@ -4,7 +4,6 @@ pipeline {
     environment {
         NODE_ENV = 'production'
         DOCKER_REGISTRY = 'unmugviolet'
-        DOCKER_BUILDKIT = '1'
     }
     tools {
         nodejs 'Main NodeJS'
@@ -24,7 +23,6 @@ pipeline {
             }
         }
 
-        // Wait for the SonarQube analysis to be completed by getting the webhook response
         stage('Quality Gate') {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
@@ -44,14 +42,13 @@ pipeline {
             steps {
                 script {
                     try {
-                        // Check if Dockerfile exists
                         sh 'ls -la ./Dockerfile || echo "Dockerfile not found"'
 
                         def imageName = "${DOCKER_REGISTRY}/aidella:${env.BUILD_NUMBER}"
                         def latestImageName = "${DOCKER_REGISTRY}/aidella:latest"
                         
                         sh """
-                            docker build -t ${imageName} \
+                            DOCKER_BUILDKIT=0 docker build -t ${imageName} \
                             -t ${latestImageName} \
                             --build-arg NODE_ENV='${env.NODE_ENV}' \
                             --build-arg BUILD_NUMBER='${env.BUILD_NUMBER}' \
@@ -73,7 +70,6 @@ pipeline {
         stage('Push Image') {
             steps {
                 script {
-                    // Login to Docker Hub and push image
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
                         def versionedImage = docker.image("${env.IMAGE_NAME}")
                         def latestImage = docker.image("${env.LATEST_IMAGE_NAME}")
@@ -104,7 +100,7 @@ pipeline {
                                         echo "🚀 Starting containers..." &&
                                         docker compose up -d &&
                                         echo "⏳ Waiting for containers to be ready..." &&
-                                        sleep 15 &&
+                                        sleep 10 &&
                                         echo "🔧 Running deployment tasks..." &&
                                         docker exec aidella make deploy &&
                                         echo "🧹 Cleaning up..." &&
